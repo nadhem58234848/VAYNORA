@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VAYNORA | ملابس فاخرة من سوسة، تونس</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Cinzel & Cairo -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;700&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Swiper.js for Sliders -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <!-- Leaflet.js for Map -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+   
+    <style>
+        :root {
+            --background-dark: #0a0a0a;
+            --primary-gold: #D4AF37;
+            --text-light: #F5F5F5;
+            --text-secondary: #B0B0B0;
+        }
+        body {
+            font-family: 'Cairo', sans-serif;
+            scroll-behavior: smooth;
+            background-color: var(--background-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+        }
+        h1, h2, h3, h4, .font-heading { font-family: 'Cinzel', serif; }
+        .font-arabic { font-family: 'Cairo', sans-serif; }
+        .bg-gold { background-color: var(--primary-gold); }
+        .text-gold { color: var(--primary-gold); }
+        .border-gold { border-color: var(--primary-gold); }
+        .btn-glow:hover { box-shadow: 0 0 20px 8px rgba(212, 175, 55, 0.25); }
+        #preloader { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--background-dark); z-index: 9999; display: flex; justify-content: center; align-items: center; transition: opacity 0.75s ease; }
+        #preloader.loaded { opacity: 0; pointer-events: none; }
+        .logo-pulse { animation: pulse 1.5s infinite ease-in-out; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        #map { height: 400px; border-radius: 0.5rem; filter: grayscale(100%) invert(100%) contrast(120%); }
+        .leaflet-control-attribution, .leaflet-control-zoom { display: none; }
+        .typing-cursor { display: inline-block; width: 2px; height: 1em; background-color: var(--primary-gold); animation: blink 0.7s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+        #lookbook-modal { display: none; }
+        .swiper-button-next, .swiper-button-prev { color: var(--primary-gold); }
+        .swiper-pagination-bullet-active { background: var(--primary-gold); }
+        .collections-slider .swiper-slide { cursor: pointer; }
+        #to-top-btn { position: fixed; bottom: 20px; left: 20px; z-index: 100; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; }
+        #to-top-btn.visible { opacity: 1; visibility: visible; }
+        #sticky-purchase-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: opacity 0.4s, visibility 0.4s, transform 0.4s;
+        }
+        #sticky-purchase-btn.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+        .gemini-response {
+            border: 1px solid var(--primary-gold);
+            padding: 1rem;
+            margin-top: 1.5rem;
+            border-radius: 0.5rem;
+            background-color: rgba(212, 175, 55, 0.05);
+            white-space: pre-wrap;
+            line-height: 1.8;
+        }
+    </style>
+</head>
+
+<body class="bg-dark">
+
+    <div id="preloader">
+        <div class="logo-pulse">
+            <svg class="w-20 h-20 text-gold" viewBox="0 0 64 64" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                <path d="M32 18 C28 22 28 28 32 32 C36 28 36 22 32 18 Z"></path>
+                <path d="M18 30 C22 45 32 54 32 54 C32 54 42 45 46 30 L40 30 C38 38 32 44 32 44 C32 44 26 38 24 30 L18 30 Z"></path>
+            </svg>
+        </div>
+    </div>
+
+    <header class="bg-dark/80 backdrop-blur-sm shadow-lg shadow-gold/10 sticky top-0 z-40">
+        <div class="container mx-auto px-6 py-4 flex justify-center items-center">
+            <a href="#" class="flex items-center gap-8">
+                <!-- Image Placeholder -->
+                <img src="https://placehold.co/128x128/0a0a0a/D4AF37?text=V" alt="Vaynora Logo Placeholder" class="w-14 h-14 rounded-full object-cover">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <span class="font-heading text-3xl font-bold text-gold tracking-widest">VAYNORA</span>
+                </div>
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero" class="relative min-h-screen flex items-center justify-center text-center overflow-hidden bg-cover bg-center" style="background-image: url('https://images.pexels.com/photos/7691089/pexels-photo-7691089.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2');">
+            <div class="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent"></div>
+            <div class="container mx-auto px-6 relative z-10">
+                <h1 class="text-5xl md:text-8xl font-extrabold text-white mb-4">VAYNORA</h1>
+                <p class="text-lg md:text-2xl h-10 max-w-3xl mx-auto mb-10 text-gold font-light tracking-widest font-arabic"><span id="typing-effect"></span><span class="typing-cursor"></span></p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-4 font-arabic">
+                    <a href="https://wa.me/21652563695" target="_blank" class="bg-gold text-dark font-bold px-8 py-3 rounded-lg text-lg hover:bg-yellow-600 transition-all transform hover:-translate-y-1 shadow-lg btn-glow w-full md:w-auto">تسوق الآن</a>
+                    <a href="#collections" class="bg-transparent border-2 border-gold text-white font-bold px-8 py-3 rounded-lg text-lg hover:bg-gold hover:text-dark transition-all transform hover:-translate-y-1 shadow-lg btn-glow w-full md:w-auto">اكتشف مجموعاتنا</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="pt-32 pb-64 bg-dark">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold mb-4 text-gold reveal font-arabic">أسطورتنا</h2>
+                <p class="text-xl max-w-3xl mx-auto text-secondary mb-16 reveal font-arabic">أنت لم تنضم إلى مجرد براند... لقد أصبحت جزءًا من قصة أعظم.</p>
+                <div class="flex flex-col md:flex-row items-center gap-12 max-w-5xl mx-auto reveal">
+                    <div class="md:w-1/2"><img src="https://images.unsplash.com/photo-1551803091-e2ab6924165b?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=1200" alt="VAYNORA Craftsmanship from Sousse" class="rounded-lg shadow-lg w-full" loading="lazy"></div>
+                    <div class="md:w-1/2 text-right font-arabic">
+                        <p class="text-light text-xl leading-relaxed mb-4">قصة ولدت من ضغط المعاناة، من حروب قاسية ودموع. في عالم يزداد ظلمًا، حيث يُقتل الأطفال وتُهان النساء ويُترك الكبار بلا سند... وحيث أمم عظيمة كانت لا تُقهر، أصبحت تموت جوعًا قبل أن تموت قصفًا.</p>
+                        <p class="text-light text-xl leading-relaxed">كل قطعة تحمل أثرًا من تلك النار، وتحول الألم إلى قوة وهوية. امتلاكك لهذه القطعة ليس مجرد اقتناء... إنه دليل أنك اخترت أن تكون مختلفًا، أن تؤمن أن الشر لا يكسرنا، بل يصنع منا شعلة لا تنطفئ.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="philosophy" class="py-32 bg-black/20">
+            <div class="container mx-auto px-6 text-center font-arabic">
+                <h2 class="text-4xl font-bold mb-10 text-gold reveal">VAYNORA - MANIFESTO</h2>
+                <div class="max-w-4xl mx-auto reveal space-y-6 text-2xl text-light leading-loose">
+                    <p>نحن لسنا مجرد براند. نحن قصة تروى على القماش.</p>
+                    <p>من الظلام يولد النور. من الألم يولد المجد. ومن الصمت يولد صوت لا يُكسر.</p>
+                    <p>هو درعك VAYNORA. رمز القوة، الهوية، والوعد. هو وعد بأنك مهما انكسرت، ستنهض أقوى.</p>
+                    <p>كل قطعة منا ليست ثوبًا... بل شهادة على صمودك.</p>
+                </div>
+                <div class="mt-16 pt-16 border-t border-gold/20">
+                    <h2 class="text-4xl font-bold mb-10 text-gold reveal">أبعاد الفلسفة</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-6xl mx-auto text-right">
+                        <!-- The Name & Colors -->
+                        <div class="reveal">
+                            <h4 class="text-2xl font-bold mb-4">الاسم والألوان</h4>
+                            <div class="space-y-4 text-secondary text-lg">
+                                <p><strong class="text-light">VA (من Vision):</strong> يوحي بالقوة، الثبات، والرؤية المستقبلية.</p>
+                                <p><strong class="text-light">NORA (من "نور"):</strong> رمز الإشعاع، الأمل، والطاقة المضيئة وسط الظلام.</p>
+                                <p><strong class="text-light">النتيجة:</strong> توازن بين الظلام والنور، رحلة صعود من الصعوبات إلى النجاح.</p>
+                                <p><strong class="text-light">الأسود الملكي:</strong> رمز القوة، الغموض، الحماية، والهيبة.</p>
+                                <p><strong class="text-light">الذهبي المعدني:</strong> رمز النجاح، والندرة.</p>
+                            </div>
+                        </div>
+                        <!-- The Hidden Symbols -->
+                        <div class="reveal">
+                            <h4 class="text-2xl font-bold mb-4">الرموز المخفية</h4>
+                             <div class="space-y-4 text-secondary text-lg">
+                                <p><strong class="text-light">الخطوط الحادة:</strong> تعبر عن العزم والإصرار.</p>
+                                <p><strong class="text-light">التباين بين الظلام والنور:</strong> يحاكي فلسفة أن الألم يولد المجد.</p>
+                                <p><strong class="text-light">كل قطعة ملابس:</strong> هي هوية، قوة، ودرع نفسي. رمز للصمود والرفعة.</p>
+                                <p><strong class="text-light">تذكير:</strong> "من يعيش التجربة، يلبس القصة".</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <p class="mt-20 text-4xl font-bold text-gold font-heading reveal">ارتد القصة. عش الرمزية. اصنع أسطورتك.</p>
+            </div>
+        </section>
+
+        <section id="founder" class="py-24 bg-dark">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row-reverse items-center gap-12 max-w-5xl mx-auto reveal">
+                    <div class="md:w-2/3 text-right font-arabic">
+                        <h2 class="text-4xl font-bold mb-4 text-gold font-arabic">كلمة المؤسس</h2>
+                        <div class="text-light text-xl leading-relaxed mb-6 space-y-4">
+                            <p>"ما بداتش كفكرة متاع ملابس عادية. بدات Vaynora كإحساس بالغربة داخل السوق: أسعار غالية بلا معنى، وعود فارغة، وخامات ضعيفة. من هنا، خرجت Vaynora: براند تونسي رجالي يبدع من قلب الواقع.</p>
+                            <p>مشينا في طريق صعيب، لكن صادق: اخترنا الجودة قبل الكثرة، اخترنا الثقة قبل الربح، اخترنا نصنع حاجة تعيش معاك... مش تستهلكك.</p>
+                            <p>مش مجرد اسم، هي عقلية Vaynora. عقلية رجل حر، فاهم قيمته، يلبس باش يعبر على قوته، مش باش يتخبى.</p>
+                            <p>اليوم، Vaynora هي وعد: وعد بالصدق، وعد بالتميز، ووعد إنو الرجولة مش في الثمن، الرجولة في الموقف."</p>
+                        </div>
+                        <p class="font-heading text-2xl text-gold">Nadhem Elaashek</p>
+                        <p class="text-secondary">المؤسس والمدير الإبداعي, VAYNORA</p>
+
+                        <p class="mt-8 text-xl text-secondary">لماذا يجب ان تشتري من VAYNORA؟</p>
+                        <button id="purchase-reason-generator" class="mt-4 bg-gold text-dark font-bold px-6 py-2 rounded-lg transition transform hover:-translate-y-1 shadow-lg btn-glow"><i class="fas fa-robot me-2"></i> VAYNORA AI الذكاء الاصطناعي</button>
+                        <div id="purchase-reason-result" class="gemini-response hidden"></div>
+                    </div>
+                     <div class="md:w-1/3"><img src="https://images.unsplash.com/photo-1616082494939-94b62fb94b28?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=800" alt="Nadhem Elaashek, Founder of VAYNORA" class="rounded-lg shadow-lg w-full object-cover h-full" loading="lazy"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="collections" class="py-24 bg-black/20">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-4xl font-bold mb-4 text-gold reveal font-arabic">مجموعاتنا الخاصة</h2>
+                <p class="text-xl max-w-2xl mx-auto mb-16 text-secondary reveal font-arabic">استكشاف للأناقة، التراث، والرقي المعاصر.</p>
+                <div class="swiper collections-slider max-w-6xl mx-auto reveal">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide group" data-collection="heritage">
+                            <div class="relative overflow-hidden rounded-lg shadow-lg">
+                                <img src="https://images.unsplash.com/photo-1622445281318-a7335935de2a?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=800" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform" loading="lazy">
+                                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/50"></div>
+                                <h3 class="absolute bottom-4 right-4 text-2xl font-arabic text-white">تراث سوسة</h3>
+                            </div>
+                            <a href="https://wa.me/21652563695" target="_blank" class="mt-4 inline-block bg-gold text-dark font-bold px-6 py-2 rounded-lg transition transform hover:-translate-y-1 shadow-lg btn-glow">اطلب الآن</a>
+                        </div>
+                        <div class="swiper-slide group" data-collection="mediterranean">
+                            <div class="relative overflow-hidden rounded-lg shadow-lg">
+                                <img src="https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=800" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform" loading="lazy">
+                                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/50"></div>
+                                <h3 class="absolute bottom-4 right-4 text-2xl font-arabic text-white">نسيم المتوسط</h3>
+                            </div>
+                             <a href="https://wa.me/21652563695" target="_blank" class="mt-4 inline-block bg-gold text-dark font-bold px-6 py-2 rounded-lg transition transform hover:-translate-y-1 shadow-lg btn-glow">اطلب الآن</a>
+                        </div>
+                        <div class="swiper-slide group" data-collection="noir">
+                            <div class="relative overflow-hidden rounded-lg shadow-lg">
+                                <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=800" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform" loading="lazy">
+                                <div class="absolute inset-0 bg-black/20 group-hover:bg-black/50"></div>
+                                <h3 class="absolute bottom-4 right-4 text-2xl font-arabic text-white">الفخامة السوداء</h3>
+                            </div>
+                             <a href="https://wa.me/21652563695" target="_blank" class="mt-4 inline-block bg-gold text-dark font-bold px-6 py-2 rounded-lg transition transform hover:-translate-y-1 shadow-lg btn-glow">اطلب الآن</a>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination mt-12"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="featured-product" class="py-24 bg-dark">
+             <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row items-center gap-12 max-w-5xl mx-auto reveal">
+                    <div class="md:w-1/2">
+                        <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=1200" alt="Featured Product from VAYNORA" class="rounded-lg shadow-lg w-full" loading="lazy">
+                    </div>
+                    <div class="md:w-1/2 text-right font-arabic">
+                        <h2 class="text-4xl font-bold mb-4 text-gold">القطعة الأكثر طلباً</h2>
+                        <p class="text-light text-xl leading-relaxed mb-6">تيشيرت "الفخامة السوداء". تصميم يجسد القوة والغموض، مصنوع من أجود أنواع القطن لراحة لا تضاهى. قطعة أساسية تعبر عن شخصيتك الواثقة.</p>
+                        <a href="https://wa.me/21652563695" target="_blank" class="bg-gold text-dark font-bold px-8 py-3 rounded-lg text-lg hover:bg-yellow-600 transition-all transform hover:-translate-y-1 shadow-lg btn-glow">اطلبه الآن عبر واتساب</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="stylist" class="py-24 bg-black/20 text-center">
+            <div class="container mx-auto px-6 font-arabic">
+                <h2 class="text-4xl font-bold mb-4 text-gold reveal">✨ مستشارك الأنيق</h2>
+                <p class="text-xl mb-10 max-w-2xl mx-auto text-secondary reveal">صف لنا مناسبتك، ودع الذكاء الاصطناعي يقترح لك الإطلالة المثالية التي تعكس روح VAYNORA.</p>
+                <div class="max-w-2xl mx-auto reveal">
+                    <input id="occasion-input" type="text" placeholder="مثال: عشاء عمل مهم، سهرة على الشاطئ..." class="w-full p-4 rounded-lg bg-dark border border-gold/50 text-light text-center focus:ring-2 focus:ring-gold focus:outline-none">
+                    <button id="stylist-button" class="mt-6 bg-gold text-dark font-bold px-8 py-3 rounded-lg w-full md:w-auto transition transform hover:-translate-y-1 shadow-lg btn-glow">اقترح لي إطلالة</button>
+                    <div id="stylist-result" class="gemini-response hidden text-right"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="boutique" class="py-24 bg-dark">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row items-center gap-12 max-w-6xl mx-auto">
+                    <div class="md:w-1/2 text-right font-arabic">
+                        <h2 class="text-4xl font-bold mb-4 text-gold">بوتيك VAYNORA</h2>
+                        <p class="text-light text-xl leading-relaxed mb-6">عش تجربة VAYNORA في متجرنا الرئيسي. اكتشف مجموعاتنا شخصيًا واستمتع بتجربة تسوق فريدة مع فريقنا المتخصص.</p>
+                        <div class="space-y-2 text-secondary text-lg">
+                            <p><i class="fas fa-map-marker-alt w-5 ms-2 text-gold"></i> 500 متر بعد مفترق القنطاوي، في اتجاه شط مريم</p>
+                            <p><i class="fas fa-clock w-5 ms-2 text-gold"></i> الإثنين - السبت: 10:00 - 20:00</p>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 w-full"><div id="map"></div></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="py-24 bg-black/20 text-center">
+            <div class="container mx-auto px-6 font-arabic">
+                <h2 class="text-4xl font-bold mb-4 text-gold">امتلك قطعة من الأسطورة</h2>
+                <p class="text-xl mb-10 max-w-xl mx-auto text-secondary">جاهز لارتداء قصتك؟ تواصل معنا مباشرة عبر واتساب لطلب قطعتك الخاصة من VAYNORA أو للاستفسار عن مجموعاتنا الحصرية.</p>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-6">
+                    <a href="https://wa.me/21652563695" target="_blank" class="border-2 border-gold text-white font-bold px-8 py-3 rounded-lg w-full md:w-auto hover:bg-gold hover:text-dark transition-all transform hover:-translate-y-1 shadow-lg btn-glow"><i class="fab fa-whatsapp me-2"></i> اطلب الآن عبر واتساب</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gradient-to-t from-black to-dark py-8">
+        <div class="container mx-auto px-6 text-center text-secondary font-arabic">
+            <div class="flex justify-center space-x-6 space-x-reverse mb-4">
+                <a href="https://www.instagram.com/vaynora.shop/" target="_blank" class="hover:text-gold transition-colors text-2xl"><i class="fab fa-instagram"></i></a>
+                <a href="https://www.tiktok.com/@vaynora0?_t=ZM-901yageE4LM&_r=1" target="_blank" class="hover:text-gold transition-colors text-2xl"><i class="fab fa-tiktok"></i></a>
+            </div>
+            <p class="mb-8 text-sm">
+                &copy; 2025 VAYNORA | سوسة، تونس. جميع الحقوق محفوظة. | <a href="https://wa.me/971524505803" target="_blank" class="hover:text-gold transition-colors">CREATED BY NIDZID AGENCY</a>
+            </p>
+    
+            <!-- Nidzid Agency Section -->
+            <div class="border-t border-gold/20 pt-8 mt-8">
+                <div class="flex justify-center items-center gap-4">
+                    <img src="https://placehold.co/128x128/0a0a0a/D4AF37?text=N" alt="Nidzid Agency Logo Placeholder" class="w-16 h-16 rounded-full object-cover">
+                    <div>
+                        <p class="text-xl font-bold text-light">موقع وتجربة تسويقية من إبداع</p>
+                        <a href="https://wa.me/971524505803" target="_blank" class="inline-block bg-gold/10 text-gold font-bold px-6 py-3 rounded-lg border border-gold transition transform hover:-translate-y-1 shadow-lg btn-glow mt-2">
+                            تواصل مع NIDZID AGENCY <i class="fas fa-rocket ms-2"></i>
+                        </a>
+                         <p class="text-secondary mt-4 text-sm">خبراء التسويق بالمؤثرين وتصميم المواقع الفاخرة</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <button id="to-top-btn" class="bg-gold text-dark w-12 h-12 rounded-full flex items-center justify-center btn-glow"><i class="fas fa-arrow-up"></i></button>
+    
+    <a href="https://wa.me/21652563695" target="_blank" id="sticky-purchase-btn" class="bg-gold text-dark font-bold px-5 py-3 rounded-full flex items-center justify-center btn-glow shadow-lg font-arabic gap-2">
+        <i class="fab fa-whatsapp text-2xl"></i>
+        <span>اطلب الآن</span>
+    </a>
+
+    <div id="lookbook-modal" class="fixed inset-0 bg-black/90 z-50 flex items-center justify-center p-4">
+        <div class="relative w-full max-w-4xl max-h-full">
+            <div class="swiper lookbook-swiper bg-dark rounded-lg shadow-2xl">
+                <div class="swiper-wrapper" id="modal-swiper-wrapper"></div>
+                <div class="swiper-button-next"></div><div class="swiper-button-prev"></div>
+            </div>
+             <button id="close-modal-btn" class="absolute -top-4 -left-4 text-white bg-gold rounded-full w-10 h-10 text-2xl">&times;</button>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js" defer></script>
+    <script src="https://unpkg.com/scrollreveal" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- Preloader Fix ---
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                if(preloader) {
+                    preloader.classList.add('loaded');
+                }
+            }, 500);
+
+            // --- Gemini API Configuration ---
+            const API_KEY = ""; // Leave empty, will be handled by the environment
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${API_KEY}`;
+            
+            async function callGemini(prompt) {
+                const payload = {
+                    contents: [{ parts: [{ text: prompt }] }],
+                };
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const result = await response.json();
+                    return result.candidates?.[0]?.content?.parts?.[0]?.text || "عذرًا، لم أتمكن من إنشاء رد. الرجاء المحاولة مرة أخرى.";
+                } catch (error) {
+                    console.error("Error calling Gemini API:", error);
+                    return "حدث خطأ أثناء الاتصال بالخادم. يرجى التحقق من اتصالك بالإنترنت والمحاولة مرة أخرى.";
+                }
+            }
+
+            // --- AI Stylist Feature ---
+            const stylistButton = document.getElementById('stylist-button');
+            const occasionInput = document.getElementById('occasion-input');
+            const stylistResult = document.getElementById('stylist-result');
+
+            stylistButton.addEventListener('click', async () => {
+                const occasion = occasionInput.value.trim();
+                if (!occasion) {
+                    stylistResult.textContent = "الرجاء إدخال مناسبة للحصول على اقتراح.";
+                    stylistResult.classList.remove('hidden');
+                    return;
+                }
+
+                stylistResult.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري التفكير في إطلالتك...';
+                stylistResult.classList.remove('hidden');
+                stylistButton.disabled = true;
+
+                const prompt = `
+                    أنت خبير أزياء عالمي للعلامة التجارية التونسية الفاخرة VAYNORA.
+                    فلسفة VAYNORA عميقة: ولدت من المعاناة والألم، وترمز إلى القوة والهوية من خلال شعلة لا تنطفئ.
+                    مجموعاتها هي: "تراث سوسة"، "نسيم المتوسط"، و "الفخامة السوداء".
+                    
+                    المستخدم يريد إطلالة لمناسبة: "${occasion}".
+                    
+                    مهمتك:
+                    1.  اقتراح إطلالة كاملة وأنيقة باللغة العربية.
+                    2.  يجب أن يكون الاقتراح مرتكزًا على تيشيرت من إحدى مجموعات VAYNORA.
+                    3.  اذكر اسم المجموعة والتيشيرت المقترح.
+                    4.  صف كيفية تنسيق التيشيرت مع باقي الملابس (بنطال، حذاء، إكسسوارات) بأسلوب راقٍ ومفصل.
+                    5.  اجعل النص جذابًا وملهمًا، يعكس فخامة VAYNORA وقصتها.
+                    6. في نهاية الاقتراح، أضف دعوة واضحة للشراء مثل: "لطلب هذه الإطلالة الكاملة، تواصل معنا الآن عبر واتساب."
+                `;
+
+                const responseText = await callGemini(prompt);
+                stylistResult.textContent = responseText;
+                stylistButton.disabled = false;
+            });
+
+            // --- AI Purchase Reason Generator ---
+            const purchaseReasonButton = document.getElementById('purchase-reason-generator');
+            const purchaseReasonResult = document.getElementById('purchase-reason-result');
+            
+            purchaseReasonButton.addEventListener('click', async () => {
+                purchaseReasonResult.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري توليد السبب...';
+                purchaseReasonResult.classList.remove('hidden');
+                purchaseReasonButton.disabled = true;
+
+                const prompt = `
+                    أنت صوت علامة VAYNORA، وهي علامة تجارية تونسية فاخرة للملابس الرجالية.
+                    مهمتك هي كتابة نص قصير ومقنع، لا يزيد عن 3-4 جمل، يجيب على سؤال العميل: "لماذا أشتري من VAYNORA؟".
+
+                    استخدم هذه النقاط الأساسية في إجابتك:
+                    - VAYNORA ليست مجرد ملابس، بل هي عقلية ووعد بالصدق والتميز.
+                    - نحن نختار الجودة قبل الكثرة، ونصنع قطعة تعيش معك، لا تستهلكك.
+                    - ارتداء VAYNORA هو تعبير عن القوة وفهم القيمة الحقيقية، وليس مجرد اتباع للموضة.
+                    - اختم النص بدعوة مباشرة للشراء، مثل "استثمر في قطعة تحكي قصتك. اطلبها الآن."
+                `;
+                const responseText = await callGemini(prompt);
+                purchaseReasonResult.textContent = responseText;
+                purchaseReasonButton.disabled = false;
+            });
+
+
+            // --- Existing Page Logic ---
+            if (typeof ScrollReveal !== 'undefined') {
+                ScrollReveal().reveal('.reveal', { distance: '50px', duration: 800, easing: 'ease-in-out', origin: 'bottom', interval: 100, reset: false });
+            }
+
+            const typingElement = document.getElementById('typing-effect');
+            const words = ["ملابس فاخرة", "صناعة تونسية", "أناقة عصرية", "قصة تُرتدى", "هوية متجددة"];
+            let wordIndex = 0, charIndex = 0, isDeleting = false;
+            function type() {
+                const currentWord = words[wordIndex];
+                const typeSpeed = isDeleting ? 75 : 150;
+                if (typingElement) {
+                    typingElement.textContent = currentWord.substring(0, charIndex);
+                    if (!isDeleting && charIndex < currentWord.length) charIndex++;
+                    else if (isDeleting && charIndex > 0) charIndex--;
+                    else { isDeleting = !isDeleting; if (!isDeleting) wordIndex = (wordIndex + 1) % words.length; }
+                    setTimeout(type, isDeleting ? typeSpeed : (charIndex === currentWord.length ? 2000 : typeSpeed));
+                }
+            }
+            if (typingElement) type();
+
+            if (typeof Swiper !== 'undefined') {
+                new Swiper('.collections-slider', { loop: true, spaceBetween: 30, slidesPerView: 1, grabCursor: true, pagination: { el: '.swiper-pagination', clickable: true }, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' }, breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } } });
+            
+                const lookbookModal = document.getElementById('lookbook-modal');
+                const closeModalBtn = document.getElementById('close-modal-btn');
+                const modalSwiperWrapper = document.getElementById('modal-swiper-wrapper');
+                const lookbookData = {
+                    heritage: ['https://images.unsplash.com/photo-1622445281318-a7335935de2a?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=1600', 'https://images.unsplash.com/photo-1576566588028-4147f3842f27?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=1600'],
+                    mediterranean: ['https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=1600', 'https://images.unsplash.com/photo-1527719327859-c6ce80353573?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=1600'],
+                    noir: ['https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=1600', 'https://images.unsplash.com/photo-1503341504253-dff481648536?ixlib=rb-4.0.3&q=80&fm=jpg&crop=entropy&cs=srgb&w=1600']
+                };
+                const lookbookSwiper = new Swiper('.lookbook-swiper', { loop: true, navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } });
+                document.querySelectorAll('.collections-slider .swiper-slide[data-collection]').forEach(slide => {
+                    slide.addEventListener('click', (e) => {
+                        // Prevent click on "اطلب الآن" button from opening the modal
+                        if (e.target.closest('a')) { return; }
+                        const collection = slide.dataset.collection;
+                        if (lookbookData[collection]) {
+                            modalSwiperWrapper.innerHTML = lookbookData[collection].map(src => `<div class="swiper-slide flex items-center justify-center"><img src="${src}" class="max-w-full max-h-[90vh] object-contain"></div>`).join('');
+                            lookbookSwiper.update();
+                            lookbookModal.style.display = 'flex';
+                        }
+                    });
+                });
+
+                closeModalBtn.addEventListener('click', () => lookbookModal.style.display = 'none');
+                lookbookModal.addEventListener('click', (e) => { if(e.target === lookbookModal) lookbookModal.style.display = 'none'; });
+            }
+
+            const toTopBtn = document.getElementById('to-top-btn');
+            const stickyPurchaseBtn = document.getElementById('sticky-purchase-btn');
+            const heroSection = document.getElementById('hero');
+
+            window.addEventListener('scroll', () => {
+                const isVisible = window.scrollY > 300;
+                toTopBtn.classList.toggle('visible', isVisible);
+                if (stickyPurchaseBtn && heroSection) {
+                    const heroHeight = heroSection.offsetHeight;
+                    stickyPurchaseBtn.classList.toggle('visible', window.scrollY > heroHeight * 0.8);
+                }
+            });
+
+            toTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+            if (typeof L !== 'undefined') {
+                const mapCoords = [35.8980, 10.5960];
+                const map = L.map('map').setView(mapCoords, 16);
+                L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', { maxZoom: 19 }).addTo(map);
+                const goldIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23D4AF37" width="48px" height="48px"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>`;
+                const goldIconUrl = `data:image/svg+xml;charset=UTF-8,${goldIconSvg}`;
+                const goldIcon = new L.Icon({ iconUrl: goldIconUrl, iconSize: [42, 42], iconAnchor: [21, 42], popupAnchor: [0, -42] });
+                L.marker(mapCoords, {icon: goldIcon}).addTo(map);
+            }
+        });
+    </script>
+</body>
+</html>
