@@ -1,9 +1,15 @@
-import { Composition, Folder } from "remotion";
+import { Composition, Folder, Still } from "remotion";
 import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
 import { BRAND_REEL_DURATION, BrandReel } from "./Brand/BrandReel";
 import { VAY_STORY_DURATION, VayStory } from "./Brand/VayStory";
+import {
+  FIVE_THINGS,
+  SLIDE_HEIGHT,
+  SLIDE_WIDTH,
+  VayCarouselSlide,
+} from "./Brand/VayCarousel";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -52,6 +58,18 @@ export const RemotionRoot: React.FC = () => {
           titleColor: "#000000",
         }}
       />
+      <Folder name="Carousel-5-things">
+        {FIVE_THINGS.map((slide, i) => (
+          <Still
+            key={i}
+            id={`FiveThings-${i + 1}`}
+            component={VayCarouselSlide}
+            width={SLIDE_WIDTH}
+            height={SLIDE_HEIGHT}
+            defaultProps={{ slide, counter: `${i + 1}/${FIVE_THINGS.length}` }}
+          />
+        ))}
+      </Folder>
       <Folder name="Brand">
         <Composition
           id="VayStory"
