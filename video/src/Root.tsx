@@ -2,6 +2,7 @@ import { Composition, Folder } from "remotion";
 import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
+import { BRAND_REEL_DURATION, BrandReel } from "./Brand/BrandReel";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -50,7 +51,16 @@ export const RemotionRoot: React.FC = () => {
           titleColor: "#000000",
         }}
       />
-
+      <Folder name="Brand">
+        <Composition
+          id="BrandReel"
+          component={BrandReel}
+          durationInFrames={BRAND_REEL_DURATION}
+          fps={30}
+          width={1080}
+          height={1920}
+        />
+      </Folder>
     </>
   );
 };

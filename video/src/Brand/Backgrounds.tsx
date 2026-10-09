@@ -1,0 +1,99 @@
+import {
+  AbsoluteFill,
+  Img,
+  OffthreadVideo,
+  interpolate,
+  random,
+  staticFile,
+  useCurrentFrame,
+  useVideoConfig,
+} from "remotion";
+import { BG, DEEP_RED, RED } from "./theme";
+
+// B-roll shot (image or video from public/) with a slow push-in and the
+// brand grade: desaturated, crushed blacks, red multiply, heavy vignette.
+export const BRoll: React.FC<{ src: string; zoom?: "in" | "out" }> = ({
+  src,
+  zoom = "in",
+}) => {
+  const frame = useCurrentFrame();
+  const { durationInFrames } = useVideoConfig();
+  const p = frame / durationInFrames;
+  const scale =
+    zoom === "in"
+      ? interpolate(p, [0, 1], [1.05, 1.18])
+      : interpolate(p, [0, 1], [1.18, 1.05]);
+  const style: React.CSSProperties = {
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    transform: `scale(${scale})`,
+    filter: "grayscale(0.85) contrast(1.3) brightness(0.9)",
+  };
+  const isVideo = /\.(mp4|mov|webm)$/i.test(src);
+
+  return (
+    <AbsoluteFill style={{ backgroundColor: BG, overflow: "hidden" }}>
+      {isVideo ? (
+        <OffthreadVideo src={staticFile(src)} muted style={style} />
+      ) : (
+        <Img src={staticFile(src)} style={style} />
+      )}
+      <AbsoluteFill
+        style={{
+          backgroundColor: RED,
+          mixBlendMode: "multiply",
+          opacity: 0.45,
+        }}
+      />
+      <AbsoluteFill
+        style={{
+          background: `linear-gradient(to bottom, ${BG}00 30%, ${BG} 95%), radial-gradient(ellipse at center, transparent 45%, ${BG} 100%)`,
+        }}
+      />
+    </AbsoluteFill>
+  );
+};
+
+// Stand-in when there is no B-roll yet: dark red glow with rising embers.
+export const EmberBackground: React.FC = () => {
+  const frame = useCurrentFrame();
+  const { width, height } = useVideoConfig();
+  const pulse = interpolate(Math.sin(frame / 20), [-1, 1], [0.55, 0.85]);
+
+  return (
+    <AbsoluteFill style={{ backgroundColor: BG, overflow: "hidden" }}>
+      <AbsoluteFill
+        style={{
+          background: `radial-gradient(ellipse at 50% 85%, ${DEEP_RED} 0%, ${BG} 65%)`,
+          opacity: pulse,
+        }}
+      />
+      {new Array(40).fill(true).map((_, i) => {
+        const speed = 2 + random(`s${i}`) * 4;
+        const size = 2 + random(`z${i}`) * 5;
+        const x = random(`x${i}`) * width;
+        const y =
+          height -
+          ((frame * speed + random(`y${i}`) * height) % (height * 1.1));
+        const drift = Math.sin((frame + i * 13) / 18) * 12;
+        return (
+          <div
+            key={i}
+            style={{
+              position: "absolute",
+              left: x + drift,
+              top: y,
+              width: size,
+              height: size,
+              borderRadius: "50%",
+              backgroundColor: RED,
+              boxShadow: `0 0 ${size * 3}px ${RED}`,
+              opacity: interpolate(y, [0, height], [0, 0.9]),
+            }}
+          />
+        );
+      })}
+    </AbsoluteFill>
+  );
+};
