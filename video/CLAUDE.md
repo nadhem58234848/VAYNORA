@@ -1,11 +1,37 @@
-# Editing style guide — VAYNORA® (Nadhem, @nadhem_elaashek)
+# Editing style guide — VAYNORA® (@vaynora_) and Nadhem (@nadhem_elaashek)
 
 This project makes Reels in the owner's editing style. Follow these rules for
 every new video unless the owner says otherwise. Add each new rule the owner
 teaches to "Rules taught by the owner" at the bottom.
 
 The old gold-and-black VAYNORA clothing-store identity (the website and the
-images at the repo root) is retired. Never use gold or those images.
+images at the repo root) is retired: never use those images. Gold itself is
+not banned: it is reserved for AURA (see below) and must not appear in VAY
+content.
+
+## The universe: VAY + N + AURA = VAYNORA (taught by the owner)
+
+The brand is still being built. It has three parts:
+
+- **VAY — part 1, the active character now.** The side that went through
+  hardship, learned to overcome addiction, resists difficulty and turns pain
+  into power. Look: black warrior, **red** crown on the letter V, red hand
+  wraps, dark red scenes. VAY will **speak** in Reels: teaching how to beat
+  pornography addiction, its harms, and everything in that niche. This niche
+  is the starting point: focus on it until the brand owns part of that market.
+- **N — Nadhem**, the real person. He appears in talking Reels (on camera,
+  real footage). His account @nadhem_elaashek stays his personal brand.
+- **AURA — part 3, NOT revealed yet.** Discipline, calm, knowledge and
+  spirituality. Looks like VAY but the crown is on the letter **A** and the
+  color is **gold**. AURA appears only once the brand is established in the
+  addiction niche; AURA content = building a routine, self-development,
+  seeking knowledge, getting closer to God. Do not show, tease or use AURA
+  or gold until the owner says AURA is launching.
+
+Accounts:
+- **@vaynora_** — VAY content and later AURA content, sometimes Nadhem.
+  VAY videos carry the @vaynora_ handle.
+- **@nadhem_elaashek** — Nadhem's personal brand.
 
 ## Brand (from the owner's brand guide)
 
@@ -54,6 +80,9 @@ images at the repo root) is retired. Never use gold or those images.
 
 ## What the account data says (Windsor, Dec 2025 – Oct 2026)
 
+Source: Nadhem's personal account @nadhem_elaashek (the only account
+connected to Windsor). @vaynora_ may behave differently.
+
 - Best retention: personal story reels («خسرت قرابة 20 مليون»: 25.6 s average
   watch, 27% skip) and calm faith reflections («تأخير النعم»: 28% skip).
 - Biggest reach: short, shareable faith reels («اغرس نخلة في الجنة»: 1.5M
@@ -79,3 +108,7 @@ images at the repo root) is retired. Never use gold or those images.
    the old website.
 3. Previous brand work to learn from: the VAY carousel, the brand guide, the
    habit guide, the 10 rules sheet, the التوبة النصوحة carousel.
+4. VAY = part 1 (red, addiction niche, will speak in Reels); N = Nadhem in
+   talking Reels; AURA = part 3 (gold, crown on A, discipline/knowledge/
+   spirituality), hidden until the brand owns its spot in the niche.
+5. @nadhem_elaashek stays personal; @vaynora_ carries VAY and AURA.

@@ -177,7 +177,7 @@ const Handle: React.FC = () => (
         marginBottom: 70,
       }}
     >
-      @nadhem_elaashek
+      @vaynora_
     </div>
   </AbsoluteFill>
 );
