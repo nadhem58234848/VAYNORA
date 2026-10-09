@@ -1,11 +1,19 @@
 import { continueRender, delayRender, staticFile } from "remotion";
 
-// Brand identity taken from the Instagram account. See ../../CLAUDE.md.
-export const RED = "#C62828";
+// Values from the VAYNORA brand guide. See ../../CLAUDE.md.
+export const RED = "#C81E1E";
 export const DEEP_RED = "#4A0606";
-export const BG = "#0B0B0B";
-export const WHITE = "#F2F2F2";
-export const GRAY = "#8A8A8A";
+export const BG = "#0A0A0A";
+export const WHITE = "#F2EFE9";
+export const GRAY = "#8C8C86";
+
+// Cairo weights from the brand guide.
+export const HEADLINE = 800; // ExtraBold: headlines
+export const BODY = 600; // SemiBold: body text
+export const DETAIL = 500; // Medium: secondary text and details
+
+// Minimum side margin for text (brand guide: never under 90px at 1080 wide).
+export const MARGIN = 90;
 
 export const TAGLINE = "TURN PAIN INTO POWER";
 export const BRAND = "VAYNORA";
@@ -20,7 +28,7 @@ const LATIN_RANGE =
 
 const handle = delayRender("Loading Cairo");
 Promise.all(
-  ["400", "700", "900"].flatMap((weight) =>
+  ["500", "600", "800"].flatMap((weight) =>
     (
       [
         ["arabic", ARABIC_RANGE],

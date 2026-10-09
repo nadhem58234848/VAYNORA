@@ -3,6 +3,7 @@ import { HelloWorld } from "./HelloWorld";
 import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
 import { BRAND_REEL_DURATION, BrandReel } from "./Brand/BrandReel";
+import { VAY_STORY_DURATION, VayStory } from "./Brand/VayStory";
 
 // Each <Composition> is an entry in the sidebar!
 
@@ -52,6 +53,14 @@ export const RemotionRoot: React.FC = () => {
         }}
       />
       <Folder name="Brand">
+        <Composition
+          id="VayStory"
+          component={VayStory}
+          durationInFrames={VAY_STORY_DURATION}
+          fps={30}
+          width={1080}
+          height={1920}
+        />
         <Composition
           id="BrandReel"
           component={BrandReel}

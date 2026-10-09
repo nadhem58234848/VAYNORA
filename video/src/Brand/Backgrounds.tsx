@@ -12,10 +12,12 @@ import { BG, DEEP_RED, RED } from "./theme";
 
 // B-roll shot (image or video from public/) with a slow push-in and the
 // brand grade: desaturated, crushed blacks, red multiply, heavy vignette.
-export const BRoll: React.FC<{ src: string; zoom?: "in" | "out" }> = ({
-  src,
-  zoom = "in",
-}) => {
+// grade="none" keeps footage that is already on-brand (e.g. the VAY art).
+export const BRoll: React.FC<{
+  src: string;
+  zoom?: "in" | "out";
+  grade?: "red" | "none";
+}> = ({ src, zoom = "in", grade = "red" }) => {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
   const p = frame / durationInFrames;
@@ -28,7 +30,10 @@ export const BRoll: React.FC<{ src: string; zoom?: "in" | "out" }> = ({
     height: "100%",
     objectFit: "cover",
     transform: `scale(${scale})`,
-    filter: "grayscale(0.85) contrast(1.3) brightness(0.9)",
+    filter:
+      grade === "red"
+        ? "grayscale(0.85) contrast(1.3) brightness(0.9)"
+        : "none",
   };
   const isVideo = /\.(mp4|mov|webm)$/i.test(src);
 
@@ -39,18 +44,22 @@ export const BRoll: React.FC<{ src: string; zoom?: "in" | "out" }> = ({
       ) : (
         <Img src={staticFile(src)} style={style} />
       )}
-      <AbsoluteFill
-        style={{
-          backgroundColor: RED,
-          mixBlendMode: "multiply",
-          opacity: 0.45,
-        }}
-      />
-      <AbsoluteFill
-        style={{
-          background: `linear-gradient(to bottom, ${BG}00 30%, ${BG} 95%), radial-gradient(ellipse at center, transparent 45%, ${BG} 100%)`,
-        }}
-      />
+      {grade === "red" ? (
+        <>
+          <AbsoluteFill
+            style={{
+              backgroundColor: RED,
+              mixBlendMode: "multiply",
+              opacity: 0.45,
+            }}
+          />
+          <AbsoluteFill
+            style={{
+              background: `linear-gradient(to bottom, ${BG}00 30%, ${BG} 95%), radial-gradient(ellipse at center, transparent 45%, ${BG} 100%)`,
+            }}
+          />
+        </>
+      ) : null}
     </AbsoluteFill>
   );
 };

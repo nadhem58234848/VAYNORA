@@ -6,79 +6,114 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { BRAND, FONT, GRAY, RED, TAGLINE, WHITE } from "./theme";
+import {
+  BG,
+  BODY,
+  BRAND,
+  DETAIL,
+  FONT,
+  GRAY,
+  HEADLINE,
+  MARGIN,
+  RED,
+  WHITE,
+} from "./theme";
 
 const clamp = {
   extrapolateLeft: "clamp",
   extrapolateRight: "clamp",
 } as const;
 
-// Persistent frame like the Instagram posts: tagline top-left, brand
-// top-right, slide counter, red edge bar on the left.
+// Signature frame from the brand guide: red vertical bar on the right edge,
+// spaced-out VAYNORA at the top, slide counter pill top-left.
 export const BrandFrame: React.FC<{ counter?: string }> = ({ counter }) => {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
-  const pad = width * 0.06;
   const small = width * 0.022;
   const bar = interpolate(frame, [0, 20], [0, 1], {
     ...clamp,
     easing: Easing.out(Easing.cubic),
   });
-  const label: React.CSSProperties = {
-    position: "absolute",
-    top: pad,
-    fontFamily: FONT,
-    fontWeight: 700,
-    fontSize: small,
-    letterSpacing: small * 0.25,
-    color: GRAY,
-  };
 
   return (
-    <AbsoluteFill style={{ pointerEvents: "none" }}>
+    <AbsoluteFill style={{ pointerEvents: "none", fontFamily: FONT }}>
       <div
         style={{
           position: "absolute",
-          left: 0,
+          right: 0,
           top: 0,
           width: width * 0.008,
           height: height * bar,
           backgroundColor: RED,
         }}
       />
-      <div style={{ ...label, left: pad }}>{counter ?? TAGLINE}</div>
-      <div style={{ ...label, right: pad, color: WHITE }}>{BRAND}</div>
+      <div
+        style={{
+          position: "absolute",
+          top: MARGIN * 0.8,
+          width: "100%",
+          textAlign: "center",
+          fontWeight: HEADLINE,
+          fontSize: small,
+          letterSpacing: small * 0.45,
+          color: GRAY,
+        }}
+      >
+        {BRAND}
+      </div>
+      {counter ? (
+        <div
+          style={{
+            position: "absolute",
+            top: MARGIN * 0.65,
+            left: MARGIN * 0.6,
+            fontWeight: BODY,
+            fontSize: small,
+            color: GRAY,
+            border: `1px solid rgba(242,239,233,0.14)`,
+            borderRadius: 4,
+            padding: `${small * 0.15}px ${small * 0.5}px`,
+          }}
+        >
+          {counter}
+        </div>
+      ) : null}
     </AbsoluteFill>
   );
 };
 
-// Arabic headline. Each line slides up from a mask; words in `highlight`
-// are drawn in red. A short red rule draws in underneath.
+// Words in `highlight` are drawn red, everything else white.
+const Words: React.FC<{ text: string; highlight: string[] }> = ({
+  text,
+  highlight,
+}) => (
+  <>
+    {text.split(" ").map((word, w) => (
+      <span key={w} style={{ color: highlight.includes(word) ? RED : WHITE }}>
+        {word}{" "}
+      </span>
+    ))}
+  </>
+);
+
+// Arabic headline. Each line slides up from a mask; a short red rule draws
+// in underneath, then a gray subtitle fades up.
 export const Headline: React.FC<{
   lines: string[];
   highlight?: string[];
   kicker?: string;
   sub?: string;
   size?: number;
-}> = ({ lines, highlight = [], kicker, sub, size = 0.11 }) => {
+}> = ({ lines, highlight = [], kicker, sub, size = 0.1 }) => {
   const frame = useCurrentFrame();
   const { fps, width } = useVideoConfig();
   const fontSize = width * size;
-  const rule = interpolate(
-    frame,
-    [12 + lines.length * 4, 30 + lines.length * 4],
-    [0, 1],
-    {
-      ...clamp,
-      easing: Easing.out(Easing.cubic),
-    },
-  );
-  const subIn = interpolate(
-    frame,
-    [20 + lines.length * 4, 32 + lines.length * 4],
-    [0, 1],
-    clamp,
-  );
+  const after = 12 + lines.length * 4;
+  const rule = interpolate(frame, [after, after + 18], [0, 1], {
+    ...clamp,
+    easing: Easing.out(Easing.cubic),
+  });
+  const subIn = interpolate(frame, [after + 8, after + 20], [0, 1], clamp);
 
   return (
     <AbsoluteFill
@@ -87,15 +122,15 @@ export const Headline: React.FC<{
         alignItems: "center",
         direction: "rtl",
         fontFamily: FONT,
-        padding: width * 0.08,
+        padding: MARGIN,
       }}
     >
       {kicker ? (
         <div
           style={{
             color: RED,
-            fontWeight: 700,
-            fontSize: fontSize * 0.28,
+            fontWeight: BODY,
+            fontSize: fontSize * 0.3,
             marginBottom: fontSize * 0.2,
             opacity: interpolate(frame, [0, 10], [0, 1], clamp),
           }}
@@ -116,21 +151,14 @@ export const Headline: React.FC<{
           >
             <div
               style={{
-                fontWeight: 900,
+                fontWeight: HEADLINE,
                 fontSize,
-                lineHeight: 1.25,
+                lineHeight: 1.3,
                 textAlign: "center",
                 transform: `translateY(${(1 - enter) * 110}%)`,
               }}
             >
-              {line.split(" ").map((word, w) => (
-                <span
-                  key={w}
-                  style={{ color: highlight.includes(word) ? RED : WHITE }}
-                >
-                  {word}{" "}
-                </span>
-              ))}
+              <Words text={line} highlight={highlight} />
             </div>
           </div>
         );
@@ -147,8 +175,8 @@ export const Headline: React.FC<{
         <div
           style={{
             color: GRAY,
-            fontWeight: 400,
-            fontSize: fontSize * 0.3,
+            fontWeight: DETAIL,
+            fontSize: fontSize * 0.32,
             marginTop: fontSize * 0.25,
             textAlign: "center",
             opacity: subIn,
@@ -162,7 +190,58 @@ export const Headline: React.FC<{
   );
 };
 
-// One word per beat, hard cuts, last word in red ("ضعتُ. سُجنتُ. ... ثم قمتُ.").
+// Caption in a dark rounded box, like the captions on the carousel panels.
+// The box scales in, then the text slides up inside it.
+export const CaptionBox: React.FC<{
+  text: string;
+  highlight?: string[];
+  style?: React.CSSProperties;
+}> = ({ text, highlight = [], style }) => {
+  const frame = useCurrentFrame();
+  const { fps, width } = useVideoConfig();
+  const box = spring({ frame, fps, config: { damping: 200 } });
+  const txt = spring({ frame: frame - 4, fps, config: { damping: 200 } });
+  const fontSize = width * 0.068;
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: MARGIN,
+        right: MARGIN,
+        display: "flex",
+        justifyContent: "center",
+        ...style,
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: "rgba(10,10,10,0.82)",
+          borderRadius: fontSize * 0.3,
+          padding: `${fontSize * 0.15}px ${fontSize * 0.6}px`,
+          overflow: "hidden",
+          transform: `scaleX(${box})`,
+        }}
+      >
+        <div
+          style={{
+            direction: "rtl",
+            fontFamily: FONT,
+            fontWeight: HEADLINE,
+            fontSize,
+            lineHeight: 1.45,
+            textAlign: "center",
+            transform: `translateY(${(1 - txt) * 110}%)`,
+          }}
+        >
+          <Words text={text} highlight={highlight} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// One word per beat, punch-in, last word red ("ضعتُ. سُجنتُ. ... ثم قمتُ.").
 export const Staccato: React.FC<{ words: string[]; beat?: number }> = ({
   words,
   beat = 12,
@@ -178,7 +257,7 @@ export const Staccato: React.FC<{ words: string[]; beat?: number }> = ({
         alignItems: "flex-start",
         direction: "rtl",
         fontFamily: FONT,
-        padding: width * 0.1,
+        padding: MARGIN,
         flexDirection: "column",
       }}
     >
@@ -191,7 +270,7 @@ export const Staccato: React.FC<{ words: string[]; beat?: number }> = ({
           <div
             key={word}
             style={{
-              fontWeight: 900,
+              fontWeight: HEADLINE,
               fontSize,
               lineHeight: 1.2,
               color: last ? RED : WHITE,
@@ -207,37 +286,44 @@ export const Staccato: React.FC<{ words: string[]; beat?: number }> = ({
   );
 };
 
-// Outlined red pill call-to-action, e.g. "اسحب لتعرف ما ينتظرك".
-export const CallToAction: React.FC<{ text: string }> = ({ text }) => {
+// Call to action. "solid": red block with black button text (the carousel's
+// last slide); "outline": red outlined pill.
+export const CallToAction: React.FC<{
+  text: string;
+  variant?: "outline" | "solid";
+  bottom?: number;
+}> = ({ text, variant = "outline", bottom = 0.14 }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const enter = spring({ frame, fps, config: { damping: 14 } });
-  const fontSize = width * 0.04;
+  const fontSize = width * 0.045;
+  const solid = variant === "solid";
 
   return (
     <AbsoluteFill style={{ alignItems: "center" }}>
       <div
         style={{
           position: "absolute",
-          bottom: height * 0.14,
+          bottom: height * bottom,
           direction: "rtl",
           fontFamily: FONT,
-          fontWeight: 700,
+          fontWeight: HEADLINE,
           fontSize,
           color: WHITE,
-          border: `3px solid ${RED}`,
-          borderRadius: fontSize * 2,
+          backgroundColor: solid ? RED : "transparent",
+          border: solid ? "none" : `3px solid ${RED}`,
+          borderRadius: solid ? 4 : fontSize * 2,
           padding: `${fontSize * 0.35}px ${fontSize * 1.1}px`,
           transform: `scale(${enter})`,
         }}
       >
-        {text} ←
+        {text}
       </div>
     </AbsoluteFill>
   );
 };
 
-// Red flash + slash between shots, sits over the cut.
+// Red slash + short red flash over a cut.
 export const RedSlash: React.FC = () => {
   const frame = useCurrentFrame();
   const { width } = useVideoConfig();
@@ -260,6 +346,17 @@ export const RedSlash: React.FC = () => {
           marginLeft: -width * 0.45,
           backgroundColor: RED,
           transform: `translateX(${x * width}px) skewX(-18deg)`,
+        }}
+      />
+      <div
+        style={{
+          position: "absolute",
+          top: "-50%",
+          left: "50%",
+          width: width * 0.06,
+          height: "200%",
+          backgroundColor: BG,
+          transform: `translateX(${(x - 0.12) * width}px) skewX(-18deg)`,
         }}
       />
     </AbsoluteFill>
