@@ -64,27 +64,23 @@ export const BRoll: React.FC<{
   );
 };
 
-// Stand-in when there is no B-roll yet: dark red glow with rising embers.
-export const EmberBackground: React.FC = () => {
+// Rising red embers on a transparent layer (overlay on any shot).
+export const Embers: React.FC<{ count?: number; seed?: string }> = ({
+  count = 40,
+  seed = "e",
+}) => {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
-  const pulse = interpolate(Math.sin(frame / 20), [-1, 1], [0.55, 0.85]);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: BG, overflow: "hidden" }}>
-      <AbsoluteFill
-        style={{
-          background: `radial-gradient(ellipse at 50% 85%, ${DEEP_RED} 0%, ${BG} 65%)`,
-          opacity: pulse,
-        }}
-      />
-      {new Array(40).fill(true).map((_, i) => {
-        const speed = 2 + random(`s${i}`) * 4;
-        const size = 2 + random(`z${i}`) * 5;
-        const x = random(`x${i}`) * width;
+    <AbsoluteFill style={{ overflow: "hidden", pointerEvents: "none" }}>
+      {new Array(count).fill(true).map((_, i) => {
+        const speed = 2 + random(`${seed}s${i}`) * 4;
+        const size = 2 + random(`${seed}z${i}`) * 5;
+        const x = random(`${seed}x${i}`) * width;
         const y =
           height -
-          ((frame * speed + random(`y${i}`) * height) % (height * 1.1));
+          ((frame * speed + random(`${seed}y${i}`) * height) % (height * 1.1));
         const drift = Math.sin((frame + i * 13) / 18) * 12;
         return (
           <div
@@ -103,6 +99,42 @@ export const EmberBackground: React.FC = () => {
           />
         );
       })}
+    </AbsoluteFill>
+  );
+};
+
+// Slow red glow breathing in from the bottom of a shot.
+export const GlowPulse: React.FC<{ strength?: number }> = ({
+  strength = 0.35,
+}) => {
+  const frame = useCurrentFrame();
+  const pulse = interpolate(Math.sin(frame / 14), [-1, 1], [0.4, 1]);
+  return (
+    <AbsoluteFill
+      style={{
+        background: `radial-gradient(ellipse at 50% 100%, ${RED} 0%, transparent 60%)`,
+        mixBlendMode: "screen",
+        opacity: strength * pulse,
+        pointerEvents: "none",
+      }}
+    />
+  );
+};
+
+// Stand-in when there is no B-roll yet: dark red glow with rising embers.
+export const EmberBackground: React.FC = () => {
+  const frame = useCurrentFrame();
+  const pulse = interpolate(Math.sin(frame / 20), [-1, 1], [0.55, 0.85]);
+
+  return (
+    <AbsoluteFill style={{ backgroundColor: BG, overflow: "hidden" }}>
+      <AbsoluteFill
+        style={{
+          background: `radial-gradient(ellipse at 50% 85%, ${DEEP_RED} 0%, ${BG} 65%)`,
+          opacity: pulse,
+        }}
+      />
+      <Embers />
     </AbsoluteFill>
   );
 };

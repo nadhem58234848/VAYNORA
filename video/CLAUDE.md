@@ -95,6 +95,18 @@ connected to Windsor). @vaynora_ may behave differently.
 - Average watch time is mostly 7–20 s → keep Reels around 15–25 s, put the
   payoff early.
 
+## Sound (taught by the owner)
+
+- **No music.** Only nasheeds without percussion (no rhythm, no instruments).
+  Put the file in `public/audio/` and set `NASHEED` in the composition; it is
+  mixed at 0.35 and fades in/out. Without a nasheed, a very quiet dark room
+  tone (noise, no pitch) plays instead.
+- Sound effects are non-musical and synthesized by `scripts/make-sfx.py`
+  into `public/sfx/`: `whoosh` (peaks with every red slash cut), `hit` (each
+  caption appearing), `impact` (hook, the hope turn, the CTA), `riser`
+  (builds into the hope turn). Placed with `SoundEffect` in `src/Brand/Sound.tsx`.
+- Camera shake (`useShake`) lands on the same frames as the impacts/hits.
+
 ## Working on the videos
 
 - `src/Brand/VayStory.tsx`: VAY carousel → Reel (edit `SLIDES`).
@@ -115,3 +127,4 @@ connected to Windsor). @vaynora_ may behave differently.
    spirituality), hidden until the brand owns its spot in the niche.
 5. Account split: @nadhem_elaashek = discipline, self-development, his
    journey; @vaynora_ = addiction niche, fronted by VAY.
+6. Audio: nasheeds without percussion only, never music.

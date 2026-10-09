@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import {
   AbsoluteFill,
   Easing,
@@ -8,15 +9,17 @@ import {
   useCurrentFrame,
   useVideoConfig,
 } from "remotion";
-import { BRoll } from "./Backgrounds";
+import { BRoll, Embers, GlowPulse } from "./Backgrounds";
 import {
   BrandFrame,
   CallToAction,
   CaptionBox,
   Headline,
   RedSlash,
+  useShake,
 } from "./MotionGraphics";
-import { BG, DETAIL, FONT, GRAY, RED } from "./theme";
+import { Bed, SoundEffect } from "./Sound";
+import { BG, DETAIL, FONT, GRAY, RED, WHITE } from "./theme";
 
 // Reel version of the VAY carousel: each slide is two stacked panels split by
 // a red line, each panel with its own caption, revealed one after the other.
@@ -115,6 +118,8 @@ const PanelView: React.FC<{ panel: Panel; y: number }> = ({ panel, y }) => {
       }}
     >
       <BRoll src={panel.src} grade="none" />
+      <GlowPulse strength={0.22} />
+      <Embers count={16} seed={panel.src} />
       <Sequence from={6} layout="none">
         <CaptionBox
           text={panel.caption}
@@ -136,9 +141,10 @@ const SlideView: React.FC<{ slide: Slide; duration: number }> = ({
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
   });
+  const shake = useShake([0, BOTTOM_AT], 10);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: BG }}>
+    <AbsoluteFill style={{ backgroundColor: BG, transform: shake }}>
       <Sequence durationInFrames={duration} layout="none">
         <PanelView panel={slide.top} y={PANEL_TOP} />
       </Sequence>
@@ -186,8 +192,9 @@ const Hook: React.FC = () => {
   const frame = useCurrentFrame();
   const { durationInFrames } = useVideoConfig();
   const scale = interpolate(frame, [0, durationInFrames], [1.08, 1.18]);
+  const shake = useShake([2], 18);
   return (
-    <AbsoluteFill style={{ backgroundColor: BG }}>
+    <AbsoluteFill style={{ backgroundColor: BG, transform: shake }}>
       <Img
         src={staticFile("vay/vay-poster.jpg")}
         style={{
@@ -198,13 +205,39 @@ const Hook: React.FC = () => {
           opacity: 0.45,
         }}
       />
+      <Embers count={30} seed="hook" />
       <Headline
         lines={["تعبت من الإباحية", "والعادة السرية؟"]}
         highlight={["الإباحية"]}
         sub="حاولت أكثر من مرة وتعثّرت؟"
+        subColor={WHITE}
         size={0.105}
       />
     </AbsoluteFill>
+  );
+};
+
+// Optional nasheed without percussion, e.g. "audio/nasheed.mp3" in public/.
+const NASHEED: string | undefined = undefined;
+
+const SoundTrack: React.FC = () => {
+  const last = starts[starts.length - 1];
+  return (
+    <>
+      <Bed nasheed={NASHEED} duration={VAY_STORY_DURATION} />
+      <SoundEffect type="impact" at={2} />
+      {starts.map((start) => (
+        <Fragment key={start}>
+          {/* The slash covers the cut; the whoosh peaks with it. */}
+          <SoundEffect type="whoosh" at={start - 9} />
+          <SoundEffect type="hit" at={start + 6} />
+          <SoundEffect type="hit" at={start + BOTTOM_AT + 6} />
+        </Fragment>
+      ))}
+      <SoundEffect type="riser" at={last - 48} />
+      <SoundEffect type="impact" at={last} />
+      <SoundEffect type="impact" at={last + BOTTOM_AT + 20} />
+    </>
   );
 };
 
@@ -212,6 +245,7 @@ export const VayStory: React.FC = () => {
   const total = SLIDES.length + 1;
   return (
     <AbsoluteFill style={{ backgroundColor: BG }}>
+      <SoundTrack />
       <Sequence durationInFrames={HOOK}>
         <Hook />
         <BrandFrame counter={`1/${total}`} />

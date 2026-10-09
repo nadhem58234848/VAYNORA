@@ -103,8 +103,10 @@ export const Headline: React.FC<{
   highlight?: string[];
   kicker?: string;
   sub?: string;
+  // Off-white instead of gray when the subline sits on a busy image.
+  subColor?: string;
   size?: number;
-}> = ({ lines, highlight = [], kicker, sub, size = 0.1 }) => {
+}> = ({ lines, highlight = [], kicker, sub, subColor = GRAY, size = 0.1 }) => {
   const frame = useCurrentFrame();
   const { fps, width } = useVideoConfig();
   const fontSize = width * size;
@@ -174,7 +176,7 @@ export const Headline: React.FC<{
       {sub ? (
         <div
           style={{
-            color: GRAY,
+            color: subColor,
             fontWeight: DETAIL,
             fontSize: fontSize * 0.32,
             marginTop: fontSize * 0.25,
@@ -361,4 +363,20 @@ export const RedSlash: React.FC = () => {
       />
     </AbsoluteFill>
   );
+};
+
+// Camera shake that kicks in at each frame in `hits` and dies out quickly.
+// Returns a CSS transform to put on the shaken layer.
+export const useShake = (hits: number[], strength = 14) => {
+  const frame = useCurrentFrame();
+  let x = 0;
+  let y = 0;
+  for (const hit of hits) {
+    const local = frame - hit;
+    if (local < 0 || local > 12) continue;
+    const amp = strength * Math.exp(-local / 3.5);
+    x += amp * Math.sin(local * 2.7 + hit);
+    y += amp * Math.cos(local * 3.1 + hit);
+  }
+  return `translate(${x}px, ${y}px)`;
 };
