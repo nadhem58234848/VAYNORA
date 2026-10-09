@@ -28,10 +28,12 @@ The brand is still being built. It has three parts:
   seeking knowledge, getting closer to God. Do not show, tease or use AURA
   or gold until the owner says AURA is launching.
 
-Accounts:
-- **@vaynora_** — VAY content and later AURA content, sometimes Nadhem.
-  VAY videos carry the @vaynora_ handle.
-- **@nadhem_elaashek** — Nadhem's personal brand.
+Accounts (decided by the owner):
+- **@vaynora_** — the addiction niche (pornography, compulsive habits,
+  recovery). VAY is the face of this account. Nadhem appears sometimes.
+  VAY videos carry the @vaynora_ handle. AURA will launch here later.
+- **@nadhem_elaashek** — Nadhem's personal brand: discipline,
+  self-development and his own journey. Real footage of Nadhem, his voice.
 
 ## Brand (from the owner's brand guide)
 
@@ -111,4 +113,5 @@ connected to Windsor). @vaynora_ may behave differently.
 4. VAY = part 1 (red, addiction niche, will speak in Reels); N = Nadhem in
    talking Reels; AURA = part 3 (gold, crown on A, discipline/knowledge/
    spirituality), hidden until the brand owns its spot in the niche.
-5. @nadhem_elaashek stays personal; @vaynora_ carries VAY and AURA.
+5. Account split: @nadhem_elaashek = discipline, self-development, his
+   journey; @vaynora_ = addiction niche, fronted by VAY.
