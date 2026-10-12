@@ -6,6 +6,7 @@
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@huggingface/transformers": "4.3.1",
     "@remotion/cli": "4.0.534",
     "@remotion/zod-types": "4.0.534",
     "react": "19.2.3",

@@ -23,19 +23,22 @@ Word-by-word captions, one word at a time, jumping between positions around
 the face per phrase; red keywords punch in with a `hit`; a `whoosh` before
 each new phrase; end card «تابع» + handle with an `impact`.
 
-1. Get the video and its words. Best: an `.srt` (CapCut auto-captions →
-   export SRT). Otherwise ask for the script as `.txt`, one phrase per line,
-   in the order spoken. Mark keywords with `*asterisks*`.
-2. `python3 scripts/prepare-talking.py <video> <srt|txt> <name>`
-   (writes `public/talking/<name>.{mp4,json}`; the .txt route aligns phrases
-   to the speech pauses, so check the printed cue times look plausible).
+1. The owner only needs to send the video. Transcribe it yourself:
+   `python3 scripts/prepare-talking.py <video> <name>`
+   (offline Whisper small, word timings, phrases split at pauses; ~2 s of
+   compute per second of video). Writes `public/talking/<name>.{mp4,json}`.
+2. Proofread `public/talking/<name>.json` yourself before rendering: Whisper
+   mishears dialect (Tunisian Darja especially). Fix misheard words from
+   context, keep the speaker's dialect (don't rewrite into MSA), and set
+   `"key": true` on 1 keyword per phrase at most. If a word is truly unclear,
+   ask the owner rather than guess. Show the owner the corrected text only if
+   unsure about several words.
+   Optional inputs when the owner has them: an `.srt` or a `.txt` script
+   (one phrase per line, `*keyword*`) as the 2nd argument instead.
 3. Pick the handle by account: `@nadhem_elaashek` (discipline, journey) or
    `@vaynora_` (addiction niche, VAY).
 4. `npx remotion render TalkingReel out/<name>.mp4 --props='{"name":"<name>","handle":"@..."}'`
 5. QA (below), then send `out/<name>.mp4` with SendUserFile.
-
-If huggingface.co is ever reachable, word timings can come from Whisper
-instead; until then do not promise word-exact sync on the .txt route.
 
 ## 2. VAY Reel from panel art
 
