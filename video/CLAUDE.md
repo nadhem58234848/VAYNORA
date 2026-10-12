@@ -128,3 +128,5 @@ connected to Windsor). @vaynora_ may behave differently.
 5. Account split: @nadhem_elaashek = discipline, self-development, his
    journey; @vaynora_ = addiction niche, fronted by VAY.
 6. Audio: nasheeds without percussion only, never music.
+7. Claude edits **Reels only**. Carousels are made by the owner elsewhere;
+   don't offer carousel work.
