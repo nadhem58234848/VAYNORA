@@ -1,8 +1,12 @@
 """Prepare a talking-head Reel for word-by-word captions (TalkingReel).
 
 Usage (from video/):
+  python3 scripts/prepare-talking.py <video> <name>                  # automatic
   python3 scripts/prepare-talking.py <video> <captions.srt|script.txt> <name>
 
+- Without captions the speech is transcribed offline (scripts/transcribe.mjs,
+  Whisper small) with word timings and split into phrases at pauses. Then
+  fix misheard words and set "key": true on keywords in the JSON by hand.
 - With an .srt (e.g. CapCut auto-captions export) the cue timings are used.
 - With a .txt (one phrase per line) timings are estimated from the speech
   pauses in the audio (ffmpeg silencedetect). Less precise than an SRT.
@@ -117,21 +121,46 @@ def split_words(cue):
     return words
 
 
+def transcribe(video):
+    """Offline Whisper word timings, grouped into phrases at pauses."""
+    tmp = os.path.join(OUT, "_words.json")
+    subprocess.run(["node", os.path.join(ROOT, "scripts", "transcribe.mjs"),
+                    video, tmp], check=True)
+    words = json.load(open(tmp, encoding="utf-8"))["words"]
+    os.remove(tmp)
+    cues, current = [], []
+    for i, w in enumerate(words):
+        current.append({"text": w["text"], "start": round(w["start"], 3),
+                        "end": round(w["end"], 3), "key": False})
+        nxt = words[i + 1] if i + 1 < len(words) else None
+        pause = nxt["start"] - w["end"] if nxt else 1
+        if pause > 0.35 or len(current) >= 5 or w["text"][-1] in ".!؟?،,":
+            cues.append({"start": current[0]["start"], "end": current[-1]["end"],
+                         "words": current})
+            current = []
+    return cues
+
+
 def main():
-    if len(sys.argv) != 4:
+    if len(sys.argv) not in (3, 4):
         sys.exit(__doc__)
-    video, captions, name = sys.argv[1:]
+    video, name = sys.argv[1], sys.argv[-1]
+    captions = sys.argv[2] if len(sys.argv) == 4 else None
     os.makedirs(OUT, exist_ok=True)
     duration, width, height = probe(video)
-    cues = parse_srt(captions) if captions.lower().endswith(".srt") \
-        else align_text(video, duration, captions)
+    if captions is None:
+        cues = transcribe(video)
+    else:
+        cues = parse_srt(captions) if captions.lower().endswith(".srt") \
+            else align_text(video, duration, captions)
+        cues = [{"start": c["start"], "end": c["end"], "words": split_words(c)}
+                for c in cues]
     data = {
         "video": f"talking/{name}.mp4",
         "duration": duration,
         "width": width,
         "height": height,
-        "cues": [{"start": c["start"], "end": c["end"], "words": split_words(c)}
-                 for c in cues],
+        "cues": cues,
     }
     shutil.copyfile(video, os.path.join(OUT, f"{name}.mp4"))
     with open(os.path.join(OUT, f"{name}.json"), "w", encoding="utf-8") as f:

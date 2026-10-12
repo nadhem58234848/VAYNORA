@@ -34,8 +34,8 @@ const SLOTS = [
   { x: 0.27, y: 0.5 },
   { x: 0.73, y: 0.5 },
   { x: 0.5, y: 0.74 },
-  { x: 0.3, y: 0.24 },
-  { x: 0.7, y: 0.24 },
+  { x: 0.3, y: 0.15 },
+  { x: 0.7, y: 0.15 },
 ];
 
 export const calculateTalkingMetadata: CalculateMetadataFunction<

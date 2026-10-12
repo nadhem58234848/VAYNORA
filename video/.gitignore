@@ -8,3 +8,6 @@ out
 
 # Raw talking-head uploads and their caption data (per session)
 public/talking/
+
+# Whisper model fetched by the session start hook (~240 MB)
+.models/
