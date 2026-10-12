@@ -4,6 +4,7 @@ import { Logo } from "./HelloWorld/Logo";
 import { Title } from "./HelloWorld/Title";
 import { BRAND_REEL_DURATION, BrandReel } from "./Brand/BrandReel";
 import { VAY_STORY_DURATION, VayStory } from "./Brand/VayStory";
+import { TalkingReel, calculateTalkingMetadata } from "./Brand/TalkingReel";
 import {
   FIVE_THINGS,
   SLIDE_HEIGHT,
@@ -71,6 +72,16 @@ export const RemotionRoot: React.FC = () => {
         ))}
       </Folder>
       <Folder name="Brand">
+        <Composition
+          id="TalkingReel"
+          component={TalkingReel}
+          calculateMetadata={calculateTalkingMetadata}
+          durationInFrames={300}
+          fps={30}
+          width={1080}
+          height={1920}
+          defaultProps={{ name: "demo", handle: "@nadhem_elaashek" }}
+        />
         <Composition
           id="VayStory"
           component={VayStory}
