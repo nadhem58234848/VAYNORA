@@ -23,7 +23,12 @@ Word-by-word captions, one word at a time, jumping between positions around
 the face per phrase; red keywords punch in with a `hit`; a `whoosh` before
 each new phrase; end card «تابع» + handle with an `impact`.
 
-1. The owner only needs to send the video. Transcribe it yourself:
+0. Clean up the raw footage first:
+   `python3 scripts/enhance.py <raw> <enhanced.mp4> --compare <before_after.png>`
+   (exposure from measured luma, warm grade for natural skin, denoise,
+   sharpen; sound: noise reduction, de-ess, compression, -14 LUFS). Look at
+   the before/after still; show it to the owner with the Reel.
+1. The owner only needs to send the video. Transcribe the enhanced file:
    `python3 scripts/prepare-talking.py <video> <name>`
    (offline Whisper small, word timings, phrases split at pauses; ~2 s of
    compute per second of video). Writes `public/talking/<name>.{mp4,json}`.
@@ -31,7 +36,10 @@ each new phrase; end card «تابع» + handle with an `impact`.
    mishears dialect (Tunisian Darja especially). Fix misheard words from
    context, keep the speaker's dialect (don't rewrite into MSA), and set
    `"key": true` on 1 keyword per phrase at most. If a word is truly unclear,
-   ask the owner rather than guess. Show the owner the corrected text only if
+   ask the owner rather than guess. Tunisian Darja comes out badly (first
+   real Reel: about half the words wrong), so when many words are unclear,
+   show the owner the transcript with your guesses and ask for the exact
+   text; then use it as a .txt (or fix the JSON words, keeping the timings). Show the owner the corrected text only if
    unsure about several words.
    Optional inputs when the owner has them: an `.srt` or a `.txt` script
    (one phrase per line, `*keyword*`) as the 2nd argument instead.
