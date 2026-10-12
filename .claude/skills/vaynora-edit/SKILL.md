@@ -1,9 +1,12 @@
 ---
 name: vaynora-edit
-description: Edit VAYNORA / Nadhem Instagram content end to end — talking-head Reels with word-by-word captions and sound effects, VAY Reels from panel art, and VAY carousels from ChatGPT images. Use whenever the owner sends a video, audio, images or a script and asks for montage/editing ("مونتاج", "ركّب", "كابشن", "ريل", "كاروسيل"), or asks for image prompts for VAY.
+description: Edit VAYNORA / Nadhem Instagram Reels end to end — talking-head Reels with word-by-word captions and sound effects, and VAY Reels from panel art. Use whenever the owner sends a video, audio, images or a script and asks for montage/editing ("مونتاج", "ركّب", "كابشن", "ريل"). Reels only: carousels are not Claude's job.
 ---
 
 # VAYNORA editing
+
+Claude's job here is **Reels only**. The owner makes carousels elsewhere: do
+not offer carousel work or image prompts for carousels.
 
 Everything lives in `video/` (Remotion). Before any work, read
 `video/CLAUDE.md`: brand identity, VAY/N/AURA rules, account split, sound
@@ -41,21 +44,6 @@ captions → hope turn → CTA. Edit `SLIDES`; images in `public/vay/`. Sound:
 `SoundTrack` in the same file (whoosh per cut, hit per caption, riser into
 the hope turn, impacts). Optional nasheed: set `NASHEED`.
 Render: `npx remotion render VayStory out/VayStory.mp4`.
-
-## 3. VAY carousel (ChatGPT draws, Claude writes)
-
-1. Write the prompts in English into `video/prompts/<name>.md`, starting from
-   the master message in `prompts/vay-carousel-5-things.md` (VAY locked to the
-   reference, clean muted backgrounds, red only on VAY, NO TEXT in images,
-   calm lower third, 3:2 panels / 2:3 cover and CTA).
-2. Arabic text is never drawn by ChatGPT: Claude sets it with
-   `VayCarouselSlide` (`src/Brand/VayCarousel.tsx`), Modern Standard Arabic,
-   one red keyword per caption, Latin digits.
-3. Review each image the owner sends: VAY unchanged (crown, no face, emblem,
-   wraps), background calm, matches the prompt, bright enough for a phone.
-   Give a one-line fix prompt when it fails.
-4. Save images under `public/carousel/<name>/`, set `src` in the slide list,
-   render each slide: `npx remotion still <Id>-<n> out/<name>-<n>.png`.
 
 ## Sound effects
 
