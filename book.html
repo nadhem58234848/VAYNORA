@@ -140,9 +140,6 @@ world.addEventListener("click", () => pick(false));
 let saved = null;
 try{ saved = localStorage.getItem("vay-region"); }catch(e){}
 if (saved === "world") pick(false);
-else if (!saved) {
-  try{ if (!/Africa\/Tunis/.test(Intl.DateTimeFormat().resolvedOptions().timeZone)) pick(false); }catch(e){}
-}
 </script>
 
 </body>
