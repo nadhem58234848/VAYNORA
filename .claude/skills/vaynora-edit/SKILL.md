@@ -28,7 +28,9 @@ each new phrase; end card «تابع» + handle with an `impact`.
    (exposure from measured luma, warm grade for natural skin, denoise,
    sharpen; sound: noise reduction, de-ess, compression, -14 LUFS). Look at
    the before/after still; show it to the owner with the Reel.
-1. The owner only needs to send the video. Transcribe the enhanced file:
+1. The owner sends the video. Uploads over 30 MB fail in the app: ask for a
+   CapCut export at 1080p, 30 fps, bitrate ~5–7 Mbps, smart HDR off, AI
+   upscale off. Transcribe the enhanced file:
    `python3 scripts/prepare-talking.py <video> <name>`
    (offline Whisper small, word timings, phrases split at pauses; ~2 s of
    compute per second of video). Writes `public/talking/<name>.{mp4,json}`.
@@ -39,14 +41,27 @@ each new phrase; end card «تابع» + handle with an `impact`.
    ask the owner rather than guess. Tunisian Darja comes out badly (first
    real Reel: about half the words wrong), so when many words are unclear,
    show the owner the transcript with your guesses and ask for the exact
-   text; then use it as a .txt (or fix the JSON words, keeping the timings). Show the owner the corrected text only if
+   text; then use it as a .txt (or fix the JSON words, keeping the timings).
+   CapCut's auto-captions ("تعديل الشرح" screenshots) are far better than
+   Whisper on Darja: when the owner sends them, fix spelling and pass the
+   lines as a .txt — each word is aligned to Whisper's timing (DTW), so
+   timing stays exact even where Whisper misheard. CapCut can skip a line;
+   fill it from Whisper and tell the owner which words you inferred. Show the owner the corrected text only if
    unsure about several words.
    Optional inputs when the owner has them: an `.srt` or a `.txt` script
    (one phrase per line, `*keyword*`) as the 2nd argument instead.
 3. Pick the handle by account: `@nadhem_elaashek` (discipline, journey) or
    `@vaynora_` (addiction niche, VAY).
+   The script also detects the face (OpenCV) and writes face-free caption
+   slots into the JSON (above the head, below the chin, beside the face when
+   there is room). Check a few stills: no word may touch the face.
 4. `npx remotion render TalkingReel out/<name>.mp4 --props='{"name":"<name>","handle":"@..."}'`
-5. QA (below), then send `out/<name>.mp4` with SendUserFile.
+5. Delivery copy (the chat upload limit is 30 MB; SFX on top of the voice
+   can hit 0 dB):
+   `ffmpeg -i out/<name>.mp4 -c:v libx264 -preset slow -b:v 7M -maxrate 8M -bufsize 16M -pix_fmt yuv420p -af "alimiter=limit=0.84:attack=2:release=60:level=false" -c:a aac -b:a 192k -movflags +faststart out/<name>-ig.mp4`
+   Check peak < -1 dB and size < 30 MB (lower -b:v for Reels over ~30 s).
+6. QA (below), then send `out/<name>-ig.mp4` and the before/after still
+   with SendUserFile.
 
 ## 2. VAY Reel from panel art
 
