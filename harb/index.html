@@ -375,12 +375,13 @@ function rr(x,X,Y,W,Hh,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+W,Y,X+W,Y+Hh,r
 // sticker in the style of the «هل أنت مستعد لهذا التحدي؟» post: red banner + red check boxes + bold text, narrow so it sits on the right side
 // cs: w = white text, b = dark text, d = dark background
 const RED='#8e1d20';
-async function sticker(title,rows){try{await document.fonts.load('800 40px Cairo')}catch(e){}
+async function sticker(title,rows,ex){ex=ex||{};try{await document.fonts.load('800 40px Cairo')}catch(e){}
  const cv=$('#cv'),cs=S.cs||'w';let x=cv.getContext('2d');
  const F='800 54px Cairo',BF='800 58px Cairo',P=24,BOX=66,GAP=26,LH=92;
  x.font=F;let tw=0;rows.forEach(r=>tw=Math.max(tw,x.measureText(r[0]).width));
  x.font=BF;const bw=x.measureText(title).width+P*2*1.6;
- const W=Math.ceil(Math.max(bw,tw+BOX+GAP)+P*2),Hh=P+120+28+Math.max(1,rows.length)*LH+110;
+ const TOP=ex.badge?86:0,BOT=ex.chain?72:0;
+ const W=Math.ceil(Math.max(bw,tw+BOX+GAP)+P*2),Hh=P+120+28+TOP+Math.max(1,rows.length)*LH+110+BOT;
  cv.width=W;cv.height=Hh;x=cv.getContext('2d');x.direction='rtl';x.textAlign='right';x.textBaseline='middle';
  if(cs==='d'){x.fillStyle='rgba(13,13,13,.92)';rr(x,0,0,W,Hh,28);x.fill()}
  const T=cs==='b'?'#111':'#fff',sh=on=>{x.shadowColor=on&&cs!=='d'?(cs==='b'?'rgba(255,255,255,.7)':'rgba(0,0,0,.65)'):'transparent';x.shadowBlur=on?12:0};
@@ -389,6 +390,7 @@ async function sticker(title,rows){try{await document.fonts.load('800 40px Cairo
  x.fillStyle='#fff';x.font=BF;x.textAlign='center';x.fillText(title,W/2,P+62);x.textAlign='right';
  // rows
  let y=P+120+28+LH/2;const R=W-P;
+ if(ex.badge){sh(1);x.fillStyle=T;x.font='800 50px Cairo';x.textAlign='center';x.fillText('🏆 يوم كامل',W/2,P+120+56);x.textAlign='right';y+=TOP}
  if(!rows.length){sh(1);x.fillStyle=T;x.font=F;x.globalAlpha=.8;x.fillText('النهار مازال ما كملش',R,y);x.globalAlpha=1;y+=LH}
  rows.forEach(([t,ok])=>{sh(0);x.lineCap='round';x.lineJoin='round';
   if(ok){x.fillStyle=RED;rr(x,R-BOX,y-BOX/2,BOX,BOX,12);x.fill();x.strokeStyle='#fff';x.lineWidth=8;x.beginPath();x.moveTo(R-BOX+17,y+1);x.lineTo(R-BOX+29,y+13);x.lineTo(R-BOX+50,y-12);x.stroke()}
@@ -396,6 +398,7 @@ async function sticker(title,rows){try{await document.fonts.load('800 40px Cairo
   sh(1);x.font=F;x.fillStyle=ok?T:(cs==='b'?'#555':'#bdbdbd');x.globalAlpha=ok?1:.75;x.fillText(t,R-BOX-GAP,y+4);
   if(!ok){const w=x.measureText(t).width;sh(0);x.strokeStyle=x.fillStyle;x.lineWidth=5;x.beginPath();x.moveTo(R-BOX-GAP,y+6);x.lineTo(R-BOX-GAP-w,y+6);x.stroke()}
   x.globalAlpha=1;y+=LH});
+ if(ex.chain){sh(1);x.fillStyle=T;x.font='800 46px Cairo';x.fillText('🔗 سلسلة '+ex.chain+(ex.chain>2&&ex.chain<11?' أيام':' يوم'),R,y-LH/2+40);y+=BOT}
  // footer like the post: red line + spaced VAYNORA
  sh(0);x.fillStyle=RED;x.fillRect(P,y-LH/2+28,W-P*2,4);
  sh(1);x.fillStyle=T;x.font='400 38px Georgia,"Times New Roman",serif';x.textAlign='center';x.direction='ltr';x.fillText('V A Y N O R A',W/2,y-LH/2+80);
@@ -403,7 +406,7 @@ async function sticker(title,rows){try{await document.fonts.load('800 40px Cairo
 function rowsOf(n){const a=active(n),d=D(n),r=[];
  a.forEach(h=>{const v=val(n,h);if(v)r.push([v===3?'رياضة: يوم راحة':h.t,1]);else if(S.showMiss!==false)r.push([h.t,0])});
  if(S.cleanOn&&d.clean)r.push(['بلا عادة سيئة',1]);return r}
-function dayCard(n){return sticker('حرب النفس · اليوم '+n,rowsOf(n))}
+function dayCard(n){return sticker('حرب النفس · اليوم '+n,rowsOf(n),{badge:won(n),chain:chain()})}
 function gradCard(){return sticker('حرب النفس · كمّلت 21 يوم',[['ربحت '+wonDays()+' نهار من 21',1]].concat(AREAS.map((a,i)=>[a+': '+S.r0[i]+' ← '+S.r21[i],S.r21[i]>=S.r0[i]])))}
 async function shareCard(p,fn){const cv=await p;
  cv.toBlob(async b=>{const f=new File([b],fn,{type:'image/png'});
