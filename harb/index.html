@@ -52,6 +52,7 @@ label{display:block;margin-top:12px;font-size:14px}
 .seg{display:flex;gap:6px;margin-top:8px}
 .seg button{flex:1;border:1px solid var(--line);background:var(--card2);color:var(--tx);border-radius:10px;padding:9px 4px;font:800 13px Cairo;cursor:pointer}
 .seg button.f.on{background:var(--grn);border-color:var(--grn);color:#fff}
+.seg button.x.on{background:#5a1a1c;border-color:#5a1a1c;color:#fcc}
 .seg button.m.on{background:var(--amb);border-color:var(--amb);color:#1a1100}
 .new{font-size:11px;background:var(--red);color:#fff;border-radius:8px;padding:0 6px;margin-right:6px}
 .pr{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}
@@ -113,15 +114,15 @@ const NEXT90='الثلاثاء 1 ديسمبر';
 const N=21, APP_URL='https://nadhem58234848.github.io/VAYNORA/harb/';
 
 const WEEKS=[
- {n:'الأسبوع 1 · الأساس',d:'الفجر، النوم والقيام في وقت ثابت، وأول ساعة بلا تليفون.'},
- {n:'الأسبوع 2 · الجسد والعقل',d:'نزيدو: رياضة، قراية، وماء.'},
+ {n:'الأسبوع 1 · الأساس',d:'الفجر، النوم والقيام في وقت ثابت، أول ساعة بلا تليفون، والرياضة.'},
+ {n:'الأسبوع 2 · الجسد والعقل',d:'نزيدو: قراية وماء.'},
  {n:'الأسبوع 3 · الاتجاه',d:'نزيدو: الخمس صلوات في وقتها، ومهمة غدوة الوحيدة.'}];
 // habits: w = week it starts; full / min = what counts
 const H=[
  {id:'fajr',w:1,to:2,t:'الفجر في وقتو',full:'في وقتو',min:'في نهارو',pray:1},
  {id:'sleep',w:1,t:'نوم وقيام في وقت ثابت',full:'الزوز',min:'واحد منهم',hint:'كاملة: رقدت قبل 23:00 وقمت في وقتي · على الأقل: واحد منهم برك'},
  {id:'phone',w:1,t:'أول ساعة بلا تليفون',full:'ساعة',min:'20 دقيقة',hint:'من كي تقوم، ما تحلّش التليفون'},
- {id:'sport',w:2,t:'رياضة',full:'20 دقيقة',min:'10 ضغط + 10 سكوات',hint:'تمرين ولا مشي سريع',sp:1},
+ {id:'sport',w:1,t:'رياضة',sp:1,hint:'خطّط 3 لـ5 تمارين في الأسبوع. الراحة تحسب، الضائع لا.'},
  {id:'read',w:2,t:'قراية',full:'10 صفحات',min:'صفحتين',hint:'كتاب نافع، موش منشورات'},
  {id:'water',w:2,t:'الماء',full:'2 لتر',min:'1 لتر'},
  {id:'salat',w:3,t:'الخمس صلوات في وقتها',pray:5,hint:'تتعبّى وحدها من الصلوات اللوطة'},
@@ -136,7 +137,7 @@ const MSG=[
  'الليلة شارجور التليفون برّا البيت متاعك. الفراش للرقاد، موش للتقليب.',
  'شوف وين تمشي الساعة الأولى متاعك. كان مازلت تحلّ التليفون، حطّو في بلاصة بعيدة قبل ما ترقد.',
  'جمعة كاملة! كل ليلة سبت مراجعة: شنوة نجح؟ وين طحت؟ شنوة نبدّل؟ اكتبها لروحك وابعث تقريرك للقروب.',
- 'من اليوم نزيدو الجسد والعقل. ما تبداش بقوة. 10 ضغط و10 سكوات تحسب. المهم ما تفلّتش.',
+ 'من اليوم نزيدو القراية والماء. ما تبداش بقوة: صفحتين و1 لتر يحسبو. المهم ما تفلّتش.',
  '«أحبّ الأعمال إلى الله أدومها وإن قلّ» (متفق عليه). القليل الدايم يغلب الكثير اللي يوقف.',
  'اختار كتاب واحد وكمّل فيه. 10 صفحات كل يوم = كتاب في الشهر تقريباً.',
  'املا بوتيّة ماء 1 لتر الصباح وخلّيها قدامك. كي تكمل، عاود املاها.',
@@ -155,7 +156,8 @@ const RULES=[
  ['ما تعاودش من الصفر','كل مهمة عندها نسخة صغيرة «على الأقل» للنهارات الصعبة، وتحسب.'],
  ['ما تفلّتش زوز نهارات ورا بعضهم','نهار فالت عادي. زوز ورا بعضهم يكسرو السلسلة.'],
  ['كل ليلة تبعث تقريرك','رقم النهار مع ✅ ولا ❌، في القروب.'],
- ['التوثيق اليومي','صوّر لحظة من نهارك (صورة ولا فيديو)، حط فوقها بطاقة إنجازاتك الشفافة، وانشرها في الستوري مع tag لـ @'+'vaynora_'+'.']];
+ ['التوثيق اليومي','كل نهار انشر صورة ولا فيديو من نهارك مع بطاقتك: post بـcollaboration مع @vaynora_، ولا story بـtag لـ @vaynora_. وحط @vaynora_ في الـbio متاعك مدة التحدي.'],
+ ['تابع الستوريات والريلات','كل نهار @vaynora_ ينزّل ستوريات وريلات فيها معلومات تعاونك في التحدي. ما تفلّتهاش.']];
 const TEN=['اكسر المشهد توا: قوم من بلاصتك، بدّل البيت، واخرج من الخلوة.','سمِّ الرغبة: قول «هاذي موجة وباش تعدّي، والله يراني». واستعذ بالله.','توضّا بماء بارد.','صلّي ركعتين بخشوع، ولو قصار.','امشي لبلاصة فيها عباد، ولا كلّم صاحبك.','20 تمرين ضغط ولا مشي سريع.','تنفّس: شهيق 4، حبس 4، زفير 6. عاود 10 مرات.','اكتب: شنوة نحس توا؟ ومن شنوة قاعد نهرب؟'];
 const FIRST=['قوم توا من البلاصة، وبعّد على الجهاز.','توضّا وصلّي ركعتين، واستغفر بصدق.','ما تجلدش روحك. الحزن الصادق يدفعك، والجلد يقيّدك.','اكتب بهدوء: وقتاش؟ وين؟ شنوة الإحساس اللي قبلها؟','سدّ الثغرة اللي دخلت منها.','ارجع لتحدّيك نفس النهار. النسخة الصغيرة «على الأقل» تحسب.'];
 
@@ -197,7 +199,7 @@ function spEditor(){const p=S.sp||{days:[],min:20};
  <div style="margin-top:6px">${WD.map((w,i)=>`<span class="pill ${p.days.includes(i)?'on':''}" data-wd="${i}">${w}</span>`).join('')}</div>
  <label>قدّاش من دقيقة في كل حصة؟<input id="spm" type="number" min="5" max="180" value="${p.min}"></label>
  <button class="btn sec" id="sps">سجّل برنامج الرياضة</button>`}
-function val(n,h){const d=S.days[n];if(h.sp&&restDay(n))return 3;if(!d)return 0;
+function val(n,h){const d=S.days[n];if(!d)return 0;if(h.sp){const v=d.h.sport||0;return v===4?0:v}
  if(h.pray===1)return d.p.fajr||0;
  if(h.pray===5){let a=0,m=0;PR.forEach(([k])=>{const v=d.p[k]||0;if(v===1)a++;if(v)m++});return a===5?1:(m===5?2:0)}
  return d.h[h.id]||0}
@@ -242,7 +244,7 @@ function bindHub(){$('#goch').onclick=()=>go('home');document.querySelectorAll('
 function onboard(){
  return `<div class="top"><div>${back()}<div class="logo">حرب النفس</div><div class="mut">اصنع من الألم قوة</div></div></div>
  ${installCard(1)}<div class="card"><h1>تحدي 21 يوم 🔥</h1><p style="margin-top:8px">21 يوم نبنيو فيهم الانضباط، بداية من الصلاة. ناظم يعمل التحدي معاكم نهار بنهار.</p>
- <h3>القواعد الأربعة</h3>${RULES.map((r,i)=>`<div class="wk"><b>${i+1}</b><div><div class="t" style="font-weight:800">${r[0]}</div><div class="mut">${r[1]}</div></div></div>`).join('')}
+ <h3>القواعد الخمسة</h3>${RULES.map((r,i)=>`<div class="wk"><b>${i+1}</b><div><div class="t" style="font-weight:800">${r[0]}</div><div class="mut">${r[1]}</div></div></div>`).join('')}
  <h3>المهام تتزاد كل أسبوع</h3>${WEEKS.map((w,i)=>`<div class="wk"><b>${i+1}</b><div><div style="font-weight:800">${w.n.split('· ')[1]}</div><div class="mut">${w.d}</div></div></div>`).join('')}</div>
  <div class="card"><h2>النهار 0: علاش دخلت؟</h2>
  <label>اسمك (يظهر على بطاقتك، تنجم تخلّيه فارغ)<input id="nm" maxlength="24" value="${esc(S.name)}"></label>
@@ -278,23 +280,25 @@ function home(){
  ${installCard()}
  <div class="stats"><div class="stat"><b>${n}<small style="font-size:13px">/21</small></b><span>النهار</span></div><div class="stat"><b class="grn">${ch}</b><span>السلسلة 🔗</span></div><div class="stat"><b>${dc}/${a.length}</b><span>مهام اليوم</span></div></div>
  ${lastTwoMissed()?`<div class="card" style="border-color:var(--amb)"><b>⚠️ فلّتت زوز نهارات.</b><p class="mut">موش مشكلة، أما اليوم لازم ترجع. اعمل على الأقل النسخة الصغيرة من كل مهمة وتحسب.</p></div>`:''}
- <div class="card"><span class="phase">${wk.n}</span><h3 style="margin-top:2px">💬 رسالة اليوم من ناظم</h3><p>${MSG[n-1]}</p></div>
+ <div class="card"><span class="phase">${wk.n}</span><h3 style="margin-top:2px">💬 رسالة اليوم من ناظم</h3><p>${MSG[n-1]}</p>
+ <a class="btn sec" target="_blank" href="https://instagram.com/${VAY}">📲 شوف ستوري وريل اليوم في إنستغرام</a></div>
  <div class="card"><h2>مهام اليوم</h2><div class="mut">«على الأقل» تحسب. المهم ما تفلّتش.</div>
  ${a.map(h=>habRow(n,h,newIds.includes(h.id))).join('')}</div>
  ${custCard(n)}
  <div class="card"><h2>🕌 صلواتي اليوم</h2><div class="mut">${w<3?'الأسبوع هذا يحسب الفجر. سجّل البقية زادة.':'الأسبوع هذا تحسب الخمسة.'}</div>
  ${PR.map(([k,t])=>`<div class="pr"><div style="font-weight:800">${t}</div><div class="seg"><button class="f ${d.p[k]===1?'on':''}" data-p="${k}" data-v="1">في وقتها</button><button class="m ${d.p[k]===2?'on':''}" data-p="${k}" data-v="2">في نهارها</button></div></div>`).join('')}</div>
  ${S.cleanOn?`<div class="card priv"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:800">بلا عادة سيئة اليوم</div><div class="mut">خاصة بيك. ما تحسبش في التحدي، وتظهر في البطاقة كان عملتها برك.</div></div><div class="seg" style="flex:0 0 30%;margin:0"><button class="f ${d.clean?'on':''}" id="cln">✓</button></div></div></div>`:''}
- <div class="card"><h2>📸 التوثيق اليومي</h2><p class="mut">صوّر لحظة من نهارك، حط فوقها البطاقة هاذي، وانشرها في الستوري مع tag لـ <b style="direction:ltr;display:inline-block">@${VAY}</b>.</p>
+ <div class="card"><h2>📸 التوثيق اليومي</h2><p class="mut">صوّر لحظة من نهارك وحط فوقها البطاقة هاذي، وبعد:</p>
+ <ul class="mut" style="margin-top:4px"><li><b>Post</b>: اعمل collaboration مع <b dir="ltr" style="unicode-bidi:isolate">@${VAY}</b></li><li><b>Story</b>: اعمل tag لـ <b dir="ltr" style="unicode-bidi:isolate">@${VAY}</b></li><li>وحط <b dir="ltr" style="unicode-bidi:isolate">@${VAY}</b> في الـbio متاعك مدة التحدي</li></ul>
  ${cardBox()}
  <div class="row"><button class="btn sec" id="txt">انسخ التقرير</button>${TG?`<a class="btn tg" href="${TG}" target="_blank">القروب</a>`:`<button class="btn sec" id="shtxt">شارك</button>`}</div></div>
  ${n%7===0?review(n):''}
  ${inviteCard()}`}
 function habRow(n,h,isNew){
  const v=val(n,h),auto=!!h.pray,d=D(n);
- if(h.sp&&(!S.sp||!S.sp.days.length||S._spEdit))return `<div class="hab"><div class="t">${isNew?'<span class="new">جديد</span>':''}🏋️ برنامج الرياضة متاعك</div>${spEditor()}</div>`;
- if(h.sp&&v===3)return `<div class="hab"><div class="t">رياضة</div><small class="grn">😌 يوم راحة حسب برنامجك (يحسب)</small><small><a href="#" class="red" data-spe>بدّل البرنامج</a> · تمارينك: ${S.sp.days.map(i=>WD[i]).join('، ')} · ${S.sp.min} دقيقة</small></div>`;
- if(h.sp)h=Object.assign({},h,{full:S.sp.min+' دقيقة',hint:'اليوم نهار تمرين · <a href="#" class="red" data-spe>بدّل البرنامج</a>'});
+ if(h.sp){const raw=d.h.sport||0,ws=n-((n-1)%7);let wk=0;for(let k=ws;k<=n;k++)if(S.days[k]&&S.days[k].h.sport===1)wk++;
+  return `<div class="hab"><div class="t">${isNew?'<span class="new">جديد</span>':''}🏋️ رياضة</div><small>${h.hint} · تمارين هالأسبوع: <b>${wk}</b></small>
+  <div class="seg"><button class="f ${raw===1?'on':''}" data-h="sport" data-v="1">💪 تمرين</button><button class="f ${raw===3?'on':''}" data-h="sport" data-v="3">😌 راحة</button><button class="x ${raw===4?'on':''}" data-h="sport" data-v="4">✕ ضائع</button></div></div>`}
  return `<div class="hab"><div class="t">${isNew?'<span class="new">جديد</span>':''}${h.t}</div>${h.hint?`<small>${h.hint}</small>`:''}
  ${auto?`<small class="${v?'grn':''}">${v===1?'✅ كاملة':v===2?'🟡 على الأقل':'سجّل في «صلواتي اليوم» اللوطة'}</small>`:
  `<div class="seg"><button class="f ${v===1?'on':''}" data-h="${h.id}" data-v="1">كاملة · ${h.full}</button><button class="m ${v===2?'on':''}" data-h="${h.id}" data-v="2">على الأقل · ${h.min}</button></div>`}
@@ -361,7 +365,6 @@ function set(){return head()+`<div class="card"><h2>الإعدادات</h2>
  <label>نهار البداية<input id="sst" type="date" value="${S.start}"></label>
  <button class="btn sec" id="ssv">سجّل</button></div>
  ${installCard(1)}${inviteCard()}
- <div class="card"><h2>🏋️ برنامج الرياضة</h2>${spEditor()}</div>
  <div class="card"><h2>⏰ تذكير كل ليلة</h2><p class="mut">يزيد في الكاليندر متاع تليفونك تذكير على 21:30 لمدة 21 يوم: «ابعث تقريرك».</p><button class="btn sec" id="ics">زيد التذكير</button></div>
  ${TG?`<div class="card"><a class="btn tg" href="${TG}" target="_blank">قروب التليغرام</a></div>`:''}
  <div class="card"><h2>نسخة احتياطية</h2><p class="mut">بياناتك في هالتليفون برك. كان تبدّل تليفون، انسخ الكود وحطّو في الجديد.</p>
