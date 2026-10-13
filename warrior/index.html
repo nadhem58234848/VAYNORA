@@ -128,7 +128,7 @@ function vWelcome(){return `
 </div>
 <div class="card">
 <p>كل نهار تلقى مهمتك من الكتاب، تسجّل نهارك، وكي تجيك الموجة تنزل على <b class="red">نجدة</b>.</p>
-<p class="mut" style="margin-top:8px">🔒 كل حاجة تتسجّل في تليفونك برك. حتى حد ما يشوفها، حتى نذهم.</p>
+<p class="mut" style="margin-top:8px">🔒 كل حاجة تتسجّل في تليفونك برك. حتى حد ما يشوفها، حتى ناظم.</p>
 <label>شنوة نسمّيك؟ (اسم مستعار يكفي)<input id="nm" placeholder="مثلاً: محارب" maxlength="20"></label>
 <label>وقتاش تبدا؟<input id="st" type="date" value="${today()}"></label>
 <button class="btn" id="go">نبدا التحدي 💪</button>
@@ -141,7 +141,7 @@ if(raw<1)return `<div class="top"><span class="logo">VAYNORA</span></div><div cl
 if(raw>90)return vDone();
 const n=raw,d=D(n),ph=phaseOf(n),isRev=n%7===0||n===90;
 const rules=RULES.map(r=>`<div class="chk ${d[r[0]]?'on':''}" data-r="${r[0]}"><span class="box">${d[r[0]]?'✓':''}</span><div>${r[1]}<small>${r[2]}</small></div></div>`).join('');
-const mile=n===21?`<div class="card" style="border-color:var(--amb)"><h2>🎖️ النهار 21!</h2><p>كمّلت انطلاقة المحارب. ثلاثة أسابيع موش ساهلة. ابعث لنذهم وقلّو كيفاش تبدّلت، ونكمّلو مع بعضنا للـ90.</p><a class="btn" href="https://wa.me/${WA}?text=${encodeURIComponent('السلام عليكم، كمّلت 21 يوم في تطبيق المحارب الحمد لله 💪 نحب نكمّل للـ90')}" target="_blank">ابعث لنذهم</a></div>`:'';
+const mile=n===21?`<div class="card" style="border-color:var(--amb)"><h2>🎖️ النهار 21!</h2><p>كمّلت انطلاقة المحارب. ثلاثة أسابيع موش ساهلة. ابعث لناظم وقلّو كيفاش تبدّلت، ونكمّلو مع بعضنا للـ90.</p><a class="btn" href="https://wa.me/${WA}?text=${encodeURIComponent('السلام عليكم، كمّلت 21 يوم في تطبيق المحارب الحمد لله 💪 نحب نكمّل للـ90')}" target="_blank">ابعث لناظم</a></div>`:'';
 return `
 <div class="top"><div><span class="logo">VAYNORA</span><div class="mut">مرحبا ${esc(S.name)} 🤍</div></div><div style="text-align:left"><span class="mut">النهار</span><div class="big">${n}<span style="font-size:18px;color:var(--mut)">/90</span></div></div></div>
 <div class="stats"><div class="stat"><b class="red">${streak()}</b><span>أيام نظيفة متتالية</span></div><div class="stat"><b>${cleanCount()}</b><span>أيام نظيفة الكل</span></div><div class="stat"><b>${best()}</b><span>أحسن سلسلة</span></div></div>
@@ -163,7 +163,7 @@ $('#cl').onclick=()=>{d.clean=true;save();toast('الحمد لله، نهار آ
 $('#fl').onclick=()=>go('fall');
 document.querySelectorAll('[data-go]').forEach(e=>e.onclick=()=>go(e.dataset.go));}
 
-function vDone(){return `<div class="top"><span class="logo">VAYNORA</span></div><div class="card" style="text-align:center;padding:28px 16px"><div style="font-size:50px">🏆</div><h1>كمّلت الـ90 يوم</h1><p style="margin-top:10px">انتهى التحدي، وبدات حياتك الجديدة. سجود شكر وركعتين.</p><p class="mut" style="margin-top:8px">${cleanCount()} نهار نظيف · أحسن سلسلة ${best()}</p><a class="btn" href="https://wa.me/${WA}?text=${encodeURIComponent('السلام عليكم، كمّلت الـ90 يوم في تطبيق المحارب الحمد لله 🏆')}" target="_blank">ابعث شهادتك لنذهم</a></div>`}
+function vDone(){return `<div class="top"><span class="logo">VAYNORA</span></div><div class="card" style="text-align:center;padding:28px 16px"><div style="font-size:50px">🏆</div><h1>كمّلت الـ90 يوم</h1><p style="margin-top:10px">انتهى التحدي، وبدات حياتك الجديدة. سجود شكر وركعتين.</p><p class="mut" style="margin-top:8px">${cleanCount()} نهار نظيف · أحسن سلسلة ${best()}</p><a class="btn" href="https://wa.me/${WA}?text=${encodeURIComponent('السلام عليكم، كمّلت الـ90 يوم في تطبيق المحارب الحمد لله 🏆')}" target="_blank">ابعث شهادتك لناظم</a></div>`}
 function bindDone(){}
 
 function vMap(){const n=dayNo();let c='';for(let i=1;i<=90;i++){const d=S.days[i]||{};let k=d.clean===true?'c':d.clean===false?'f':d.task?'t':'';if(i===n)k+=' now';c+=`<div class="cell ${k}" data-d="${i}">${i}</div>`}
@@ -194,9 +194,9 @@ ${TEN.map((s,i)=>`<div class="step ${sosSteps[i]?'on':''}" data-s="${i}"><span c
 ${S.ifthen.some(x=>x)?`<div class="card"><h2>قراراتك اللي خذيتها وإنت هادي</h2><ol>${S.ifthen.filter(x=>x).map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:''}
 <div class="card"><h2>ما تبقاش وحدك</h2>
 ${S.contact?`<p>الشخص اللي تكلمو: <b>${esc(S.contact)}</b></p>`:''}
-<a class="btn sec" href="https://ig.me/m/${IG}" target="_blank">ابعث لنذهم في إنستا</a>
+<a class="btn sec" href="https://ig.me/m/${IG}" target="_blank">ابعث لناظم في إنستا</a>
 <a class="btn sec" href="https://wa.me/${WA}?text=${encodeURIComponent('نجدة 🆘')}" target="_blank">ابعث «نجدة» في واتساب</a>
-<p class="mut" style="margin-top:8px">نذهم يجاوب كي ينجم، موش ديما في الحين. الخطة اللي فوق هي اللي تنقذك في اللحظة.</p></div>
+<p class="mut" style="margin-top:8px">ناظم يجاوب كي ينجم، موش ديما في الحين. الخطة اللي فوق هي اللي تنقذك في اللحظة.</p></div>
 <div class="quote">«إِنَّمَا الصَّبْرُ عِنْدَ الصَّدْمَةِ الأُولَى» · متفق عليه</div>`}
 function tick(){if(!tOn)return;tLeft--;const e=$('#tm');if(e)e.textContent=fmt(tLeft);if(tLeft<=0){clearInterval(tmr);tOn=false;tLeft=600;if(navigator.vibrate)navigator.vibrate([200,100,200]);if(view==='sos')render();const n=dayNo();if(n>=1&&n<=90){const d=D(n);d.wins=(d.wins||0)+1;save()}toast('عدّت الموجة! إنت أقوى مما ظنّيت 💪')}}
 function bindSos(){$('#ts').onclick=()=>{tOn=!tOn;if(tOn){clearInterval(tmr);tmr=setInterval(tick,1000)}else clearInterval(tmr);render()};
@@ -231,7 +231,7 @@ function vSet(){return `<div class="top"><h1>⚙️ إعدادات</h1></div>
 <div class="card"><label>اسمك<input id="sn" value="${esc(S.name)}"></label><label>تاريخ البداية<input id="sd" type="date" value="${esc(S.start)}"></label><button class="btn" id="ss">نسجّل</button></div>
 <div class="card"><h2>📲 حطّو في الشاشة الرئيسية</h2><p class="mut">آيفون: Safari ← زر المشاركة ← «إضافة إلى الشاشة الرئيسية». أندرويد: Chrome ← ⋮ ← «إضافة للشاشة الرئيسية».</p></div>
 <div class="card"><h2>🔒 الخصوصية</h2><p class="mut">بياناتك في هالتليفون وهالمتصفح برك. ما تتبعث لحتى حد. كان تفسخ بيانات المتصفح، تتفسخ معاها.</p></div>
-<div class="card"><h2>📖 الكتاب</h2><p class="mut">كل المهام من كتاب «معركة الخلوات» (الفصول 6، 7، 8) لنذهم العاشق.</p><a class="btn sec" href="https://nadhem58234848.github.io/VAYNORA/book.html" target="_blank">صفحة الكتاب</a></div>
+<div class="card"><h2>📖 الكتاب</h2><p class="mut">كل المهام من كتاب «معركة الخلوات» (الفصول 6، 7، 8) لناظم العاشق.</p><a class="btn sec" href="https://nadhem58234848.github.io/VAYNORA/book.html" target="_blank">صفحة الكتاب</a></div>
 <div class="card"><button class="btn sec" id="rs">${delArm?'متأكد؟ اضغط مرة أخرى باش تفسخ الكل':'نبدا من الصفر'}</button></div>`}
 function bindSet(){$('#ss').onclick=()=>{S.name=$('#sn').value.trim()||S.name;S.start=$('#sd').value||S.start;save();toast('تسجّلت ✓');go('home')};
 $('#rs').onclick=()=>{if(!delArm){delArm=true;render();setTimeout(()=>{delArm=false;if(view==='set')render()},4000);return}try{localStorage.removeItem(K)}catch(e){}location.reload()}}
