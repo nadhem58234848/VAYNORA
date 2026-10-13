@@ -79,6 +79,12 @@ li{margin-bottom:4px}
 .bar i{position:absolute;top:0;right:0;height:100%;border-radius:8px}
 .prog{height:8px;background:var(--card2);border-radius:8px;overflow:hidden;margin-top:10px}
 .prog i{display:block;height:100%;background:var(--red)}
+
+.pill{display:inline-block;background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:6px 12px;margin:6px 0 0 6px;cursor:pointer;font-size:13px}
+.pill.on{background:var(--red);border-color:var(--red);color:#fff}
+.ck{margin-top:10px;border-radius:12px;overflow:hidden;background:repeating-conic-gradient(#7a7a7a 0 25%,#9a9a9a 0 50%) 50%/22px 22px;min-height:120px}
+.ck.nock{background:none}
+.ck img{display:block;width:100%;-webkit-touch-callout:default}
 .priv{border-color:#3a2a10;background:#17130b}
 canvas{display:none}
 .wk{display:flex;gap:10px;align-items:flex-start;padding:8px 0}
@@ -96,7 +102,7 @@ canvas{display:none}
 <canvas id="cv" width="1080" height="1920"></canvas>
 <script>
 // ===== settings Nadhem can change =====
-const WA='21658886475', IG='nadhem_elaashek';
+const WA='21658886475', IG='nadhem_elaashek', VAY='vaynora_', TAG='#حرب_النفس';
 const TG='';                 // Telegram group link, e.g. 'https://t.me/+xxxx' (empty = hidden)
 const GROUP_START='2026-11-01'; // Sunday 1 Nov 2026
 const NEXT90='الثلاثاء 1 ديسمبر';
@@ -111,7 +117,7 @@ const H=[
  {id:'fajr',w:1,to:2,t:'الفجر في وقتو',full:'في وقتو',min:'في نهارو',pray:1},
  {id:'sleep',w:1,t:'نوم وقيام في وقت ثابت',full:'الزوز',min:'واحد منهم',hint:'كاملة: رقدت قبل 23:00 وقمت في وقتي · الدنيا: واحد منهم برك'},
  {id:'phone',w:1,t:'أول ساعة بلا تليفون',full:'ساعة',min:'20 دقيقة',hint:'من كي تقوم، ما تحلّش التليفون'},
- {id:'sport',w:2,t:'رياضة',full:'20 دقيقة',min:'10 ضغط + 10 سكوات',hint:'تمرين ولا مشي سريع'},
+ {id:'sport',w:2,t:'رياضة',full:'20 دقيقة',min:'10 ضغط + 10 سكوات',hint:'تمرين ولا مشي سريع',sp:1},
  {id:'read',w:2,t:'قراية',full:'10 صفحات',min:'صفحتين',hint:'كتاب نافع، موش منشورات'},
  {id:'water',w:2,t:'الماء',full:'2 لتر',min:'1 لتر'},
  {id:'salat',w:3,t:'الخمس صلوات في وقتها',pray:5,hint:'تتعبّى وحدها من الصلوات اللوطة'},
@@ -144,7 +150,8 @@ const AREAS=['الصلاة','النوم والفجر','الجسد والطاقة
 const RULES=[
  ['ما تعاودش من الصفر','كل مهمة عندها نسخة دنيا للنهارات الصعبة، وتحسب.'],
  ['ما تفلّتش زوز نهارات ورا بعضهم','نهار فالت عادي. زوز ورا بعضهم يكسرو السلسلة.'],
- ['كل ليلة تبعث تقريرك','رقم النهار مع ✅ ولا ❌، في القروب.']];
+ ['كل ليلة تبعث تقريرك','رقم النهار مع ✅ ولا ❌، في القروب.'],
+ ['التوثيق اليومي','صوّر لحظة من نهارك (صورة ولا فيديو)، حط فوقها بطاقة إنجازاتك الشفافة، وانشرها في الستوري مع tag لـ @'+'vaynora_'+'.']];
 const TEN=['اكسر المشهد توا: قوم من بلاصتك، بدّل البيت، واخرج من الخلوة.','سمِّ الرغبة: قول «هاذي موجة وباش تعدّي، والله يراني». واستعذ بالله.','توضّا بماء بارد.','صلّي ركعتين بخشوع، ولو قصار.','امشي لبلاصة فيها عباد، ولا كلّم صاحبك.','20 تمرين ضغط ولا مشي سريع.','تنفّس: شهيق 4، حبس 4، زفير 6. عاود 10 مرات.','اكتب: شنوة نحس توا؟ ومن شنوة قاعد نهرب؟'];
 const FIRST=['قوم توا من البلاصة، وبعّد على الجهاز.','توضّا وصلّي ركعتين، واستغفر بصدق.','ما تجلدش روحك. الحزن الصادق يدفعك، والجلد يقيّدك.','اكتب بهدوء: وقتاش؟ وين؟ شنوة الإحساس اللي قبلها؟','سدّ الثغرة اللي دخلت منها.','ارجع لتحدّيك نفس النهار. النسخة الدنيا تحسب.'];
 
@@ -161,7 +168,15 @@ function dayNo(){return S.start?diff(S.start,today())+1:0}
 function D(n){return S.days[n]=S.days[n]||{h:{},p:{}}}
 function weekOf(n){return Math.min(3,Math.ceil(n/7))}
 function active(n){const w=weekOf(n);return H.filter(h=>h.w<=w&&(!h.to||w<=h.to))}
-function val(n,h){const d=S.days[n];if(!d)return 0;
+const WD=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+function wday(n){const t=new Date((S.start||today())+'T12:00:00');t.setDate(t.getDate()+n-1);return t.getDay()}
+function restDay(n){return !!(S.sp&&S.sp.days.length&&!S.sp.days.includes(wday(n)))}
+function spEditor(){const p=S.sp||{days:[],min:20};
+ return `<div class="mut" style="margin-top:6px">اختار الأيام اللي باش تتمرّن فيها هالأسبوع (3 على الأقل). البقية أيام راحة وتحسب.</div>
+ <div style="margin-top:6px">${WD.map((w,i)=>`<span class="pill ${p.days.includes(i)?'on':''}" data-wd="${i}">${w}</span>`).join('')}</div>
+ <label>قدّاش من دقيقة في كل حصة؟<input id="spm" type="number" min="5" max="180" value="${p.min}"></label>
+ <button class="btn sec" id="sps">سجّل برنامج الرياضة</button>`}
+function val(n,h){const d=S.days[n];if(h.sp&&restDay(n))return 3;if(!d)return 0;
  if(h.pray===1)return d.p.fajr||0;
  if(h.pray===5){let a=0,m=0;PR.forEach(([k])=>{const v=d.p[k]||0;if(v===1)a++;if(v)m++});return a===5?1:(m===5?2:0)}
  return d.h[h.id]||0}
@@ -192,7 +207,7 @@ function head(){return `<div class="top"><div><div class="logo">حرب النف�
 function onboard(){
  return `<div class="top"><div><div class="logo">حرب النفس</div><div class="mut">اصنع من الألم قوة</div></div></div>
  <div class="card"><h1>تحدي 21 يوم 🔥</h1><p style="margin-top:8px">21 يوم نبنيو فيهم الانضباط، بداية من الصلاة. ناظم يعمل التحدي معاكم نهار بنهار.</p>
- <h3>القواعد الثلاثة</h3>${RULES.map((r,i)=>`<div class="wk"><b>${i+1}</b><div><div class="t" style="font-weight:800">${r[0]}</div><div class="mut">${r[1]}</div></div></div>`).join('')}
+ <h3>القواعد الأربعة</h3>${RULES.map((r,i)=>`<div class="wk"><b>${i+1}</b><div><div class="t" style="font-weight:800">${r[0]}</div><div class="mut">${r[1]}</div></div></div>`).join('')}
  <h3>المهام تتزاد كل أسبوع</h3>${WEEKS.map((w,i)=>`<div class="wk"><b>${i+1}</b><div><div style="font-weight:800">${w.n.split('· ')[1]}</div><div class="mut">${w.d}</div></div></div>`).join('')}</div>
  <div class="card"><h2>النهار 0: علاش دخلت؟</h2>
  <label>اسمك (يظهر على بطاقتك، تنجم تخلّيه فارغ)<input id="nm" maxlength="24" value="${esc(S.name)}"></label>
@@ -232,16 +247,24 @@ function home(){
  <div class="card"><h2>🕌 صلواتي اليوم</h2><div class="mut">${w<3?'الأسبوع هذا يحسب الفجر. سجّل البقية زادة.':'الأسبوع هذا تحسب الخمسة.'}</div>
  ${PR.map(([k,t])=>`<div class="pr"><div style="font-weight:800">${t}</div><div class="seg"><button class="f ${d.p[k]===1?'on':''}" data-p="${k}" data-v="1">في وقتها</button><button class="m ${d.p[k]===2?'on':''}" data-p="${k}" data-v="2">في نهارها</button></div></div>`).join('')}</div>
  ${S.cleanOn?`<div class="card priv"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:800">بلا عادة سيئة اليوم</div><div class="mut">خاصة بيك. ما تحسبش في التحدي، وتظهر في البطاقة كان عملتها برك.</div></div><div class="seg" style="flex:0 0 30%;margin:0"><button class="f ${d.clean?'on':''}" id="cln">✓</button></div></div></div>`:''}
- <div class="card"><h2>📤 تقرير الليلة</h2><p class="mut">كل ليلة ابعث بطاقتك ولا تقريرك للقروب. ناظم يبعث متاعو زادة.</p>
- <button class="btn ${won(n)?'g':''}" id="card">${won(n)?'🏆 ':''}اعمل بطاقة اليوم (صورة)</button>
+ <div class="card"><h2>📸 التوثيق اليومي</h2><p class="mut">صوّر لحظة من نهارك، حط فوقها البطاقة هاذي، وانشرها في الستوري مع tag لـ <b style="direction:ltr;display:inline-block">@${VAY}</b>.</p>
+ ${cardBox()}
  <div class="row"><button class="btn sec" id="txt">انسخ التقرير</button>${TG?`<a class="btn tg" href="${TG}" target="_blank">القروب</a>`:`<button class="btn sec" id="shtxt">شارك</button>`}</div></div>
  ${n%7===0?review(n):''}`}
 function habRow(n,h,isNew){
  const v=val(n,h),auto=!!h.pray,d=D(n);
+ if(h.sp&&(!S.sp||!S.sp.days.length||S._spEdit))return `<div class="hab"><div class="t">${isNew?'<span class="new">جديد</span>':''}🏋️ برنامج الرياضة متاعك</div>${spEditor()}</div>`;
+ if(h.sp&&v===3)return `<div class="hab"><div class="t">رياضة</div><small class="grn">😌 يوم راحة حسب برنامجك (يحسب)</small><small><a href="#" class="red" data-spe>بدّل البرنامج</a> · تمارينك: ${S.sp.days.map(i=>WD[i]).join('، ')} · ${S.sp.min} دقيقة</small></div>`;
+ if(h.sp)h=Object.assign({},h,{full:S.sp.min+' دقيقة',hint:'اليوم نهار تمرين · <a href="#" class="red" data-spe>بدّل البرنامج</a>'});
  return `<div class="hab"><div class="t">${isNew?'<span class="new">جديد</span>':''}${h.t}</div>${h.hint?`<small>${h.hint}</small>`:''}
  ${auto?`<small class="${v?'grn':''}">${v===1?'✅ كاملة':v===2?'🟡 الدنيا':'سجّل في «صلواتي اليوم» اللوطة'}</small>`:
  `<div class="seg"><button class="f ${v===1?'on':''}" data-h="${h.id}" data-v="1">كاملة · ${h.full}</button><button class="m ${v===2?'on':''}" data-h="${h.id}" data-v="2">الدنيا · ${h.min}</button></div>`}
  ${h.inp?`<input id="tomi" placeholder="مهمة غدوة الوحيدة..." value="${esc(d.tom)}">${n>15&&S.days[n-1]&&S.days[n-1].tom?`<small>مهمة اليوم (كتبتها البارح): <b>${esc(S.days[n-1].tom)}</b></small>`:''}`:''}</div>`}
+function cardBox(){const cs=S.cs||'w';
+ return `<div>${[['w','شفافة · نص أبيض'],['b','شفافة · نص أكحل'],['d','بخلفية']].map(([k,t])=>`<span class="pill ${cs===k?'on':''}" data-cs="${k}">${t}</span>`).join('')}</div>
+ <div class="ck ${cs==='d'?'nock':''}"><img id="pv" alt="بطاقة اليوم"></div>
+ <button class="btn" id="card">حفظ الصورة</button>
+ <p class="mut" style="margin-top:8px">آيفون: اضغط مطوّل على الصورة ← «نسخ»، وبعد الصقها كملصق في ستوري إنستغرام. ولا احفظها وحطها فوق الفيديو في CapCut.</p>`}
 function review(n){const d=D(n);
  return `<div class="card"><h2>📝 مراجعة الأسبوع ${n/7}</h2>
  <label>شنوة نجح معايا هالأسبوع؟<textarea data-rv="a">${esc((d.rv||{}).a)}</textarea></label>
@@ -259,7 +282,7 @@ function grad(){
  ${AREAS.map((a,i)=>`<div style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>${a}</span><span>${S.r0[i]} ← <b class="${S.r21[i]>S.r0[i]?'grn':''}">${S.r21[i]}</b></span></div>
  <div class="bar"><i style="width:${S.r0[i]*10}%;background:#555"></i><i style="width:${S.r21[i]*10}%;background:var(--grn);opacity:.85"></i></div></div>`).join('')}
  <p style="margin-top:12px">المجموع: ${sum0}/50 ← <b class="grn">${sum1}/50</b></p>
- <button class="btn g" id="gcard">اعمل بطاقة النتيجة (صورة)</button></div>
+ </div><div class="card"><h2>📸 بطاقة النتيجة</h2>${cardBox()}</div>
  <div class="card" style="border-color:var(--red)"><h2>الـ21 يوم بداية، والـ90 يوم تثبيت</h2>
  <p>كان تحب تكمّل، فما <b>البرنامج الخالص 90 يوم</b> مع ناظم:</p>
  <ul><li>مجموعة صغيرة (من 10 لـ20 واحد)</li><li>متابعة أسبوعية مع ناظم</li><li>خطة الـ90 يوم كاملة: الانضباط، الرياضة والأكل</li><li>18 سنة فما فوق · مرافقة، موش علاج</li></ul>
@@ -297,6 +320,7 @@ function set(){return head()+`<div class="card"><h2>الإعدادات</h2>
  <label>اسمك على البطاقة<input id="snm" maxlength="24" value="${esc(S.name)}"></label>
  <label>نهار البداية<input id="sst" type="date" value="${S.start}"></label>
  <button class="btn sec" id="ssv">سجّل</button></div>
+ <div class="card"><h2>🏋️ برنامج الرياضة</h2>${spEditor()}</div>
  <div class="card"><h2>⏰ تذكير كل ليلة</h2><p class="mut">يزيد في الكاليندر متاع تليفونك تذكير على 21:30 لمدة 21 يوم: «ابعث تقريرك».</p><button class="btn sec" id="ics">زيد التذكير</button></div>
  ${TG?`<div class="card"><a class="btn tg" href="${TG}" target="_blank">قروب التليغرام</a></div>`:''}
  <div class="card"><h2>نسخة احتياطية</h2><p class="mut">بياناتك في هالتليفون برك. كان تبدّل تليفون، انسخ الكود وحطّو في الجديد.</p>
@@ -312,12 +336,16 @@ function bind(){
  const c=$('#cln');if(c)c.onclick=()=>{const d=D(n);d.clean=!d.clean;save();render()};
  const t=$('#tomi');if(t)t.onchange=()=>{D(n).tom=t.value.trim();save()};
  document.querySelectorAll('[data-rv]').forEach(x=>x.onchange=()=>{const d=D(n);d.rv=d.rv||{};d.rv[x.dataset.rv]=x.value;save()});
- const cb=$('#card');if(cb)cb.onclick=()=>shareCard(dayCard(n),'harb-day'+n+'.png');
+ const cb=$('#card'),G=n>N;if(cb){cb.onclick=()=>shareCard(Promise.resolve($('#cv')),G?'harb-21.png':'harb-day'+n+'.png');if(!G||S.r21)(G?gradCard():dayCard(n)).then(cv=>{const p=$('#pv');if(p)p.src=cv.toDataURL('image/png')})}
+ document.querySelectorAll('[data-cs]').forEach(b=>b.onclick=()=>{S.cs=b.dataset.cs;save();render()});
+ document.querySelectorAll('[data-wd]').forEach(b=>b.onclick=()=>b.classList.toggle('on'));
+ document.querySelectorAll('[data-spe]').forEach(b=>b.onclick=e=>{e.preventDefault();S._spEdit=1;render()});
+ const sps=$('#sps');if(sps)sps.onclick=()=>{const days=[...document.querySelectorAll('[data-wd].on')].map(b=>+b.dataset.wd);if(days.length<3){toast('اختار 3 أيام على الأقل');return}
+  S.sp={days,min:Math.max(5,Math.min(180,+$('#spm').value||20))};delete S._spEdit;save();toast('تسجّل البرنامج ✓');render()};
  const tx=$('#txt');if(tx)tx.onclick=()=>copy(report(n));
  const st=$('#shtxt');if(st)st.onclick=()=>{if(navigator.share)navigator.share({text:report(n)}).catch(()=>{});else copy(report(n))};
  document.querySelectorAll('[data-r]').forEach(r=>r.oninput=()=>$('#rv'+r.dataset.r).textContent=r.value);
  const r21=$('#r21');if(r21)r21.onclick=()=>{S.r21=[...document.querySelectorAll('[data-r]')].map(r=>+r.value);S.why21=$('#why21').value.trim();save();render()};
- const gc=$('#gcard');if(gc)gc.onclick=()=>shareCard(gradCard(),'harb-21.png');
  // private
  const tg=$('#tgl');if(tg)tg.onclick=e=>{e.preventDefault();S.cleanOn=!S.cleanOn;save();render()};
  const gs=$('#gosos');if(gs)gs.onclick=()=>{VIEW='sos';render()};
@@ -336,40 +364,46 @@ function after(n){const was=S._w===n;render();if(won(n)&&!was){S._w=n;save();toa
 function copy(t){if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast('تنسخ ✓'),()=>prompt('انسخ:',t));else prompt('انسخ:',t)}
 function report(n){const a=active(n),d=D(n);
  let t=`⚔️ حرب النفس · النهار ${n}/21 ${won(n)?'✅':'❌'}\n`;
- a.forEach(h=>{const v=val(n,h);t+=`${v===1?'✅':v===2?'🟡':'❌'} ${h.t}\n`});
+ a.forEach(h=>{const v=val(n,h);t+=`${v===1?'✅':v===2?'🟡':v===3?'😌':'❌'} ${h.t}${v===3?' · يوم راحة':''}\n`});
  if(S.cleanOn&&d.clean)t+='✅ بلا عادة سيئة\n';
- t+=`🔗 السلسلة: ${chain()}\n${APP_URL}`;return t}
+ t+=`🔗 السلسلة: ${chain()}\n@${VAY} ${TAG}\n${APP_URL}`;return t}
 
 // ===== share cards (canvas) =====
-async function prep(){try{await document.fonts.load('800 40px Cairo');await document.fonts.load('600 40px Cairo')}catch(e){}
- const cv=$('#cv'),x=cv.getContext('2d');x.direction='rtl';x.textAlign='right';
- const g=x.createLinearGradient(0,0,0,1920);g.addColorStop(0,'#1a0606');g.addColorStop(.45,'#0d0d0d');g.addColorStop(1,'#0d0d0d');x.fillStyle=g;x.fillRect(0,0,1080,1920);
- x.fillStyle='#e0262b';x.font='800 64px Cairo';x.fillText('حرب النفس',990,170);
- x.fillStyle='#9a9a9a';x.font='600 36px Cairo';x.fillText('اصنع من الألم قوة',990,225);
- if(S.name){x.textAlign='left';x.fillStyle='#f2f2f2';x.font='800 40px Cairo';x.fillText(S.name,90,170);x.textAlign='right'}
- return x}
-function foot(x){x.fillStyle='#2c2c2c';x.fillRect(90,1740,900,2);x.fillStyle='#9a9a9a';x.font='600 32px Cairo';x.textAlign='center';x.fillText('تحدي 21 يوم مع ناظم',540,1800);x.direction='ltr';x.fillText('@'+IG,540,1850);x.direction='rtl';x.textAlign='right'}
 function rr(x,X,Y,W,Hh,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+W,Y,X+W,Y+Hh,r);x.arcTo(X+W,Y+Hh,X,Y+Hh,r);x.arcTo(X,Y+Hh,X,Y,r);x.arcTo(X,Y,X+W,Y,r);x.closePath()}
-async function dayCard(n){const x=await prep(),a=active(n),d=D(n);
- x.fillStyle='#f2f2f2';x.font='800 60px Cairo';x.fillText('النهار',990,380);
- x.fillStyle=won(n)?'#2fbf71':'#f2f2f2';x.font='800 260px Cairo';x.fillText(String(n),990,620);
- x.fillStyle='#9a9a9a';x.font='800 64px Cairo';x.textAlign='left';x.fillText('من 21',90,620);x.textAlign='right';
- // stat chips
- const chips=[['السلسلة 🔗',String(chain())],['مهام',doneCount(n)+'/'+a.length],['أيام ربحتها',String(wonDays())]];
- chips.forEach((c,i)=>{const X=90+i*310;x.fillStyle='#171717';rr(x,X,690,280,170,28);x.fill();x.textAlign='center';x.fillStyle='#f2f2f2';x.font='800 64px Cairo';x.fillText(c[1],X+140,780);x.fillStyle='#9a9a9a';x.font='600 30px Cairo';x.fillText(c[0],X+140,830);x.textAlign='right'});
- let y=960;const rows=a.map(h=>[h.t,val(n,h)]);if(S.cleanOn&&d.clean)rows.push(['بلا عادة سيئة',1]);
- const lh=Math.min(96,700/rows.length);
- rows.forEach(([t,v])=>{x.fillStyle=v===1?'#2fbf71':v===2?'#e6a23c':'#5a1a1c';rr(x,930,y-48,60,60,16);x.fill();x.fillStyle='#fff';x.font='800 40px Cairo';x.textAlign='center';x.fillText(v?'✓':'✕',960,y-4);x.textAlign='right';
-  x.fillStyle=v?'#f2f2f2':'#777';x.font='800 46px Cairo';x.fillText(t+(v===2?'  (الدنيا)':''),900,y);y+=lh});
- if(won(n)){x.fillStyle='#2fbf71';x.font='800 50px Cairo';x.textAlign='center';x.fillText('🏆 ربحت النهار',540,1690);x.textAlign='right'}
- foot(x);return $('#cv')}
-async function gradCard(){const x=await prep();
- x.textAlign='center';x.fillStyle='#f2f2f2';x.font='800 90px Cairo';x.fillText('كمّلت 21 يوم',540,420);
- x.fillStyle='#2fbf71';x.font='800 60px Cairo';x.fillText(wonDays()+' نهار ربحتهم من 21',540,520);x.textAlign='right';
- let y=680;AREAS.forEach((a,i)=>{x.fillStyle='#f2f2f2';x.font='800 44px Cairo';x.fillText(a,990,y);x.textAlign='left';x.fillText(S.r0[i]+'  ←  '+S.r21[i],90,y);x.textAlign='right';
-  x.fillStyle='#202020';rr(x,90,y+24,900,26,13);x.fill();x.fillStyle='#555';rr(x,990-90*S.r0[i],y+24,90*S.r0[i],26,13);x.fill();x.fillStyle='#2fbf71';x.globalAlpha=.85;rr(x,990-90*S.r21[i],y+24,90*S.r21[i],26,13);x.fill();x.globalAlpha=1;y+=170});
- x.textAlign='center';x.fillStyle='#e0262b';x.font='800 48px Cairo';x.fillText('الـ21 يوم بداية، والـ90 يوم تثبيت',540,1620);x.textAlign='right';
- foot(x);return $('#cv')}
+// cs: w = transparent + white text, b = transparent + dark text, d = dark background
+async function prep(h){try{await document.fonts.load('800 40px Cairo');await document.fonts.load('600 40px Cairo')}catch(e){}
+ const cv=$('#cv');cv.width=1080;cv.height=h;const x=cv.getContext('2d');x.clearRect(0,0,1080,h);x.direction='rtl';x.textAlign='right';
+ const cs=S.cs||'w';
+ if(cs==='d'){const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,'#1a0606');g.addColorStop(.5,'#0d0d0d');g.addColorStop(1,'#0d0d0d');x.fillStyle=g;rr(x,0,0,1080,h,48);x.fill()}
+ x.T=cs==='b'?'#111111':'#ffffff';x.M=cs==='b'?'#333333':(cs==='d'?'#9a9a9a':'#eeeeee');
+ x.sh=on=>{if(cs==='d'||!on){x.shadowColor='transparent';x.shadowBlur=0}else{x.shadowColor=cs==='b'?'rgba(255,255,255,.6)':'rgba(0,0,0,.6)';x.shadowBlur=14}};
+ x.sh(1);
+ x.fillStyle='#e0262b';x.font='800 66px Cairo';x.fillText('حرب النفس',990,120);
+ x.fillStyle=x.M;x.font='600 34px Cairo';x.fillText('اصنع من الألم قوة',990,172);
+ if(S.name){x.textAlign='left';x.fillStyle=x.T;x.font='800 42px Cairo';x.fillText(S.name,90,120);x.textAlign='right'}
+ return x}
+function foot(x,y){x.fillStyle=x.M;x.globalAlpha=.6;x.fillRect(90,y,900,3);x.globalAlpha=1;
+ x.fillStyle=x.T;x.font='800 40px Cairo';x.fillText(TAG,990,y+70);
+ x.textAlign='left';x.direction='ltr';x.fillText('@'+VAY,90,y+70);x.direction='rtl';x.textAlign='right'}
+function rowsOf(n){const a=active(n),d=D(n);const r=a.map(h=>{const v=val(n,h);return[h.t+(v===2?' (الدنيا)':v===3?' · يوم راحة':''),v]});if(S.cleanOn&&d.clean)r.push(['بلا عادة سيئة',1]);return r}
+async function dayCard(n){const rows=rowsOf(n),H0=260,lh=92,h=H0+260+rows.length*lh+120;const x=await prep(h);
+ // big day number
+ x.fillStyle=won(n)?'#2fbf71':x.T;x.font='800 190px Cairo';const num=String(n);x.fillText(num,990,H0+150);
+ const wN=x.measureText(num).width;x.fillStyle=x.T;x.font='800 52px Cairo';x.fillText('النهار',990-wN-30,H0+60);
+ x.fillStyle=x.M;x.font='600 40px Cairo';x.fillText('من 21 · 🔗 سلسلة '+chain(),990-wN-30,H0+130);
+ if(won(n)){x.textAlign='left';x.font='800 44px Cairo';x.fillStyle='#2fbf71';x.fillText('🏆 ربحت النهار',90,H0+130);x.textAlign='right'}
+ let y=H0+260;
+ rows.forEach(([t,v])=>{x.sh(0);x.fillStyle=v===1||v===3?'#2fbf71':v===2?'#e6a23c':'#b3262b';rr(x,926,y-52,64,64,18);x.fill();
+  x.fillStyle='#fff';x.font='800 42px Cairo';x.textAlign='center';x.fillText(v===3?'😌':v?'✓':'✕',958,y-6);x.textAlign='right';
+  x.sh(1);x.fillStyle=x.T;x.globalAlpha=v?1:.55;x.font='800 48px Cairo';x.fillText(t,896,y);x.globalAlpha=1;y+=lh});
+ foot(x,y+10);return $('#cv')}
+async function gradCard(){const h=1350,x=await prep(h);
+ x.fillStyle=x.T;x.font='800 86px Cairo';x.fillText('كمّلت 21 يوم 🏁',990,320);
+ x.fillStyle='#2fbf71';x.font='800 54px Cairo';x.fillText(wonDays()+' نهار ربحتهم من 21',990,400);
+ let y=520;AREAS.forEach((a,i)=>{x.sh(1);x.fillStyle=x.T;x.font='800 42px Cairo';x.fillText(a,990,y);x.textAlign='left';x.fillText(S.r0[i]+'  ←  '+S.r21[i],90,y);x.textAlign='right';
+  x.sh(0);x.fillStyle=x.M;x.globalAlpha=.35;rr(x,90,y+20,900,24,12);x.fill();x.globalAlpha=.8;x.fillStyle='#777';rr(x,990-90*S.r0[i],y+20,90*S.r0[i],24,12);x.fill();x.fillStyle='#2fbf71';x.globalAlpha=.95;rr(x,990-90*S.r21[i],y+20,90*S.r21[i],24,12);x.fill();x.globalAlpha=1;y+=130});
+ x.sh(1);x.fillStyle='#e0262b';x.font='800 46px Cairo';x.fillText('الـ21 يوم بداية، والـ90 يوم تثبيت',990,y+30);
+ foot(x,y+90);return $('#cv')}
 async function shareCard(p,fn){const cv=await p;
  cv.toBlob(async b=>{const f=new File([b],fn,{type:'image/png'});
   try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:'⚔️ حرب النفس'});return}}catch(e){if(e&&e.name==='AbortError')return}
