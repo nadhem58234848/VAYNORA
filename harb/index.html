@@ -101,7 +101,6 @@ canvas{display:none}
 <nav class="nav hide" id="nav"><div>
 <button data-v="home"><i>🔥</i>اليوم</button>
 <button data-v="map"><i>🗺️</i>الطريق</button>
-<button data-v="priv"><i>🛡️</i>الخلوات</button>
 <button data-v="set"><i>⚙️</i>إعدادات</button>
 </div></nav>
 <canvas id="cv" width="1080" height="1920"></canvas>
@@ -288,7 +287,6 @@ function home(){
  ${custCard(n)}
  <div class="card"><h2>🕌 صلواتي اليوم</h2><div class="mut">${w<3?'الأسبوع هذا يحسب الفجر. سجّل البقية زادة.':'الأسبوع هذا تحسب الخمسة.'}</div>
  ${PR.map(([k,t])=>`<div class="pr"><div style="font-weight:800">${t}</div><div class="seg"><button class="f ${d.p[k]===1?'on':''}" data-p="${k}" data-v="1">في وقتها</button><button class="m ${d.p[k]===2?'on':''}" data-p="${k}" data-v="2">في نهارها</button></div></div>`).join('')}</div>
- ${S.cleanOn?`<div class="card priv"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:800">بلا عادة سيئة اليوم</div><div class="mut">خاصة بيك. ما تحسبش في التحدي، وتظهر في البطاقة كان عملتها برك.</div></div><div class="seg" style="flex:0 0 30%;margin:0"><button class="f ${d.clean?'on':''}" id="cln">✓</button></div></div></div>`:''}
  <div class="card"><h2>📸 التوثيق اليومي</h2><p class="mut">صوّر لحظة من نهارك وحط فوقها البطاقة هاذي، وبعد:</p>
  <ul class="mut" style="margin-top:4px"><li><b>Post</b>: اعمل collaboration مع <b dir="ltr" style="unicode-bidi:isolate">@${VAY}</b></li><li><b>Story</b>: اعمل tag لـ <b dir="ltr" style="unicode-bidi:isolate">@${VAY}</b></li><li>وحط <b dir="ltr" style="unicode-bidi:isolate">@${VAY}</b> في الـbio متاعك مدة التحدي</li></ul>
  ${cardBox()}
@@ -418,7 +416,6 @@ function report(n){const a=active(n),d=D(n);
  let t=`⚔️ حرب النفس · النهار ${n}/21 ${won(n)?'✅':'❌'}\n`;
  a.forEach(h=>{const v=val(n,h);t+=`${v===1?'✅':v===2?'🟡':v===3?'😌':'❌'} ${h.t}${v===3?' · يوم راحة':''}\n`});
  cust(n).forEach(c=>{t+=`${cval(n,c)?'✅':'❌'} ${c.t}\n`});
- if(S.cleanOn&&d.clean)t+='✅ بلا عادة سيئة\n';
  t+=`🔗 السلسلة: ${chain()}\n@${VAY} ${TAG}\n${APP_URL}`;return t}
 
 // ===== share cards (canvas) =====
@@ -457,7 +454,7 @@ async function sticker(title,rows,ex){ex=ex||{};try{await document.fonts.load('8
 function rowsOf(n){const a=active(n),d=D(n),r=[];
  a.forEach(h=>{const v=val(n,h);if(v)r.push([v===3?'رياضة: يوم راحة':h.t,1]);else if(S.showMiss!==false)r.push([h.t,0])});
  cust(n).forEach(c=>{const v=cval(n,c);if(v)r.push([c.t,1]);else if(S.showMiss!==false)r.push([c.t,0])});
- if(S.cleanOn&&d.clean)r.push(['بلا عادة سيئة',1]);return r}
+ return r}
 function dayCard(n){return sticker('حرب النفس · اليوم '+n,rowsOf(n),{badge:won(n),chain:chain()})}
 function gradCard(){return sticker('حرب النفس · كمّلت 21 يوم',[['ربحت '+wonDays()+' نهار من 21',1]].concat(AREAS.map((a,i)=>[a+': '+S.r0[i]+' ← '+S.r21[i],S.r21[i]>=S.r0[i]])))}
 async function shareCard(p,fn){const cv=await p;
