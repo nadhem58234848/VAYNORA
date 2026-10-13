@@ -166,6 +166,12 @@ function today(){return ymd(new Date())}
 function diff(a,b){return Math.round((new Date(b+'T12:00:00')-new Date(a+'T12:00:00'))/864e5)}
 function dayNo(){return S.start?diff(S.start,today())+1:0}
 function D(n){return S.days[n]=S.days[n]||{h:{},p:{}}}
+function cust(n){return (S.custom||[]).filter(c=>c.from<=n)}
+function cval(n,c){const d=S.days[n];return d&&d.c&&d.c[c.id]?1:0}
+function custCard(n){const cs=cust(n);
+ return `<div class="card"><h2>➕ عاداتي الخاصة</h2><div class="mut">زيد العادات اللي تحبها (حتى 5). تظهر في بطاقتك، وما تأثّرش على «يوم كامل» ولا السلسلة.</div>
+ ${cs.map(c=>{const v=cval(n,c);return `<div class="hab" style="display:flex;align-items:center;gap:10px"><div class="t" style="flex:1">${esc(c.t)}</div><div class="seg" style="margin:0;flex:0 0 38%"><button class="f ${v?'on':''}" data-c="${c.id}">${v?'✓ عملتها':'عملتها؟'}</button></div><a href="#" class="mut" data-cdel="${c.id}" title="احذف">✕</a></div>`}).join('')}
+ ${(S.custom||[]).length<5?`<div class="row" style="margin-top:8px"><input id="cnew" maxlength="28" placeholder="مثلاً: أذكار الصباح، صوم الاثنين..."><button class="btn sec" id="cadd" style="flex:0 0 30%;margin-top:6px">زيد</button></div>`:''}</div>`}
 function weekOf(n){return Math.min(3,Math.ceil(n/7))}
 function active(n){const w=weekOf(n);return H.filter(h=>h.w<=w&&(!h.to||w<=h.to))}
 const WD=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
@@ -244,6 +250,7 @@ function home(){
  <div class="card"><span class="phase">${wk.n}</span><h3 style="margin-top:2px">💬 رسالة اليوم من ناظم</h3><p>${MSG[n-1]}</p></div>
  <div class="card"><h2>مهام اليوم</h2><div class="mut">«على الأقل» تحسب. المهم ما تفلّتش.</div>
  ${a.map(h=>habRow(n,h,newIds.includes(h.id))).join('')}</div>
+ ${custCard(n)}
  <div class="card"><h2>🕌 صلواتي اليوم</h2><div class="mut">${w<3?'الأسبوع هذا يحسب الفجر. سجّل البقية زادة.':'الأسبوع هذا تحسب الخمسة.'}</div>
  ${PR.map(([k,t])=>`<div class="pr"><div style="font-weight:800">${t}</div><div class="seg"><button class="f ${d.p[k]===1?'on':''}" data-p="${k}" data-v="1">في وقتها</button><button class="m ${d.p[k]===2?'on':''}" data-p="${k}" data-v="2">في نهارها</button></div></div>`).join('')}</div>
  ${S.cleanOn?`<div class="card priv"><div style="display:flex;justify-content:space-between;align-items:center"><div><div style="font-weight:800">بلا عادة سيئة اليوم</div><div class="mut">خاصة بيك. ما تحسبش في التحدي، وتظهر في البطاقة كان عملتها برك.</div></div><div class="seg" style="flex:0 0 30%;margin:0"><button class="f ${d.clean?'on':''}" id="cln">✓</button></div></div></div>`:''}
@@ -338,6 +345,9 @@ function bind(){
  const t=$('#tomi');if(t)t.onchange=()=>{D(n).tom=t.value.trim();save()};
  document.querySelectorAll('[data-rv]').forEach(x=>x.onchange=()=>{const d=D(n);d.rv=d.rv||{};d.rv[x.dataset.rv]=x.value;save()});
  const cb=$('#card'),G=n>N;if(cb){cb.onclick=()=>shareCard(Promise.resolve($('#cv')),G?'harb-21.png':'harb-day'+n+'.png');if(!G||S.r21)(G?gradCard():dayCard(n)).then(cv=>{const p=$('#pv');if(p)p.src=cv.toDataURL('image/png')})}
+ document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{const d=D(n);d.c=d.c||{};d.c[b.dataset.c]=d.c[b.dataset.c]?0:1;save();render()});
+ document.querySelectorAll('[data-cdel]').forEach(b=>b.onclick=e=>{e.preventDefault();if(b.dataset.k){S.custom=S.custom.filter(c=>c.id!==b.dataset.cdel);save();render()}else{b.dataset.k=1;b.textContent='احذف؟';b.classList.add('red')}});
+ const ca=$('#cadd');if(ca)ca.onclick=()=>{const t=$('#cnew').value.trim();if(!t){$('#cnew').focus();return}S.custom=S.custom||[];if(S.custom.length>=5)return;S.custom.push({id:'c'+Date.now(),t,from:Math.max(1,n)});save();toast('تزادت ✓');render()};
  document.querySelectorAll('[data-miss]').forEach(b=>b.onclick=()=>{S.showMiss=S.showMiss===false;save();render()});
  document.querySelectorAll('[data-cs]').forEach(b=>b.onclick=()=>{S.cs=b.dataset.cs;save();render()});
  document.querySelectorAll('[data-wd]').forEach(b=>b.onclick=()=>b.classList.toggle('on'));
@@ -367,6 +377,7 @@ function copy(t){if(navigator.clipboard)navigator.clipboard.writeText(t).then(()
 function report(n){const a=active(n),d=D(n);
  let t=`⚔️ حرب النفس · النهار ${n}/21 ${won(n)?'✅':'❌'}\n`;
  a.forEach(h=>{const v=val(n,h);t+=`${v===1?'✅':v===2?'🟡':v===3?'😌':'❌'} ${h.t}${v===3?' · يوم راحة':''}\n`});
+ cust(n).forEach(c=>{t+=`${cval(n,c)?'✅':'❌'} ${c.t}\n`});
  if(S.cleanOn&&d.clean)t+='✅ بلا عادة سيئة\n';
  t+=`🔗 السلسلة: ${chain()}\n@${VAY} ${TAG}\n${APP_URL}`;return t}
 
@@ -405,6 +416,7 @@ async function sticker(title,rows,ex){ex=ex||{};try{await document.fonts.load('8
  sh(0);return cv}
 function rowsOf(n){const a=active(n),d=D(n),r=[];
  a.forEach(h=>{const v=val(n,h);if(v)r.push([v===3?'رياضة: يوم راحة':h.t,1]);else if(S.showMiss!==false)r.push([h.t,0])});
+ cust(n).forEach(c=>{const v=cval(n,c);if(v)r.push([c.t,1]);else if(S.showMiss!==false)r.push([c.t,0])});
  if(S.cleanOn&&d.clean)r.push(['بلا عادة سيئة',1]);return r}
 function dayCard(n){return sticker('حرب النفس · اليوم '+n,rowsOf(n),{badge:won(n),chain:chain()})}
 function gradCard(){return sticker('حرب النفس · كمّلت 21 يوم',[['ربحت '+wonDays()+' نهار من 21',1]].concat(AREAS.map((a,i)=>[a+': '+S.r0[i]+' ← '+S.r21[i],S.r21[i]>=S.r0[i]])))}
