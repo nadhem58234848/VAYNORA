@@ -370,40 +370,36 @@ function report(n){const a=active(n),d=D(n);
 
 // ===== share cards (canvas) =====
 function rr(x,X,Y,W,Hh,r){x.beginPath();x.moveTo(X+r,Y);x.arcTo(X+W,Y,X+W,Y+Hh,r);x.arcTo(X+W,Y+Hh,X,Y+Hh,r);x.arcTo(X,Y+Hh,X,Y,r);x.arcTo(X,Y,X+W,Y,r);x.closePath()}
-// cs: w = transparent + white text, b = transparent + dark text, d = dark background
-async function prep(h){try{await document.fonts.load('800 40px Cairo');await document.fonts.load('600 40px Cairo')}catch(e){}
- const cv=$('#cv');cv.width=1080;cv.height=h;const x=cv.getContext('2d');x.clearRect(0,0,1080,h);x.direction='rtl';x.textAlign='right';
- const cs=S.cs||'w';
- if(cs==='d'){const g=x.createLinearGradient(0,0,0,h);g.addColorStop(0,'#1a0606');g.addColorStop(.5,'#0d0d0d');g.addColorStop(1,'#0d0d0d');x.fillStyle=g;rr(x,0,0,1080,h,48);x.fill()}
- x.T=cs==='b'?'#111111':'#ffffff';x.M=cs==='b'?'#333333':(cs==='d'?'#9a9a9a':'#eeeeee');
- x.sh=on=>{if(cs==='d'||!on){x.shadowColor='transparent';x.shadowBlur=0}else{x.shadowColor=cs==='b'?'rgba(255,255,255,.6)':'rgba(0,0,0,.6)';x.shadowBlur=14}};
- x.sh(1);
- x.fillStyle='#e0262b';x.font='800 66px Cairo';x.fillText('حرب النفس',990,120);
- x.fillStyle=x.M;x.font='600 34px Cairo';x.fillText('اصنع من الألم قوة',990,172);
- if(S.name){x.textAlign='left';x.fillStyle=x.T;x.font='800 42px Cairo';x.fillText(S.name,90,120);x.textAlign='right'}
- return x}
-function foot(x,y){x.fillStyle=x.M;x.globalAlpha=.6;x.fillRect(90,y,900,3);x.globalAlpha=1;
- x.fillStyle=x.T;x.font='800 40px Cairo';x.fillText(TAG,990,y+70);
- x.textAlign='left';x.direction='ltr';x.fillText('@'+VAY,90,y+70);x.direction='rtl';x.textAlign='right'}
-function rowsOf(n){const a=active(n),d=D(n);const r=a.map(h=>{const v=val(n,h);return[h.t+(v===2?' (على الأقل)':v===3?' · يوم راحة':''),v]});if(S.cleanOn&&d.clean)r.push(['بلا عادة سيئة',1]);return r}
-async function dayCard(n){const rows=rowsOf(n),H0=260,lh=92,h=H0+260+rows.length*lh+120;const x=await prep(h);
- // big day number
- x.fillStyle=won(n)?'#2fbf71':x.T;x.font='800 190px Cairo';const num=String(n);x.fillText(num,990,H0+150);
- const wN=x.measureText(num).width;x.fillStyle=x.T;x.font='800 52px Cairo';x.fillText('النهار',990-wN-30,H0+60);
- x.fillStyle=x.M;x.font='600 40px Cairo';x.fillText('من 21 · 🔗 سلسلة '+chain(),990-wN-30,H0+130);
- if(won(n)){x.textAlign='left';x.font='800 44px Cairo';x.fillStyle='#2fbf71';x.fillText('🏆 ربحت النهار',90,H0+130);x.textAlign='right'}
- let y=H0+260;
- rows.forEach(([t,v])=>{x.sh(0);x.fillStyle=v===1||v===3?'#2fbf71':v===2?'#e6a23c':'#b3262b';rr(x,926,y-52,64,64,18);x.fill();
-  x.fillStyle='#fff';x.font='800 42px Cairo';x.textAlign='center';x.fillText(v===3?'😌':v?'✓':'✕',958,y-6);x.textAlign='right';
-  x.sh(1);x.fillStyle=x.T;x.globalAlpha=v?1:.55;x.font='800 48px Cairo';x.fillText(t,896,y);x.globalAlpha=1;y+=lh});
- foot(x,y+10);return $('#cv')}
-async function gradCard(){const h=1350,x=await prep(h);
- x.fillStyle=x.T;x.font='800 86px Cairo';x.fillText('كمّلت 21 يوم 🏁',990,320);
- x.fillStyle='#2fbf71';x.font='800 54px Cairo';x.fillText(wonDays()+' نهار ربحتهم من 21',990,400);
- let y=520;AREAS.forEach((a,i)=>{x.sh(1);x.fillStyle=x.T;x.font='800 42px Cairo';x.fillText(a,990,y);x.textAlign='left';x.fillText(S.r0[i]+'  ←  '+S.r21[i],90,y);x.textAlign='right';
-  x.sh(0);x.fillStyle=x.M;x.globalAlpha=.35;rr(x,90,y+20,900,24,12);x.fill();x.globalAlpha=.8;x.fillStyle='#777';rr(x,990-90*S.r0[i],y+20,90*S.r0[i],24,12);x.fill();x.fillStyle='#2fbf71';x.globalAlpha=.95;rr(x,990-90*S.r21[i],y+20,90*S.r21[i],24,12);x.fill();x.globalAlpha=1;y+=130});
- x.sh(1);x.fillStyle='#e0262b';x.font='800 46px Cairo';x.fillText('الـ21 يوم بداية، والـ90 يوم تثبيت',990,y+30);
- foot(x,y+90);return $('#cv')}
+// sticker in the style of the «هل أنت مستعد لهذا التحدي؟» post: red banner + red check boxes + bold text, narrow so it sits on the right side
+// cs: w = white text, b = dark text, d = dark background
+const RED='#8e1d20';
+async function sticker(title,rows){try{await document.fonts.load('800 40px Cairo')}catch(e){}
+ const cv=$('#cv'),cs=S.cs||'w';let x=cv.getContext('2d');
+ const F='800 54px Cairo',BF='800 58px Cairo',P=24,BOX=66,GAP=26,LH=92;
+ x.font=F;let tw=0;rows.forEach(r=>tw=Math.max(tw,x.measureText(r[0]).width));
+ x.font=BF;const bw=x.measureText(title).width+P*2*1.6;
+ const W=Math.ceil(Math.max(bw,tw+BOX+GAP)+P*2),Hh=P+120+28+Math.max(1,rows.length)*LH+110;
+ cv.width=W;cv.height=Hh;x=cv.getContext('2d');x.direction='rtl';x.textAlign='right';x.textBaseline='middle';
+ if(cs==='d'){x.fillStyle='rgba(13,13,13,.92)';rr(x,0,0,W,Hh,28);x.fill()}
+ const T=cs==='b'?'#111':'#fff',sh=on=>{x.shadowColor=on&&cs!=='d'?(cs==='b'?'rgba(255,255,255,.7)':'rgba(0,0,0,.65)'):'transparent';x.shadowBlur=on?12:0};
+ // banner
+ sh(0);x.fillStyle=RED;rr(x,P,P,W-P*2,120,10);x.fill();
+ x.fillStyle='#fff';x.font=BF;x.textAlign='center';x.fillText(title,W/2,P+62);x.textAlign='right';
+ // rows
+ let y=P+120+28+LH/2;const R=W-P;
+ if(!rows.length){sh(1);x.fillStyle=T;x.font=F;x.globalAlpha=.8;x.fillText('النهار مازال ما كملش',R,y);x.globalAlpha=1;y+=LH}
+ rows.forEach(([t,ok])=>{sh(0);x.fillStyle=RED;rr(x,R-BOX,y-BOX/2,BOX,BOX,12);x.fill();
+  if(ok){x.strokeStyle='#fff';x.lineWidth=8;x.lineCap='round';x.lineJoin='round';x.beginPath();x.moveTo(R-BOX+17,y+1);x.lineTo(R-BOX+29,y+13);x.lineTo(R-BOX+50,y-12);x.stroke()}
+  sh(1);x.fillStyle=T;x.font=F;x.fillText(t,R-BOX-GAP,y+4);y+=LH});
+ // footer like the post: red line + spaced VAYNORA
+ sh(0);x.fillStyle=RED;x.fillRect(P,y-LH/2+28,W-P*2,4);
+ sh(1);x.fillStyle=T;x.font='400 38px Georgia,"Times New Roman",serif';x.textAlign='center';x.direction='ltr';x.fillText('V A Y N O R A',W/2,y-LH/2+80);
+ sh(0);return cv}
+function rowsOf(n){const a=active(n),d=D(n),r=[];
+ a.forEach(h=>{const v=val(n,h);if(v)r.push([v===3?'رياضة: يوم راحة':h.t,1])});
+ if(S.cleanOn&&d.clean)r.push(['بلا عادة سيئة',1]);return r}
+function dayCard(n){return sticker('حرب النفس · اليوم '+n,rowsOf(n))}
+function gradCard(){return sticker('حرب النفس · كمّلت 21 يوم',[['ربحت '+wonDays()+' نهار من 21',1]].concat(AREAS.map((a,i)=>[a+': '+S.r0[i]+' ← '+S.r21[i],S.r21[i]>=S.r0[i]])))}
 async function shareCard(p,fn){const cv=await p;
  cv.toBlob(async b=>{const f=new File([b],fn,{type:'image/png'});
   try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],text:'⚔️ حرب النفس'});return}}catch(e){if(e&&e.name==='AbortError')return}
