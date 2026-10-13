@@ -67,6 +67,17 @@ ol li{margin-bottom:4px}
 .hide{display:none}
 .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);background:var(--grn);color:#fff;padding:10px 18px;border-radius:20px;font-weight:800;z-index:9;transition:opacity .3s}
 </style>
+
+<style>
+.why{color:var(--mut);font-size:14px;line-height:1.7;margin:4px 0 10px}
+.how{font-weight:800;font-size:13px;color:var(--red);margin:10px 0 2px}
+.offer li{margin-bottom:6px}
+.lock{opacity:.45}
+.pill{display:inline-block;background:var(--card2);border:1px solid var(--line);border-radius:20px;padding:6px 12px;margin:4px 0 0 6px;cursor:pointer;font-size:14px}
+.pill.on{background:var(--red);border-color:var(--red);color:#fff}
+.prog{height:8px;background:var(--card2);border-radius:8px;overflow:hidden;margin-top:10px}
+.prog i{display:block;height:100%;background:var(--red)}
+</style>
 </head>
 <body>
 <div id="app"></div>
@@ -78,160 +89,205 @@ ol li{margin-bottom:4px}
 <button data-v="set"><i>⚙️</i>إعدادات</button>
 </div></nav>
 <script>
-const WA='21658886475', IG='nadhem_elaashek';
-const PH=[[1,14,'المرحلة 1: التثبيت','نبنيو الدفاعات ونعدّيو الموجات الأولى'],[15,49,'المرحلة 2: بناء الهوية','من واحد يقاوم لواحد جديد عندو برنامج وأهداف'],[50,90,'المرحلة 3: الثبات والنمو','نثبّتو الانضباط ونستعدّو لما بعد التسعين']];
-const T=["اكتب عقدك مع نفسك ووقّعه (الملحق)، واغتسل وصلِّ ركعتين توبةً وعزماً.","أزل الأسباب: فعّل الفلاتر، واحذف الحسابات والمجموعات التي تفتح لك الباب.","اكتب برنامج يومك على ورقة: الصلوات، الرياضة، العمل، الورد القرآني، النوم.","ضع الهاتف خارج السرير، ونم قبل الحادية عشرة ليلاً.","أكمل خريطة المحفزات في الفصل الثاني بصدق.","اختر صديقاً موثوقاً أو شريكاً تخبره بتحديك.","المراجعة الأسبوعية الأولى. كافئ نفسك بشيء حلال بسيط.",
-"تدرّب على خطة العشر دقائق (الفصل السادس) وأنت هادئ، قبل أن تحتاجها.","امشِ 30 دقيقة بلا هاتف، وتأمل في سبب بدايتك.","اكتب ثلاثة أسباب كبرى لماذا تفعل هذا، وعلّقها أمامك.","اجلس مع ورد قرآن عشرين دقيقة بتدبّر.","تمرين قوة كامل، وسجّل أرقامك.","ابتعد عن الهاتف بعد العشاء حتى النوم.","المراجعة الثانية. اشكر الله على أسبوعين، وانتبه لما بنيته.",
-"ابدأ مهارة جديدة تتعلمها 30 دقيقة يومياً (برمجة، لغة، مونتاج، مهارة عمل...).","اكتب هدفك الديني للشهر القادم (مقدار حفظ أو علم).","غيّر روتينك في وقت ضعفك المعتاد، فاستبدل بالعادة القديمة نشاطاً جديداً.","تصدّق بشيء ولو يسير، وانوِ به شكراً لله.","اتصل بقريب أو صديق صالح لم تكلمه منذ زمن.","تمرين قوة أصعب قليلاً من المعتاد.","المراجعة الثالثة. اكتب ما الذي تغيّر فيك خلال ثلاثة أسابيع.",
-"اقرأ قصة يوسف عليه السلام وقوله ﴿مَعَاذَ اللَّهِ﴾، وتأمل معنى الثبات في الخلوة.","رتّب غرفتك ومكتبك وهاتفك. النظام الخارجي يعين النظام الداخلي.","اكتب ما ستفعله حين يمرّ بك يوم سيئ أو مرهق.","أنهِ استحمامك بدقيقة ماء بارد (إن لم يمنعك مانع صحي).","صلِّ ركعتين قبل الفجر، وادعُ الله بثباتك.","اجلس مع رجل أكبر منك واسأله عن تجربته في الانضباط.","المراجعة الرابعة. أعد قراءة أسبابك الكبرى، وراجع الخطة.",
-"خصّص ساعتين لمشروعك أو مهارتك الأهم بلا هاتف.","اكتب رسالة لنفسك قبل شهر: ما الذي كنت تحتاج أن تسمعه؟","اليوم الحادي والثلاثون: احتفل بشهر كامل. كافئ نفسك بشيء ينفعك (كتاب، أداة رياضة).","اكتب أصعب ثلاث لحظات ضعف مررت بها وكيف تجاوزتها.","خذ استراحة رقمية: ثلاث ساعات بلا شاشات.","احضر درس علم أو استمع لمحاضرة نافعة أو زُر مريضاً.","المراجعة الخامسة.",
-"اقرأ عشرين صفحة من كتاب نافع.","تمرين كارديو أربعين دقيقة.","اكتب خطة للأيام الخطرة: السفر، الإجازة، الفراغ الطويل، الوحدة.","أخبر شخصاً موثوقاً بتقدمك إن أمكن، وخذ منه تشجيعاً أو نصيحة.","اكتب عشر نعم من الله عليك، فالامتنان يحمي القلب.","يوم نظيف: نوم مبكر، طعام معتدل، لا سهر.","المراجعة السادسة. اسأل: ما الذي تغيّر في هويتي؟",
-"أحسن إلى أحد دون أن يعلم أحد.","حدّد أهدافك للأشهر الثلاثة القادمة بدقة.","منتصف الطريق: قيّم نفسك بصدق، وجدّد عقدك مع نفسك.","انصح أو شجّع شاباً بكلمة طيبة عما تعلمته.","راجع نظام الصيام عندك وأصلحه إن اختل.","اكتب مبادئك الخمسة التي لا تتنازل عنها مهما حدث.","المراجعة السابعة.",
-"يوم الخمسين: سجود شكر، وركعتان، وصدقة.","جدّد بيئتك: راجع الفلاتر وأماكن جلوسك وقواعد الهاتف.","اقرأ عن سيرة رجل من السلف في مجاهدة النفس.","اختبر نفسك: ما نقاط الضعف التي لا تزال قائمة؟ اكتبها وضع لها حلاً.","تمرين قوة أصعب من المعتاد.","صِل رحمك بزيارة أو اتصال أو هدية.","المراجعة الثامنة.",
-"أنجز مهمة مؤجلة منذ زمن.","دش بارد كامل في الصباح (إن لم يمنعك مانع صحي).","اكتب ما كسبته حتى الآن: طاقة، تركيز، ثقة، قرب من الله...","اليوم الستون: كافئ نفسك وشارك انتصارك مع شخص تثق به.","فكّر في خطر الثقة الزائدة، واكتب كيف تحمي نفسك منها.","ابدأ نظام قراءة يومي ثابت.","المراجعة التاسعة.",
-"خطّط شهرك القادم لأهدافك الثلاثة: الدين والجسد والعمل.","يوم خدمة: اقضِ ساعات تخدم فيها الناس أو الأهل.","قوِّ وردك القرآني بصفحة إضافية.","اجلس ساعة تأمل بلا هاتف، وراجع حياتك.","جدّد نيتك: لمن أفعل هذا؟","اكتب ما تنصح به شاباً في بداية الطريق.","المراجعة العاشرة. أعد قراءة الفصل الأول من الكتاب.",
-"اختر تحدياً جسدياً جديداً (وزن، سباق، مهارة قتالية).","اكتب قائمة بما قد يعيدك للسقوط، وماذا ستفعل حينها.","احفظ دعاءً جديداً وواظب عليه.","اقضِ يوماً بين الناس في عمل نافع.","اليوم الخامس والسبعون: ثلاثة أرباع الطريق. سجّل رسالة لنفسك.","نظّم مالك وميزانيتك هذا الأسبوع.","المراجعة الحادية عشرة.",
-"احضر درساً أو محاضرة تقوّي علمك وإيمانك.","تدرّب على قول «لا» في أمر صغير آخر (السكر، التسويف، السهر).","اليوم الثمانون: اكتب كيف تغيّرت صورتك عن نفسك.","راجع أهدافك وعدّل ما يلزم.","تمرين أطول من المعتاد وبكل جدية.","اشكر من وقف معك أثناء الرحلة.","المراجعة الثانية عشرة. خطّط لما بعد التسعين.",
-"اكتب نظام الصيانة الدائم الخاص بك (الفصل العاشر).","ادعُ الله بالثبات دعاءً طويلاً في السجود.","فكّر في من تستطيع أن تنفعه بهذا التحدي، وشاركه الكتاب أو الخطة.","أعد قراءة هذا الكتاب من البداية.","اكتب شهادتك: ما الذي تغيّر فيك؟","اليوم التسعون: سجود شكر وركعتان. انتهى التحدي، وبدأت حياتك الجديدة."];
-const RULES=[['sleep','النوم','نوم بكري، فجر في وقتو، والتليفون برّا الفراش'],['guard','الحماية','الفلاتر مفعّلة، والحسابات الخطرة محذوفة'],['wird','الورد','ورد قرآن وأذكار الصباح والمساء'],['body','الجسد','رياضة ولا مشي اليوم'],['goal','الهدف','ساعة لمهارتك ولا مشروعك'],['fast','الصوم','الاثنين والخميس والأيام البيض (اللي تنجم عليه)']];
+const WA='21658886475', IG='nadhem_elaashek', N=21;
+const WEEKS=['الجمعة 1: نسكّرو الأبواب','الجمعة 2: نعدّيو الموجات','الجمعة 3: نبنيو واحد جديد'];
+// each day: t title, w why, s steps (checkable), f fields (text inputs), x special
+const DAYS=[
+{t:'العهد',w:'التوبة قرار، والإقلاع مهارة. اليوم تاخذ القرار، والـ20 نهار الجايين نتدرّبو على المهارة.',s:['اقرا العهد اللي لوطة بصوت واطي','اكتبو بخطّ يدك على ورقة، وقّع، وعلّقو وين تشوفو كل يوم','اغتسل وصلّي ركعتين توبة وعزم'],x:'pledge'},
+{t:'سكّر الأبواب',w:'اللي تاب وخلّى بيئتو كيف ما هي، كيف اللي يحب يبطّل الدخان وهو ساكن في معمل سجائر.',s:['آيفون: Settings ← Screen Time ← Content & Privacy Restrictions (فعّلها) ← Content Restrictions ← Web Content ← Limit Adult Websites. بعد حط كود لـ Screen Time ما تعرفوش إنت (خلّي صاحبك ولا واحد من الدار يحطو).','أندرويد: Settings ← Network / Connexions ← Private DNS ← اختار «hostname» واكتب: family.cloudflare-dns.com','احذف الحسابات والصفحات والمجموعات اللي تحلّلك الباب، وبطّل تتبّع أي حساب يوريك حاجات تحرّكك','كان عندك تطبيق ولا متصفّح فيه تاريخ خايب، امسحو']},
+{t:'برنامج نهارك',w:'الفراغ هو أكبر عدو. الدماغ يكره الفراغ، وكان ما عمّرتوش بحاجة نافعة، ترجع العادة وحدها.',f:['وقتاش تقوم للفجر؟','وقتاش تخدم ولا تقرا؟','وقتاش تعمل الرياضة؟','وقتاش ترقد؟ (قبل 23:00)'],s:['اكتب البرنامج على ورقة وحطها قدامك']},
+{t:'التليفون برّا الفراش',w:'أغلب الطيحات تصير في الليل، في الفراش، والتليفون في اليد.',s:['حط الشارجور متاع التليفون برّا بيتك (الصالة ولا الكوجينة)','كان تستعمل التليفون كمنبّه، شري منبّه صغير ولا خلّي واحد من الدار يفيّقك','الليلة: ترقد قبل 23:00، والتليفون يبات برّا']},
+{t:'خريطة المحفزات',w:'ما تنجمش تغلب عدو ما تعرفوش. اعرف بابك وين.',x:'triggers',f:['وقتاش العادة تجيك أكثر؟ (الساعة والبلاصة)','شنوة الإحساس اللي يكون عندك قبلها؟']},
+{t:'صاحبك في الطريق',w:'السر الثقيل يكبر في الظلام. واحد يعرف، يخفّف عليك نص الحمل.',f:['شكون الشخص اللي تثق فيه؟ (الاسم والنمرة)'],s:['ابعثلو: «خويا، بديت تحدي باش نصلّح حياتي، نحب كل جمعة نقلّك وين وصلت. تنجم تكون معايا؟»','ما يلزمكش تحكيلو كل التفاصيل. يكفي يعرف اللي إنت في تحدّي']},
+{t:'المراجعة الأولى',w:'جمعة كاملة! وقف شوية وشوف شنوة صار.',x:'review',s:['كافئ روحك بحاجة حلال صغيرة (أكلة تحبها، قهوة مع صاحبك...)']},
+{t:'تدرّب على النجدة وإنت هادي',w:'العسكري يتدرّب قبل الحرب موش في وسطها. كي تجيك الموجة، يلزم يدّك تعرف وين تمشي.',s:['افتح صفحة «نجدة» وجرّب الخطوات وحدة وحدة توا، وإنت هادي','جرّب التنفس: شهيق 4، حبس 4، زفير 6، عشر مرات','حط التطبيق في الشاشة الرئيسية باش تلقاه في ثانية'],x:'sos'},
+{t:'مشية بلا تليفون',w:'30 دقيقة معاك إنت برك. بلا سماعات، بلا تليفون.',s:['امشي 30 دقيقة، والتليفون في الدار','وإنت تمشي خمّم: علاش بديت؟ شكون تحب تولّي؟'],f:['شنوة جاك في بالك وإنت تمشي؟']},
+{t:'3 أسباب كبرى',w:'كي تضعف، العقل ينسى علاش بديت. اكتبهم وإنت قوي.',x:'why',s:['اكتبهم على ورقة وعلّقهم قدام فرشك']},
+{t:'20 دقيقة مع القرآن',w:'موش قراية سريعة. 20 دقيقة بتدبّر.',s:['اختار صفحة ولا سورة قصيرة','اقرا ببطء، واقرا التفسير الميسّر متاعها','وقف عند آية حسّيت بيها توجّهلك إنت'],f:['شنوة الآية اللي مسّتك؟']},
+{t:'تمرين قوة كامل',w:'الجسد القوي يعاون النفس القوية. والتعب الباهي يرقّدك بكري.',s:['3 دورات: ضغط (push-ups) أقصى عدد، سكوات 20، بلانك 40 ثانية، راحة دقيقة بين كل دورة','سجّل أرقامك باش تقارنها النهار 20'],f:['قدّاش من ضغط عملت في أحسن دورة؟']},
+{t:'التليفون يرقد بعد العشاء',w:'الليل أخطر وقت. اليوم تسكّر الباب الأكبر.',s:['بعد صلاة العشاء، التليفون في الشارجور برّا البيت','عمّر الوقت: قعدة مع الدار، كتاب، وضوء وأذكار النوم','كان لازمك التليفون للخدمة، خلّصها قبل العشاء']},
+{t:'المراجعة الثانية',w:'جمعتين! اشكر الله، وشوف شنوة بنيت.',x:'review',s:['ابعث لصاحبك (النهار 6) وقلّو وين وصلت']},
+{t:'مهارة جديدة',w:'من هنا تبدا تتحوّل من واحد يقاوم لواحد عندو هدف. 30 دقيقة كل يوم.',f:['شنوة المهارة؟ (لغة، مونتاج، برمجة، تصميم، صنعة...)','وين باش تتعلمها بلاش؟ (يوتيوب، كورس...)'],s:['اعمل أول 30 دقيقة اليوم']},
+{t:'هدفك الديني للشهر',w:'هدف صغير وواضح أحسن من هدف كبير ما يتعملش.',f:['شنوة هدفك؟ (مثلاً: حفظ جزء عمّ، ختمة، كتاب في العقيدة...)','قدّاش كل يوم باش يتحقق؟'],s:['ابدا اليوم بأول جزء صغير']},
+{t:'بدّل وقت ضعفك',w:'وقت الضعف اللي كتبتو في النهار 5 هو وين المعركة. اليوم تحط فيه حاجة جديدة.',x:'ifthen',s:['اليوم، في وقت ضعفك، اعمل الحاجة الجديدة اللي كتبتها']},
+{t:'صدقة ولو بالقليل',w:'«وأتبع السيئة الحسنة تمحها». الصدقة تطفي وتنوّر القلب.',s:['تصدّق بحاجة ولو دينار، ولا أكلة لواحد محتاج','انوي بيها شكر لله على الـ17 يوم']},
+{t:'رجّع صلة',w:'العزلة تغذّي العادة. الناس الباهيين يحمّوك.',s:['كلّم قريب ولا صاحب صالح ما حكيتش معاه من زمان','ما تحكيلوش على التحدي كان ما تحبش، المهم ترجع الصلة']},
+{t:'تمرين أصعب',w:'نفس تمرين النهار 12، أما أصعب شوية. شوف قدّاش تقويت.',s:['3 دورات: ضغط (زيد 2 على رقمك)، سكوات 25، بلانك 50 ثانية','قارن مع رقم النهار 12'],f:['رقمك اليوم في الضغط؟'],x:'cmp'},
+{t:'المراجعة الثالثة: التخرّج',w:'3 جمعات! اكتب شنوة تبدّل فيك.',x:'review',f:['شنوة تبدّل فيك في 21 يوم؟']}];
+const RULES=[['sleep','النوم','نوم قبل 23:00، فجر في وقتو، والتليفون برّا الفراش'],['wird','الورد','شوية قرآن وأذكار الصباح والمساء'],['body','الجسد','رياضة ولا مشي اليوم'],['goal','الهدف','وقت لمهارتك ولا خدمتك'],['task','المهمة','عملت مهمة اليوم']];
+const TRIG=[['الملل','وقت فارغ بلا هدف، تقلّب في التليفون'],['الوحدة','وحدك في بيت مسكّر، خاصة في الليل'],['الضغط والإحباط','فشل، مشكل، خوف من المستقبل'],['التعب والسهر','أغلب الطيحات بعد نص الليل'],['التليفون والمنصات','تصاور وفيديوات تطلعلك وإنت تقلّب'],['الإحساس بالنصر الكاذب','«توا قويت، نقلّب شوية عادي»']];
+const PLEDGE=['نبعد على كل ما يحلّلي باب الإباحية والعادة.','نحافظ على الصلاة والورد القرآني والصوم قد ما نجم.','نعمّر وقتي بما ينفعني، ونبعد على الخلوة مع التليفون.','كان طحت، نتوب في الحين ونقوم نفس النهار، وما نستسلمش.','نسعى لأهدافي الثلاثة: ديني وبدني وخدمتي.'];
 const REVIEW=['شنوة أكثر حاجة نجحت فيها هالجمعة؟','وقتاش كانت أصعب لحظة؟ علاش؟ وكيفاش تعاملت معاها؟','شنوة لازمني نبدّل في بيئتي ولا برنامجي؟','نمت مليح؟ صمت؟ تحركت؟ قريت ورد القرآن؟','شنوة أهم هدف للجمعة الجاية؟'];
 const TEN=['اكسر المشهد توا: قوم من بلاصتك، بدّل البيت، واخرج من الخلوة.','سمِّ الرغبة: قول «هاذي موجة وباش تعدّي، والله يراني». واستعذ بالله.','الماء: توضّا بماء بارد.','الصلاة: ركعتين بخشوع، ولو قصار.','الناس: امشي لبلاصة فيها عباد، ولا كلّم صاحبك، ولا اهبط للشارع.','الجسد: 20 تمرين ضغط ولا مشي سريع.','التنفس: شهيق 4 ثواني، حبس 4، زفير 6. عاود 10 مرات.','اكتب: شنوة نحس توا؟ ومن شنوة قاعد نهرب؟'];
 const GOLD=['ما تفاوضش. كل جملة تبدا بـ«كان هالمرة» ولا «نشوف شوية» هي فخ.','ما تقولش «باش نقاوم» وإنت في نفس البلاصة. بدّل بلاصتك الأول.','بعّد التليفون على يدك وعلى بيتك.','تفكّر شنوة يجي بعد اللحظة: الذنب والإحباط اللي تعرفهم مليح.'];
 const Q3=['شنوة الإحساس اللي قاعد نهرب منو توا؟','هذا اللي نحبو بالحق، ولا اللي يحبو الجزء الضعيف مني؟','كيفاش باش نحس بعد 10 دقايق؟ وبعد 10 سوايع؟'];
-const FIRST=['قوم توا من البلاصة، وبعّد على الجهاز.','اغتسل وتوضّا، وصلّي ركعتين، واستغفر بصدق وبقلب حاضر.','ما تجلدش روحك. الحزن الصادق يدفعك، والجلد يقيّدك.','اكتب بهدوء (من غير ما توصف المحتوى): وقتاش؟ وين؟ شنوة الإحساس اللي قبلها؟ شنوة المحفز؟ شنوة كان تنجم تعمل؟','سدّ الثغرة اللي دخلت منها (التليفون في الفراش، السهر، بلاصة معينة...).','ارجع لخطتك نفس النهار: الصلاة، الرياضة، وبرنامج غدوة. ما تستناش «بداية الجمعة».','قول لواحد تثق فيه كان تنجم، خاطر السر الثقيل يكبر في الظلام.'];
-const K='vay_warrior_v1';
+const FIRST=['قوم توا من البلاصة، وبعّد على الجهاز.','اغتسل وتوضّا، وصلّي ركعتين، واستغفر بصدق وبقلب حاضر.','ما تجلدش روحك. الحزن الصادق يدفعك، والجلد يقيّدك.','اكتب بهدوء (من غير ما توصف المحتوى): وقتاش؟ وين؟ شنوة الإحساس اللي قبلها؟ شنوة المحفز؟','سدّ الثغرة اللي دخلت منها (التليفون في الفراش، السهر، بلاصة معينة...).','ارجع لخطتك نفس النهار: الصلاة، الرياضة، وبرنامج غدوة. ما تستناش «بداية الجمعة».','قول لصاحبك اللي تثق فيه كان تنجم، خاطر السر الثقيل يكبر في الظلام.'];
+const K='vay_warrior21_v1';
 let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
-S=S||{name:'',start:'',days:{},reviews:{},falls:[],ifthen:['','',''],contact:'',why:['','','']};
+S=S||{name:'',start:'',days:{},notes:{},reviews:{},falls:[],ifthen:['','',''],contact:'',why:['','',''],trig:[],pledged:false};
 function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 const $=s=>document.querySelector(s);
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function today(){return ymd(new Date())}
 function dayNo(){if(!S.start)return 0;const a=new Date(S.start+'T00:00:00'),b=new Date(today()+'T00:00:00');return Math.floor((b-a)/864e5)+1}
-function dateOf(n){const a=new Date(S.start+'T00:00:00');a.setDate(a.getDate()+n-1);return ymd(a)}
 function D(n){return S.days[n]=S.days[n]||{}}
-function phaseOf(n){return PH.find(p=>n>=p[0]&&n<=p[1])||PH[2]}
-function streak(){const n=Math.min(dayNo(),90);let s=0;for(let i=n;i>=1;i--){const d=S.days[i];if(d&&d.clean===true)s++;else if(i===n&&!(d&&d.clean===false))continue;else break}return s}
+function NT(n){return S.notes[n]=S.notes[n]||{}}
+function streak(){const n=Math.min(dayNo(),N);let s=0;for(let i=n;i>=1;i--){const d=S.days[i];if(d&&d.clean===true)s++;else if(i===n&&!(d&&d.clean===false))continue;else break}return s}
 function cleanCount(){return Object.values(S.days).filter(d=>d.clean===true).length}
-function best(){let b=0,c=0;for(let i=1;i<=90;i++){const d=S.days[i];if(d&&d.clean===true){c++;b=Math.max(b,c)}else c=0}return b}
-function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;document.body.appendChild(e);setTimeout(()=>{e.style.opacity=0;setTimeout(()=>e.remove(),300)},1600)}
-let view='home',tmr=null,tLeft=600,tOn=false,sosSteps={};
+function tasksDone(){return Object.values(S.days).filter(d=>d.task).length}
+function best(){let b=0,c=0;for(let i=1;i<=N;i++){const d=S.days[i];if(d&&d.clean===true){c++;b=Math.max(b,c)}else c=0}return b}
+function toast(t){const e=document.createElement('div');e.className='toast';e.textContent=t;document.body.appendChild(e);setTimeout(()=>{e.style.opacity=0;setTimeout(()=>e.remove(),300)},1700)}
+const wa=t=>`https://wa.me/${WA}?text=${encodeURIComponent(t)}`;
+let view='home',tmr=null,tLeft=600,tOn=false,sosSteps={},peek=0,revWeek=1,delArm=false;
 function go(v){view=v;window.scrollTo(0,0);render()}
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.v));
+function bindGo(){document.querySelectorAll('[data-go]').forEach(e=>e.onclick=()=>go(e.dataset.go))}
 
 function vWelcome(){return `
 <div class="top"><span class="logo">VAYNORA</span></div>
 <div class="card" style="text-align:center;padding:26px 16px">
-<div style="font-size:46px">🛡️</div>
-<h1 style="margin:8px 0">تطبيق المحارب</h1>
-<p class="mut">رفيقك في تحدي الـ90 يوم متاع كتاب «معركة الخلوات»</p>
-</div>
+<div style="font-size:46px">🛡️</div><h1 style="margin:8px 0">تطبيق المحارب</h1>
+<p>تحدّي <b class="red">21 يوم</b> بلاش، باش ترجع تتحكّم في روحك</p>
+<p class="mut" style="margin-top:6px">من كتاب «معركة الخلوات» لناظم العاشق</p></div>
 <div class="card">
-<p>كل نهار تلقى مهمتك من الكتاب، تسجّل نهارك، وكي تجيك الموجة تنزل على <b class="red">نجدة</b>.</p>
+<p>✅ كل نهار مهمة وحدة، عملية، بالخطوات<br>🆘 زر <b class="red">نجدة</b> كي تجيك الموجة<br>🔁 كي تطيح، تعرف كيفاش تقوم نفس النهار</p>
 <p class="mut" style="margin-top:8px">🔒 كل حاجة تتسجّل في تليفونك برك. حتى حد ما يشوفها، حتى ناظم.</p>
 <label>شنوة نسمّيك؟ (اسم مستعار يكفي)<input id="nm" placeholder="مثلاً: محارب" maxlength="20"></label>
 <label>وقتاش تبدا؟<input id="st" type="date" value="${today()}"></label>
-<button class="btn" id="go">نبدا التحدي 💪</button>
-</div>`}
+<button class="btn" id="go">نبدا التحدي 💪</button></div>`}
 function bindWelcome(){$('#go').onclick=()=>{S.name=$('#nm').value.trim()||'محارب';S.start=$('#st').value||today();save();go('home')}}
 
-function vHome(){
-const raw=dayNo();
-if(raw<1)return `<div class="top"><span class="logo">VAYNORA</span></div><div class="card"><h2>التحدي يبدا نهار ${esc(S.start)}</h2><p class="mut">حضّر روحك: اقرا الفصل الأول، وبدّل تاريخ البداية من الإعدادات كان تحب.</p></div>`;
-if(raw>90)return vDone();
-const n=raw,d=D(n),ph=phaseOf(n),isRev=n%7===0||n===90;
-const rules=RULES.map(r=>`<div class="chk ${d[r[0]]?'on':''}" data-r="${r[0]}"><span class="box">${d[r[0]]?'✓':''}</span><div>${r[1]}<small>${r[2]}</small></div></div>`).join('');
-const mile=n===21?`<div class="card" style="border-color:var(--amb)"><h2>🎖️ النهار 21!</h2><p>كمّلت انطلاقة المحارب. ثلاثة أسابيع موش ساهلة. ابعث لناظم وقلّو كيفاش تبدّلت، ونكمّلو مع بعضنا للـ90.</p><a class="btn" href="https://wa.me/${WA}?text=${encodeURIComponent('السلام عليكم، كمّلت 21 يوم في تطبيق المحارب الحمد لله 💪 نحب نكمّل للـ90')}" target="_blank">ابعث لناظم</a></div>`:'';
+function taskCard(n,editable){const T=DAYS[n-1],d=D(n),nt=NT(n);
+let h=`<span class="phase">${WEEKS[Math.ceil(n/7)-1]}</span><h2>🎯 النهار ${n}: ${T.t}</h2><p class="why">${T.w}</p>`;
+if(T.x==='pledge')h+=`<div class="card" style="background:var(--card2)"><p><b>أعاهد الله ثم نفسي، أنا ${esc(S.name)}، إني نبدا اليوم التحدي، وإني:</b></p><ol style="margin-top:6px">${PLEDGE.map(p=>`<li>${p}</li>`).join('')}</ol>
+<label>السبب الأكبر اللي يدفعني:<input data-pl value="${esc(nt.reason)}"></label>
+<button class="btn ${S.pledged?'grn':''}" id="pl">${S.pledged?'✓ عاهدت':'نعاهد 🤲'}</button></div>`;
+if(T.x==='triggers')h+=`<p class="how">اختار الأبواب اللي تدخل منها (ولو أكثر من وحدة):</p>${TRIG.map((t,i)=>`<span class="pill ${S.trig.includes(i)?'on':''}" data-tg="${i}">${t[0]}</span>`).join('')}<p class="mut" style="margin-top:8px">${TRIG.map(t=>`<b>${t[0]}:</b> ${t[1]}`).join('<br>')}</p>`;
+if(T.s)h+=`<p class="how">كيفاش:</p>`+T.s.map((s,i)=>`<div class="step ${nt['s'+i]?'on':''}" data-st="${n}:${i}"><span class="box">${nt['s'+i]?'✓':''}</span><div>${s}</div></div>`).join('');
+if(T.x==='why')h+=`<p class="how">علاش تعمل هذا؟</p>${[0,1,2].map(i=>`<input data-y="${i}" value="${esc(S.why[i])}" placeholder="السبب ${i+1}">`).join('')}`;
+if(T.x==='ifthen'){const tr=S.trig.map(i=>TRIG[i][0]).join('، ');h+=`<p class="how">كمّل الجملة:</p>${tr?`<p class="mut">أبوابك: ${tr}${NT(5).f0?' · وقتك: '+esc(NT(5).f0):''}</p>`:''}<input data-it="0" value="${esc(S.ifthen[0])}" placeholder="إذا جا وقت ضعفي (...)، باش نعمل (...)"><input data-it="1" value="${esc(S.ifthen[1])}" placeholder="إذا لقيت روحي شادد التليفون في الفراش، باش ...">`}
+if(T.f)h+=T.f.map((f,i)=>`<label>${f}<input data-f="${n}:${i}" value="${esc(nt['f'+i])}"></label>`).join('');
+if(T.x==='cmp'&&NT(12).f0)h+=`<p class="mut" style="margin-top:6px">رقمك في النهار 12: <b>${esc(NT(12).f0)}</b></p>`;
+if(T.x==='sos')h+=`<button class="btn sec" data-go="sos">افتح صفحة نجدة</button>`;
+if(T.x==='review')h+=`<button class="btn sec" id="rv" data-w="${Math.ceil(n/7)}">📝 جاوب على أسئلة المراجعة (5)</button>`;
+if(editable)h+=`<button class="btn ${d.task?'grn':''}" id="tk">${d.task?'✓ عملتها، الحمد لله':'كمّلت المهمة ✓'}</button>`;
+return h}
+function bindTask(n){const nt=NT(n);
+document.querySelectorAll('[data-st]').forEach(e=>e.onclick=()=>{const i=e.dataset.st.split(':')[1];nt['s'+i]=!nt['s'+i];save();e.classList.toggle('on',nt['s'+i]);e.querySelector('.box').textContent=nt['s'+i]?'✓':''});
+document.querySelectorAll('[data-f]').forEach(e=>e.oninput=()=>{const [m,i]=e.dataset.f.split(':');NT(m)['f'+i]=e.value;save()});
+document.querySelectorAll('[data-y]').forEach(e=>e.oninput=()=>{S.why[+e.dataset.y]=e.value;save()});
+document.querySelectorAll('[data-it]').forEach(e=>e.oninput=()=>{S.ifthen[+e.dataset.it]=e.value;save()});
+const pl=$('[data-pl]');if(pl)pl.oninput=()=>{nt.reason=pl.value;save()};
+const pb=$('#pl');if(pb)pb.onclick=()=>{S.pledged=true;save();toast('الله يثبّتك 🤲');render()};
+document.querySelectorAll('[data-tg]').forEach(e=>e.onclick=()=>{const i=+e.dataset.tg;S.trig=S.trig.includes(i)?S.trig.filter(x=>x!==i):[...S.trig,i];save();e.classList.toggle('on')});
+const rv=$('#rv');if(rv)rv.onclick=()=>{revWeek=+rv.dataset.w;go('review')};
+const tk=$('#tk');if(tk)tk.onclick=()=>{const d=D(n);d.task=!d.task;save();if(d.task)toast('بارك الله فيك 💪');render()};
+bindGo()}
+
+function vHome(){const n=dayNo();
+if(n<1)return `<div class="top"><span class="logo">VAYNORA</span></div><div class="card"><h2>التحدي يبدا نهار ${esc(S.start)}</h2><p class="mut">بدّل تاريخ البداية من الإعدادات كان تحب تبدا اليوم.</p></div>`;
+if(n>N)return vGrad();
+const d=D(n);
+const rules=RULES.map(r=>{const on=r[0]==='task'?d.task:d[r[0]];return `<div class="chk ${on?'on':''}" data-r="${r[0]}"><span class="box">${on?'✓':''}</span><div>${r[1]}<small>${r[2]}</small></div></div>`}).join('');
 return `
-<div class="top"><div><span class="logo">VAYNORA</span><div class="mut">مرحبا ${esc(S.name)} 🤍</div></div><div style="text-align:left"><span class="mut">النهار</span><div class="big">${n}<span style="font-size:18px;color:var(--mut)">/90</span></div></div></div>
-<div class="stats"><div class="stat"><b class="red">${streak()}</b><span>أيام نظيفة متتالية</span></div><div class="stat"><b>${cleanCount()}</b><span>أيام نظيفة الكل</span></div><div class="stat"><b>${best()}</b><span>أحسن سلسلة</span></div></div>
-${mile}
-<div class="card"><span class="phase">${ph[2]}</span><h2>🎯 مهمة اليوم</h2><p class="task">${T[n-1]}</p>
-<button class="btn ${d.task?'grn':''}" id="tk">${d.task?'✓ عملتها، الحمد لله':'عملتها ✓'}</button>
-${isRev?'<button class="btn sec" id="rv">📝 افتح المراجعة الأسبوعية</button>':''}</div>
-<div class="card"><h2>⚔️ قواعد المحارب اليوم</h2>${rules}</div>
+<div class="top"><div><span class="logo">VAYNORA</span><div class="mut">مرحبا ${esc(S.name)} 🤍</div></div><div style="text-align:left"><span class="mut">النهار</span><div class="big">${n}<span style="font-size:18px;color:var(--mut)">/${N}</span></div></div></div>
+<div class="prog"><i style="width:${Math.round(n/N*100)}%"></i></div><div style="height:12px"></div>
+<div class="stats"><div class="stat"><b class="red">${streak()}</b><span>أيام نظيفة متتالية</span></div><div class="stat"><b>${cleanCount()}</b><span>أيام نظيفة الكل</span></div><div class="stat"><b>${tasksDone()}</b><span>مهام كمّلتها</span></div></div>
+<div class="card">${taskCard(n,true)}</div>
+${n===N?vOfferCard():''}
+<div class="card"><h2>⚔️ نهارك اليوم</h2>${rules}</div>
 <div class="card"><h2>🌙 آخر النهار: كيفاش كان؟</h2>
 <div class="row"><button class="btn ${d.clean===true?'grn':'sec'}" id="cl">نظيف اليوم 🤍</button><button class="btn sec" id="fl">طحت</button></div>
 <p class="mut" style="margin-top:8px">سجّلها قبل ما ترقد. الصدق مع روحك هو نص الطريق.</p></div>
 <div class="card sos"><h2>🆘 جاتك الموجة توا؟</h2><p>ما تفاوضش. اضغط هنا وعدّي 10 دقايق معايا.</p><button class="btn" data-go="sos">نجدة</button></div>`}
-function bindHome(){
-const n=dayNo();if(n<1||n>90){bindDone();return}const d=D(n);
-document.querySelectorAll('[data-r]').forEach(e=>e.onclick=()=>{d[e.dataset.r]=!d[e.dataset.r];save();render()});
-$('#tk').onclick=()=>{d.task=!d.task;save();if(d.task)toast('بارك الله فيك 💪');render()};
-const rv=$('#rv');if(rv)rv.onclick=()=>{revWeek=Math.ceil(n/7);go('review')};
+function bindHome(){const n=dayNo();if(n<1)return;if(n>N){bindGrad();return}const d=D(n);
+bindTask(n);
+document.querySelectorAll('[data-r]').forEach(e=>e.onclick=()=>{const k=e.dataset.r;if(k==='task')d.task=!d.task;else d[k]=!d[k];save();render()});
 $('#cl').onclick=()=>{d.clean=true;save();toast('الحمد لله، نهار آخر في الجيب 🤍');render()};
-$('#fl').onclick=()=>go('fall');
-document.querySelectorAll('[data-go]').forEach(e=>e.onclick=()=>go(e.dataset.go));}
+$('#fl').onclick=()=>go('fall');bindOffer()}
 
-function vDone(){return `<div class="top"><span class="logo">VAYNORA</span></div><div class="card" style="text-align:center;padding:28px 16px"><div style="font-size:50px">🏆</div><h1>كمّلت الـ90 يوم</h1><p style="margin-top:10px">انتهى التحدي، وبدات حياتك الجديدة. سجود شكر وركعتين.</p><p class="mut" style="margin-top:8px">${cleanCount()} نهار نظيف · أحسن سلسلة ${best()}</p><a class="btn" href="https://wa.me/${WA}?text=${encodeURIComponent('السلام عليكم، كمّلت الـ90 يوم في تطبيق المحارب الحمد لله 🏆')}" target="_blank">ابعث شهادتك لناظم</a></div>`}
-function bindDone(){}
+function vOfferCard(){return `<div class="card offer" style="border-color:var(--amb)">
+<h2>🏆 برنامج المحارب: 90 يوم</h2>
+<p>21 يوم هي البداية. الدماغ يحتاج في المعدل حوالي <b>66 يوم</b> باش العادة الجديدة تولّي أوتوماتيك. ما توقفش هنا.</p>
+<p class="how">في البرنامج تلقى:</p>
+<ol><li>خطة كاملة للـ69 يوم الباقين، نهار بنهار</li><li>متابعة شخصية مع ناظم كل جمعة</li><li>مجموعة خاصة مع محاربين كيفك (اسم مستعار، ما حد يشوف نمرتك)</li><li>كتاب «معركة الخلوات» كامل (123 صفحة)</li></ol>
+<a class="btn" href="${wa('السلام عليكم ناظم، كمّلت تحدي 21 يوم في تطبيق المحارب 💪 نحب نعرف تفاصيل برنامج الـ90 يوم')}" target="_blank">نحب نكمّل للـ90 💪</a>
+<a class="btn sec" href="https://ig.me/m/${IG}" target="_blank">ولا ابعث لناظم في إنستا</a></div>`}
+function bindOffer(){}
 
-function vMap(){const n=dayNo();let c='';for(let i=1;i<=90;i++){const d=S.days[i]||{};let k=d.clean===true?'c':d.clean===false?'f':d.task?'t':'';if(i===n)k+=' now';c+=`<div class="cell ${k}" data-d="${i}">${i}</div>`}
+function vGrad(){const t=tasksDone(),c=cleanCount();return `
+<div class="top"><span class="logo">VAYNORA</span></div>
+<div class="card" style="text-align:center;padding:26px 16px"><div style="font-size:50px">🎖️</div><h1>كمّلت تحدي 21 يوم</h1>
+<p style="margin-top:8px">${t>=14?`مبروك يا ${esc(S.name)}. ثلاثة أسابيع موش ساهلة، والحمد لله.`:`الـ21 يوم عدّاو يا ${esc(S.name)}. كان حسّيت ما كمّلتش كيف تحب، عادي: تنجم تعاود من الصفر من الإعدادات، ولا تكمّل مع ناظم في البرنامج.`}</p>
+<div class="stats" style="margin-top:14px"><div class="stat"><b class="red">${c}</b><span>أيام نظيفة</span></div><div class="stat"><b>${t}/${N}</b><span>مهام</span></div><div class="stat"><b>${best()}</b><span>أحسن سلسلة</span></div></div>
+${NT(21).f0?`<p class="mut">قلت: «${esc(NT(21).f0)}»</p>`:''}</div>
+${vOfferCard()}
+<div class="card"><h2>نجدة ديما موجودة</h2><p class="mut">صفحة النجدة والطيحة يبقاو يخدمو. والمهام القديمة تلقاهم في «الطريق».</p></div>`}
+function bindGrad(){bindOffer()}
+
+function vMap(){const n=dayNo();let c='';for(let i=1;i<=N;i++){const d=S.days[i]||{};let k=d.clean===true?'c':d.clean===false?'f':d.task?'t':'';if(i===n)k+=' now';if(i>n)k+=' lock';c+=`<div class="cell ${k}" data-d="${i}">${i>n?'🔒':i}</div>`}
 return `<div class="top"><h1>🗺️ الطريق</h1></div>
-<div class="card"><div class="grid">${c}</div>
-<p class="mut" style="margin-top:12px">🟩 نظيف · 🟫 المهمة برك · 🟥 طيحة · الإطار الأحمر = اليوم</p></div>
-${PH.map(p=>`<div class="card"><h2>${p[2]}</h2><p class="mut">الأيام ${p[0]} - ${p[1]} · ${p[3]}</p></div>`).join('')}
-<div class="card"><h2>📝 المراجعات الأسبوعية</h2>${Array.from({length:13},(_,i)=>i+1).map(w=>`<button class="btn sec" data-w="${w}" ${w*7>n+6&&!(S.reviews[w])?'disabled':''}>الجمعة ${w} ${S.reviews[w]?'✓':''}</button>`).join('')}</div>
-<div class="card"><h2>📋 مهام كل الأيام</h2><p class="mut">اضغط على نهار في الخريطة باش تشوف مهمتو.</p><div id="dt"></div></div>`}
-function bindMap(){document.querySelectorAll('[data-d]').forEach(e=>e.onclick=()=>{const i=+e.dataset.d;$('#dt').innerHTML=`<h3>النهار ${i}</h3><p>${T[i-1]}</p>`;$('#dt').scrollIntoView({behavior:'smooth'})});
+<div class="card"><div class="grid" style="grid-template-columns:repeat(7,1fr)">${c}</div>
+<p class="mut" style="margin-top:12px">🟩 نظيف · 🟫 المهمة برك · 🟥 طيحة · 🔒 مازال · الإطار الأحمر = اليوم</p></div>
+<div id="dt"></div>
+<div class="card"><h2>📝 المراجعات</h2>${[1,2,3].map(w=>`<button class="btn sec" data-w="${w}" ${w*7>n&&!S.reviews[w]?'disabled':''}>المراجعة ${w} ${S.reviews[w]?'✓':''}</button>`).join('')}</div>`}
+function bindMap(){const n=dayNo();document.querySelectorAll('[data-d]').forEach(e=>e.onclick=()=>{const i=+e.dataset.d;if(i>n){toast('هذا النهار مازال 🔒');return}$('#dt').innerHTML=`<div class="card">${taskCard(i,false)}</div>`;bindTask(i);$('#dt').scrollIntoView({behavior:'smooth'})});
 document.querySelectorAll('[data-w]').forEach(e=>e.onclick=()=>{revWeek=+e.dataset.w;go('review')})}
 
-let revWeek=1;
-function vReview(){const r=S.reviews[revWeek]||[];return `<div class="top"><h1>📝 مراجعة الجمعة ${revWeek}</h1></div>
-<div class="card"><p class="mut">5 أسئلة من الكتاب. جاوب بصدق، حتى حد ما يقرا كان إنت.</p>
+function vReview(){const r=S.reviews[revWeek]||[];return `<div class="top"><h1>📝 المراجعة ${revWeek}</h1></div>
+<div class="card"><p class="mut">جاوب بصدق، حتى حد ما يقرا كان إنت.</p>
 ${REVIEW.map((q,i)=>`<label>${i+1}. ${q}<textarea data-q="${i}">${esc(r[i])}</textarea></label>`).join('')}
 <button class="btn" id="sv">نسجّل المراجعة</button><button class="btn sec" data-go="home">رجوع</button></div>`}
-function bindReview(){$('#sv').onclick=()=>{S.reviews[revWeek]=[...document.querySelectorAll('[data-q]')].map(t=>t.value);save();toast('تسجّلت. كافئ روحك بحاجة حلال 🤍');go('home')};document.querySelectorAll('[data-go]').forEach(e=>e.onclick=()=>go(e.dataset.go))}
+function bindReview(){$('#sv').onclick=()=>{S.reviews[revWeek]=[...document.querySelectorAll('[data-q]')].map(t=>t.value);save();toast('تسجّلت. كافئ روحك بحاجة حلال 🤍');go('home')};bindGo()}
 
 function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
 function vSos(){return `<div class="top"><h1>🆘 نجدة</h1></div>
 <div class="card sos" style="text-align:center"><p>الرغبة كيف الموجة: تطلع، توصل للقمة، وتهبط. ما يلزمكش تغلبها الكل، يلزمك تصبر <b>10 دقايق</b> برك.</p>
 <div class="timer" id="tm">${fmt(tLeft)}</div><button class="btn" id="ts">${tOn?'⏸ وقّف':'▶ ابدا الـ10 دقايق'}</button></div>
-<div class="card"><h2>خطة المحارب: 10 دقايق</h2><p class="mut">اعمل وحدة وحدة، واضغط عليها كي تكمّلها.</p>
+<div class="card"><h2>خطة العشر دقايق</h2><p class="mut">اعمل وحدة وحدة، واضغط عليها كي تكمّلها.</p>
 ${TEN.map((s,i)=>`<div class="step ${sosSteps[i]?'on':''}" data-s="${i}"><span class="box">${sosSteps[i]?'✓':''}</span><div>${s}</div></div>`).join('')}</div>
+${S.why.some(x=>x)?`<div class="card"><h2>تفكّر علاش بديت</h2><ol>${S.why.filter(x=>x).map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:''}
+${S.ifthen.some(x=>x)?`<div class="card"><h2>قراراتك وإنت هادي</h2><ol>${S.ifthen.filter(x=>x).map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:''}
 <div class="card"><h2>القواعد الذهبية</h2><ol>${GOLD.map(g=>`<li>${g}</li>`).join('')}</ol></div>
 <div class="card"><h2>3 أسئلة قبل أي قرار</h2><ol>${Q3.map(g=>`<li>${g}</li>`).join('')}</ol></div>
-${S.ifthen.some(x=>x)?`<div class="card"><h2>قراراتك اللي خذيتها وإنت هادي</h2><ol>${S.ifthen.filter(x=>x).map(x=>`<li>${esc(x)}</li>`).join('')}</ol></div>`:''}
 <div class="card"><h2>ما تبقاش وحدك</h2>
-${S.contact?`<p>الشخص اللي تكلمو: <b>${esc(S.contact)}</b></p>`:''}
+${NT(6).f0?`<p>كلّم: <b>${esc(NT(6).f0)}</b></p>`:''}
 <a class="btn sec" href="https://ig.me/m/${IG}" target="_blank">ابعث لناظم في إنستا</a>
-<a class="btn sec" href="https://wa.me/${WA}?text=${encodeURIComponent('نجدة 🆘')}" target="_blank">ابعث «نجدة» في واتساب</a>
 <p class="mut" style="margin-top:8px">ناظم يجاوب كي ينجم، موش ديما في الحين. الخطة اللي فوق هي اللي تنقذك في اللحظة.</p></div>
 <div class="quote">«إِنَّمَا الصَّبْرُ عِنْدَ الصَّدْمَةِ الأُولَى» · متفق عليه</div>`}
-function tick(){if(!tOn)return;tLeft--;const e=$('#tm');if(e)e.textContent=fmt(tLeft);if(tLeft<=0){clearInterval(tmr);tOn=false;tLeft=600;if(navigator.vibrate)navigator.vibrate([200,100,200]);if(view==='sos')render();const n=dayNo();if(n>=1&&n<=90){const d=D(n);d.wins=(d.wins||0)+1;save()}toast('عدّت الموجة! إنت أقوى مما ظنّيت 💪')}}
+function tick(){if(!tOn)return;tLeft--;const e=$('#tm');if(e)e.textContent=fmt(tLeft);if(tLeft<=0){clearInterval(tmr);tOn=false;tLeft=600;if(navigator.vibrate)navigator.vibrate([200,100,200]);if(view==='sos')render();toast('عدّت الموجة! إنت أقوى مما ظنّيت 💪')}}
 function bindSos(){$('#ts').onclick=()=>{tOn=!tOn;if(tOn){clearInterval(tmr);tmr=setInterval(tick,1000)}else clearInterval(tmr);render()};
 document.querySelectorAll('[data-s]').forEach(e=>e.onclick=()=>{sosSteps[e.dataset.s]=!sosSteps[e.dataset.s];render()})}
 
 function vFall(){return `<div class="top"><h1>طحت؟ قوم.</h1></div>
 <div class="card"><p>الزلّة حدث، أما الاستسلام فقرار. الضرر الكبير موش في الزلّة، في الفكرة اللي بعدها: «وفى كل شي».</p>
 <div class="quote">«وَأَتْبِعِ السَّيِّئَةَ الْحَسَنَةَ تَمْحُهَا»</div></div>
-<div class="card"><h2>بروتوكول أول ساعة</h2>${FIRST.map((s,i)=>`<div class="step" data-f="${i}"><span class="box"></span><div>${s}</div></div>`).join('')}</div>
+<div class="card"><h2>أول ساعة بعد الطيحة</h2>${FIRST.map((s,i)=>`<div class="step" data-fp="${i}"><span class="box"></span><div>${s}</div></div>`).join('')}</div>
 <div class="card"><h2>اكتب بهدوء</h2><p class="mut">من غير ما توصف المحتوى. هذا يتسجّل عندك برك.</p>
-<label>وقتاش ووين؟<input id="f1"></label>
-<label>شنوة الإحساس اللي كان قبلها؟<input id="f2"></label>
-<label>شنوة المحفز؟<input id="f3"></label>
-<label>شنوة كان تنجم تعمل؟ وكيفاش تسدّ الثغرة؟<textarea id="f4"></textarea></label>
+<label>وقتاش ووين؟<input id="f1"></label><label>شنوة الإحساس اللي كان قبلها؟<input id="f2"></label><label>شنوة المحفز؟<input id="f3"></label>
+<label>كيفاش باش تسدّ الثغرة؟<textarea id="f4"></textarea></label>
 <button class="btn" id="fs">نسجّل ونعاود العد</button>
-<p class="mut" style="margin-top:8px">العداد يرجع للصفر، إيه. أما الخبرة ما تتمحاش. قول: «اليوم الأول من جديد، وأنا أقوى مما كنت».</p></div>`}
-function bindFall(){document.querySelectorAll('[data-f]').forEach(e=>e.onclick=()=>{e.classList.toggle('on');e.querySelector('.box').textContent=e.classList.contains('on')?'✓':''});
-$('#fs').onclick=()=>{const n=dayNo();if(n>=1&&n<=90){D(n).clean=false}S.falls.push({day:n,date:today(),w:$('#f1').value,f:$('#f2').value,t:$('#f3').value,fix:$('#f4').value});save();toast('كمّل خطتك اليوم. الله يحب التوّابين 🤍');go('home')}}
+<p class="mut" style="margin-top:8px">العداد يرجع للصفر، إيه. أما الخبرة ما تتمحاش، والمهام اللي عملتها تبقى. قول: «اليوم الأول من جديد، وأنا أقوى مما كنت».</p></div>`}
+function bindFall(){document.querySelectorAll('[data-fp]').forEach(e=>e.onclick=()=>{e.classList.toggle('on');e.querySelector('.box').textContent=e.classList.contains('on')?'✓':''});
+$('#fs').onclick=()=>{const n=dayNo();if(n>=1&&n<=N)D(n).clean=false;S.falls.push({day:n,date:today(),w:$('#f1').value,f:$('#f2').value,t:$('#f3').value,fix:$('#f4').value});save();toast('كمّل خطتك اليوم. الله يحب التوّابين 🤍');go('home')}}
 
 function vPlan(){return `<div class="top"><h1>🛡️ خطتي</h1></div>
-<div class="card"><h2>علاش بديت؟ (3 أسباب كبرى)</h2>${[0,1,2].map(i=>`<input data-y="${i}" value="${esc(S.why[i])}" placeholder="السبب ${i+1}">`).join('')}</div>
-<div class="card"><h2>جمل «إذا... فإن»</h2><p class="mut">قرارك وإنت هادي أقوى من قرارك وإنت مشتعل. تظهرلك في صفحة النجدة.</p>
-<p class="mut" style="margin-top:6px">مثال: إذا حسّيت بالملل بعد العشاء، نخرج نتمشى ولا نكلم صاحبي.</p>
-${[0,1,2].map(i=>`<input data-i="${i}" value="${esc(S.ifthen[i])}" placeholder="إذا ... باش ...">`).join('')}</div>
-<div class="card"><h2>الشخص اللي نكلمو كي نضعف</h2><input id="ct" value="${esc(S.contact)}" placeholder="الاسم والنمرة"></div>
-<button class="btn" id="ps">نسجّل</button>
-${S.falls.length?`<div class="card" style="margin-top:12px"><h2>دروس من الطيحات (${S.falls.length})</h2>${S.falls.slice(-5).reverse().map(f=>`<p class="mut">النهار ${f.day}: ${esc(f.t||f.f||'—')}${f.fix?' ← '+esc(f.fix):''}</p>`).join('')}</div>`:''}`}
-function bindPlan(){$('#ps').onclick=()=>{S.why=[0,1,2].map(i=>$(`[data-y="${i}"]`).value);S.ifthen=[0,1,2].map(i=>$(`[data-i="${i}"]`).value);S.contact=$('#ct').value;save();toast('تسجّلت ✓')}}
+<div class="card"><h2>علاش بديت؟</h2>${[0,1,2].map(i=>`<input data-y="${i}" value="${esc(S.why[i])}" placeholder="السبب ${i+1}">`).join('')}</div>
+<div class="card"><h2>أبوابي (المحفزات)</h2>${TRIG.map((t,i)=>`<span class="pill ${S.trig.includes(i)?'on':''}" data-tg="${i}">${t[0]}</span>`).join('')}</div>
+<div class="card"><h2>جمل «إذا... باش»</h2><p class="mut">قرارك وإنت هادي أقوى من قرارك وإنت مشتعل. تظهرلك في صفحة النجدة.</p>
+${[0,1,2].map(i=>`<input data-it="${i}" value="${esc(S.ifthen[i])}" placeholder="إذا ... باش ...">`).join('')}</div>
+${S.falls.length?`<div class="card"><h2>دروس من الطيحات (${S.falls.length})</h2>${S.falls.slice(-5).reverse().map(f=>`<p class="mut">النهار ${f.day}: ${esc(f.t||f.f||'—')}${f.fix?' ← '+esc(f.fix):''}</p>`).join('')}</div>`:''}
+<p class="mut" style="text-align:center">كل حاجة تتسجّل وحدها ✓</p>`}
+function bindPlan(){document.querySelectorAll('[data-y]').forEach(e=>e.oninput=()=>{S.why[+e.dataset.y]=e.value;save()});
+document.querySelectorAll('[data-it]').forEach(e=>e.oninput=()=>{S.ifthen[+e.dataset.it]=e.value;save()});
+document.querySelectorAll('[data-tg]').forEach(e=>e.onclick=()=>{const i=+e.dataset.tg;S.trig=S.trig.includes(i)?S.trig.filter(x=>x!==i):[...S.trig,i];save();e.classList.toggle('on')})}
 
-let delArm=false;
 function vSet(){return `<div class="top"><h1>⚙️ إعدادات</h1></div>
 <div class="card"><label>اسمك<input id="sn" value="${esc(S.name)}"></label><label>تاريخ البداية<input id="sd" type="date" value="${esc(S.start)}"></label><button class="btn" id="ss">نسجّل</button></div>
 <div class="card"><h2>📲 حطّو في الشاشة الرئيسية</h2><p class="mut">آيفون: Safari ← زر المشاركة ← «إضافة إلى الشاشة الرئيسية». أندرويد: Chrome ← ⋮ ← «إضافة للشاشة الرئيسية».</p></div>
 <div class="card"><h2>🔒 الخصوصية</h2><p class="mut">بياناتك في هالتليفون وهالمتصفح برك. ما تتبعث لحتى حد. كان تفسخ بيانات المتصفح، تتفسخ معاها.</p></div>
-<div class="card"><h2>📖 الكتاب</h2><p class="mut">كل المهام من كتاب «معركة الخلوات» (الفصول 6، 7، 8) لناظم العاشق.</p><a class="btn sec" href="https://nadhem58234848.github.io/VAYNORA/book.html" target="_blank">صفحة الكتاب</a></div>
+<div class="card"><h2>📖 الكتاب</h2><p class="mut">التحدي مبني على كتاب «معركة الخلوات» لناظم العاشق.</p><a class="btn sec" href="https://nadhem58234848.github.io/VAYNORA/book.html" target="_blank">صفحة الكتاب</a></div>
 <div class="card"><button class="btn sec" id="rs">${delArm?'متأكد؟ اضغط مرة أخرى باش تفسخ الكل':'نبدا من الصفر'}</button></div>`}
 function bindSet(){$('#ss').onclick=()=>{S.name=$('#sn').value.trim()||S.name;S.start=$('#sd').value||S.start;save();toast('تسجّلت ✓');go('home')};
 $('#rs').onclick=()=>{if(!delArm){delArm=true;render();setTimeout(()=>{delArm=false;if(view==='set')render()},4000);return}try{localStorage.removeItem(K)}catch(e){}location.reload()}}
