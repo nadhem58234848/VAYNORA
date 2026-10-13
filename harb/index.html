@@ -7,6 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="حرب النفس">
 <meta name="theme-color" content="#0d0d0d">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<link rel="manifest" href="manifest.json">
 <meta property="og:title" content="تحدي 21 يوم · حرب النفس">
 <meta property="og:description" content="اصنع من الألم قوة. 21 يوم انضباط مع ناظم.">
 <title>تحدي 21 يوم · حرب النفس</title>
@@ -172,6 +175,17 @@ function custCard(n){const cs=cust(n);
  return `<div class="card"><h2>➕ عاداتي الخاصة</h2><div class="mut">زيد العادات اللي تحبها (حتى 5). تظهر في بطاقتك، وما تأثّرش على «يوم كامل» ولا السلسلة.</div>
  ${cs.map(c=>{const v=cval(n,c);return `<div class="hab" style="display:flex;align-items:center;gap:10px"><div class="t" style="flex:1">${esc(c.t)}</div><div class="seg" style="margin:0;flex:0 0 38%"><button class="f ${v?'on':''}" data-c="${c.id}">${v?'✓ عملتها':'عملتها؟'}</button></div><a href="#" class="mut" data-cdel="${c.id}" title="احذف">✕</a></div>`}).join('')}
  ${(S.custom||[]).length<5?`<div class="row" style="margin-top:8px"><input id="cnew" maxlength="28" placeholder="مثلاً: أذكار الصباح، صوم الاثنين..."><button class="btn sec" id="cadd" style="flex:0 0 30%;margin-top:6px">زيد</button></div>`:''}</div>`}
+const STANDALONE=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+const IOS=/iphone|ipad|ipod/i.test(navigator.userAgent);
+function installCard(full){if(STANDALONE)return '';if(!full&&S.instOk)return '';
+ return `<div class="card" style="border-color:var(--red)"><h2>📲 حطّو كيف تطبيق</h2><p class="mut">باش تلقاه في ثانية وما يضيعش الرابط.</p>
+ <h3>آيفون (Safari)</h3><ol><li>اضغط زرّ المشاركة <b>⬆️</b> لوطة</li><li>اختار <b dir="ltr" style="unicode-bidi:isolate">Sur l'écran d'accueil</b> ولا <b dir="ltr" style="unicode-bidi:isolate">Add to Home Screen</b></li><li>اضغط <b dir="ltr" style="unicode-bidi:isolate">Ajouter</b></li></ol>
+ <h3>أندرويد (Chrome)</h3><ol><li>اضغط <b>⋮</b> الفوق</li><li>اختار <b dir="ltr" style="unicode-bidi:isolate">Installer l'application</b> ولا <b dir="ltr" style="unicode-bidi:isolate">Ajouter à l'écran d'accueil</b></li></ol>
+ ${IOS?'<p class="mut" style="margin-top:6px">⚠️ في آيفون، التطبيق في الشاشة الرئيسية ما يشوفش البيانات متاع Safari. حطّو <b>قبل ما تبدا</b>، ولا انقل بياناتك بـ«نسخة احتياطية» من الإعدادات.</p>':''}
+ ${full?'':'<button class="btn sec" id="instok">عملتها / موش توا</button>'}</div>`}
+function inviteCard(){return `<div class="card"><h2>👥 جيب صاحبك</h2><p class="mut">التحدي أسهل مع صاحبك. ابعثلو الرابط وادخلو مع بعضكم.</p>
+ <div class="row"><button class="btn" id="inv">ابعث الرابط</button><a class="btn g" target="_blank" href="https://wa.me/?text=${encodeURIComponent(INV)}">واتساب</a></div></div>`}
+const INV='دخلت تحدي 21 يوم «حرب النفس» مع ناظم: الفجر، الرياضة، القراية والصلاة. تعال معايا ونعملوه مع بعضنا 💪\n'+'https://nadhem58234848.github.io/VAYNORA/harb/';
 function weekOf(n){return Math.min(3,Math.ceil(n/7))}
 function active(n){const w=weekOf(n);return H.filter(h=>h.w<=w&&(!h.to||w<=h.to))}
 const WD=['الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
@@ -212,7 +226,7 @@ function head(){return `<div class="top"><div><div class="logo">حرب النف�
 // ===== onboarding =====
 function onboard(){
  return `<div class="top"><div><div class="logo">حرب النفس</div><div class="mut">اصنع من الألم قوة</div></div></div>
- <div class="card"><h1>تحدي 21 يوم 🔥</h1><p style="margin-top:8px">21 يوم نبنيو فيهم الانضباط، بداية من الصلاة. ناظم يعمل التحدي معاكم نهار بنهار.</p>
+ ${installCard(1)}<div class="card"><h1>تحدي 21 يوم 🔥</h1><p style="margin-top:8px">21 يوم نبنيو فيهم الانضباط، بداية من الصلاة. ناظم يعمل التحدي معاكم نهار بنهار.</p>
  <h3>القواعد الأربعة</h3>${RULES.map((r,i)=>`<div class="wk"><b>${i+1}</b><div><div class="t" style="font-weight:800">${r[0]}</div><div class="mut">${r[1]}</div></div></div>`).join('')}
  <h3>المهام تتزاد كل أسبوع</h3>${WEEKS.map((w,i)=>`<div class="wk"><b>${i+1}</b><div><div style="font-weight:800">${w.n.split('· ')[1]}</div><div class="mut">${w.d}</div></div></div>`).join('')}</div>
  <div class="card"><h2>النهار 0: علاش دخلت؟</h2>
@@ -240,11 +254,12 @@ function home(){
   return head()+`<div class="card" style="text-align:center"><div class="mut">التحدي يبدا بعد</div><div class="big red" style="margin:6px 0">${left}</div><div class="mut">${left===1?'نهار (غدوة!)':'نهارات'}</div></div>
   <div class="card"><h2>حضّر روحك من توا</h2><ol><li>حط منبّه الفجر بعيد على الفراش.</li><li>اختار وقت رقاد (قبل 23:00) ووقت قيام ثابت.</li><li>اختار الكتاب اللي باش تقراه في الأسبوع 2.</li><li>زيد تذكير الليل لـ21 يوم من الإعدادات.</li>${TG?'<li>ادخل لقروب التليغرام.</li>':''}</ol>
   ${TG?`<a class="btn tg" href="${TG}" target="_blank">ادخل قروب التليغرام</a>`:''}</div>
-  <div class="card"><h3>علاش دخلت؟</h3><div class="quote">${esc(S.why0)}</div></div>`}
+  ${installCard()}${inviteCard()}<div class="card"><h3>علاش دخلت؟</h3><div class="quote">${esc(S.why0)}</div></div>`}
  if(n>N)return grad();
  const d=D(n),a=active(n),w=weekOf(n),wk=WEEKS[w-1],dc=doneCount(n),ch=chain();
  const newIds=n===8||n===15?a.filter(h=>h.w===w).map(h=>h.id):[];
  return head()+`
+ ${installCard()}
  <div class="stats"><div class="stat"><b>${n}<small style="font-size:13px">/21</small></b><span>النهار</span></div><div class="stat"><b class="grn">${ch}</b><span>السلسلة 🔗</span></div><div class="stat"><b>${dc}/${a.length}</b><span>مهام اليوم</span></div></div>
  ${lastTwoMissed()?`<div class="card" style="border-color:var(--amb)"><b>⚠️ فلّتت زوز نهارات.</b><p class="mut">موش مشكلة، أما اليوم لازم ترجع. اعمل على الأقل النسخة الصغيرة من كل مهمة وتحسب.</p></div>`:''}
  <div class="card"><span class="phase">${wk.n}</span><h3 style="margin-top:2px">💬 رسالة اليوم من ناظم</h3><p>${MSG[n-1]}</p></div>
@@ -257,7 +272,8 @@ function home(){
  <div class="card"><h2>📸 التوثيق اليومي</h2><p class="mut">صوّر لحظة من نهارك، حط فوقها البطاقة هاذي، وانشرها في الستوري مع tag لـ <b style="direction:ltr;display:inline-block">@${VAY}</b>.</p>
  ${cardBox()}
  <div class="row"><button class="btn sec" id="txt">انسخ التقرير</button>${TG?`<a class="btn tg" href="${TG}" target="_blank">القروب</a>`:`<button class="btn sec" id="shtxt">شارك</button>`}</div></div>
- ${n%7===0?review(n):''}`}
+ ${n%7===0?review(n):''}
+ ${inviteCard()}`}
 function habRow(n,h,isNew){
  const v=val(n,h),auto=!!h.pray,d=D(n);
  if(h.sp&&(!S.sp||!S.sp.days.length||S._spEdit))return `<div class="hab"><div class="t">${isNew?'<span class="new">جديد</span>':''}🏋️ برنامج الرياضة متاعك</div>${spEditor()}</div>`;
@@ -328,6 +344,7 @@ function set(){return head()+`<div class="card"><h2>الإعدادات</h2>
  <label>اسمك على البطاقة<input id="snm" maxlength="24" value="${esc(S.name)}"></label>
  <label>نهار البداية<input id="sst" type="date" value="${S.start}"></label>
  <button class="btn sec" id="ssv">سجّل</button></div>
+ ${installCard(1)}${inviteCard()}
  <div class="card"><h2>🏋️ برنامج الرياضة</h2>${spEditor()}</div>
  <div class="card"><h2>⏰ تذكير كل ليلة</h2><p class="mut">يزيد في الكاليندر متاع تليفونك تذكير على 21:30 لمدة 21 يوم: «ابعث تقريرك».</p><button class="btn sec" id="ics">زيد التذكير</button></div>
  ${TG?`<div class="card"><a class="btn tg" href="${TG}" target="_blank">قروب التليغرام</a></div>`:''}
@@ -348,6 +365,8 @@ function bind(){
  document.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{const d=D(n);d.c=d.c||{};d.c[b.dataset.c]=d.c[b.dataset.c]?0:1;save();render()});
  document.querySelectorAll('[data-cdel]').forEach(b=>b.onclick=e=>{e.preventDefault();if(b.dataset.k){S.custom=S.custom.filter(c=>c.id!==b.dataset.cdel);save();render()}else{b.dataset.k=1;b.textContent='احذف؟';b.classList.add('red')}});
  const ca=$('#cadd');if(ca)ca.onclick=()=>{const t=$('#cnew').value.trim();if(!t){$('#cnew').focus();return}S.custom=S.custom||[];if(S.custom.length>=5)return;S.custom.push({id:'c'+Date.now(),t,from:Math.max(1,n)});save();toast('تزادت ✓');render()};
+ const io=$('#instok');if(io)io.onclick=()=>{S.instOk=1;save();render()};
+ const iv=$('#inv');if(iv)iv.onclick=()=>{if(navigator.share)navigator.share({text:INV}).catch(()=>{});else copy(INV)};
  document.querySelectorAll('[data-miss]').forEach(b=>b.onclick=()=>{S.showMiss=S.showMiss===false;save();render()});
  document.querySelectorAll('[data-cs]').forEach(b=>b.onclick=()=>{S.cs=b.dataset.cs;save();render()});
  document.querySelectorAll('[data-wd]').forEach(b=>b.onclick=()=>b.classList.toggle('on'));
