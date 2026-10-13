@@ -115,7 +115,7 @@ const WEEKS=[
 // habits: w = week it starts; full / min = what counts
 const H=[
  {id:'fajr',w:1,to:2,t:'الفجر في وقتو',full:'في وقتو',min:'في نهارو',pray:1},
- {id:'sleep',w:1,t:'نوم وقيام في وقت ثابت',full:'الزوز',min:'واحد منهم',hint:'كاملة: رقدت قبل 23:00 وقمت في وقتي · الدنيا: واحد منهم برك'},
+ {id:'sleep',w:1,t:'نوم وقيام في وقت ثابت',full:'الزوز',min:'واحد منهم',hint:'كاملة: رقدت قبل 23:00 وقمت في وقتي · على الأقل: واحد منهم برك'},
  {id:'phone',w:1,t:'أول ساعة بلا تليفون',full:'ساعة',min:'20 دقيقة',hint:'من كي تقوم، ما تحلّش التليفون'},
  {id:'sport',w:2,t:'رياضة',full:'20 دقيقة',min:'10 ضغط + 10 سكوات',hint:'تمرين ولا مشي سريع',sp:1},
  {id:'read',w:2,t:'قراية',full:'10 صفحات',min:'صفحتين',hint:'كتاب نافع، موش منشورات'},
@@ -128,7 +128,7 @@ const MSG=[
  'النهار الأول. ما نحبّكش تكون مثالي، نحبّك تكون حاضر. الليلة حط المنبّه بعيد على الفراش وارقد قبل 23:00. غدوة الفجر هو أول انتصار.',
  'كي تقوم، ما تحلّش التليفون. توضّا، صلّي، واشرب ماء. الساعة الأولى ليك إنت، موش للناس.',
  'اليوم اختار وقت قيام ثابت (مثلاً 30 دقيقة قبل الفجر) وما تبدّلوش حتى في الويكاند. الجسد يحب النظام.',
- 'كان طحت البارح، ما تهزّش. القاعدة: ما تفلّتش زوز نهارات ورا بعضهم. النسخة الدنيا تحسب.',
+ 'كان طحت البارح، ما تهزّش. القاعدة: ما تفلّتش زوز نهارات ورا بعضهم. النسخة الصغيرة «على الأقل» تحسب.',
  'الليلة شارجور التليفون برّا البيت متاعك. الفراش للرقاد، موش للتقليب.',
  'شوف وين تمشي الساعة الأولى متاعك. كان مازلت تحلّ التليفون، حطّو في بلاصة بعيدة قبل ما ترقد.',
  'جمعة كاملة! كل ليلة سبت مراجعة: شنوة نجح؟ وين طحت؟ شنوة نبدّل؟ اكتبها لروحك وابعث تقريرك للقروب.',
@@ -137,7 +137,7 @@ const MSG=[
  'اختار كتاب واحد وكمّل فيه. 10 صفحات كل يوم = كتاب في الشهر تقريباً.',
  'املا بوتيّة ماء 1 لتر الصباح وخلّيها قدامك. كي تكمل، عاود املاها.',
  'الرياضة اليوم مع واحد: صاحبك، خوك، ولا ابعث فيديو التمرين للقروب. الانضباط يكبر مع الجماعة.',
- 'كي تحس بالكسل، قول: «نعمل النسخة الدنيا برك». أغلب المرات باش تكمّل الكاملة.',
+ 'كي تحس بالكسل، قول: «نعمل على الأقل النسخة الصغيرة». أغلب المرات باش تكمّل الكاملة.',
  'جمعتين! قارن روحك بروحك متاع النهار 0، موش بالناس. المراجعة الليلة.',
  'الأسبوع الأخير: الاتجاه. الخمس صلوات في وقتها. حط منبّه لكل صلاة اليوم.',
  'قبل ما ترقد اكتب مهمة واحدة برك لغدوة، الأهم. غدوة تبدا بيها قبل أي حاجة أخرى.',
@@ -148,12 +148,12 @@ const MSG=[
  'النهار 21. كمّلت. قيّم روحك من جديد وشوف الفرق. ابعث بطاقتك للقروب. الـ21 يوم بداية، والـ90 يوم تثبيت.'];
 const AREAS=['الصلاة','النوم والفجر','الجسد والطاقة','التركيز وتسيير الوقت','السيطرة على النفس'];
 const RULES=[
- ['ما تعاودش من الصفر','كل مهمة عندها نسخة دنيا للنهارات الصعبة، وتحسب.'],
+ ['ما تعاودش من الصفر','كل مهمة عندها نسخة صغيرة «على الأقل» للنهارات الصعبة، وتحسب.'],
  ['ما تفلّتش زوز نهارات ورا بعضهم','نهار فالت عادي. زوز ورا بعضهم يكسرو السلسلة.'],
  ['كل ليلة تبعث تقريرك','رقم النهار مع ✅ ولا ❌، في القروب.'],
  ['التوثيق اليومي','صوّر لحظة من نهارك (صورة ولا فيديو)، حط فوقها بطاقة إنجازاتك الشفافة، وانشرها في الستوري مع tag لـ @'+'vaynora_'+'.']];
 const TEN=['اكسر المشهد توا: قوم من بلاصتك، بدّل البيت، واخرج من الخلوة.','سمِّ الرغبة: قول «هاذي موجة وباش تعدّي، والله يراني». واستعذ بالله.','توضّا بماء بارد.','صلّي ركعتين بخشوع، ولو قصار.','امشي لبلاصة فيها عباد، ولا كلّم صاحبك.','20 تمرين ضغط ولا مشي سريع.','تنفّس: شهيق 4، حبس 4، زفير 6. عاود 10 مرات.','اكتب: شنوة نحس توا؟ ومن شنوة قاعد نهرب؟'];
-const FIRST=['قوم توا من البلاصة، وبعّد على الجهاز.','توضّا وصلّي ركعتين، واستغفر بصدق.','ما تجلدش روحك. الحزن الصادق يدفعك، والجلد يقيّدك.','اكتب بهدوء: وقتاش؟ وين؟ شنوة الإحساس اللي قبلها؟','سدّ الثغرة اللي دخلت منها.','ارجع لتحدّيك نفس النهار. النسخة الدنيا تحسب.'];
+const FIRST=['قوم توا من البلاصة، وبعّد على الجهاز.','توضّا وصلّي ركعتين، واستغفر بصدق.','ما تجلدش روحك. الحزن الصادق يدفعك، والجلد يقيّدك.','اكتب بهدوء: وقتاش؟ وين؟ شنوة الإحساس اللي قبلها؟','سدّ الثغرة اللي دخلت منها.','ارجع لتحدّيك نفس النهار. النسخة الصغيرة «على الأقل» تحسب.'];
 
 const K='vay_harb21_v1';
 let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
@@ -240,9 +240,9 @@ function home(){
  const newIds=n===8||n===15?a.filter(h=>h.w===w).map(h=>h.id):[];
  return head()+`
  <div class="stats"><div class="stat"><b>${n}<small style="font-size:13px">/21</small></b><span>النهار</span></div><div class="stat"><b class="grn">${ch}</b><span>السلسلة 🔗</span></div><div class="stat"><b>${dc}/${a.length}</b><span>مهام اليوم</span></div></div>
- ${lastTwoMissed()?`<div class="card" style="border-color:var(--amb)"><b>⚠️ فلّتت زوز نهارات.</b><p class="mut">موش مشكلة، أما اليوم لازم ترجع. اعمل النسخة الدنيا من كل مهمة وتحسب.</p></div>`:''}
+ ${lastTwoMissed()?`<div class="card" style="border-color:var(--amb)"><b>⚠️ فلّتت زوز نهارات.</b><p class="mut">موش مشكلة، أما اليوم لازم ترجع. اعمل على الأقل النسخة الصغيرة من كل مهمة وتحسب.</p></div>`:''}
  <div class="card"><span class="phase">${wk.n}</span><h3 style="margin-top:2px">💬 رسالة اليوم من ناظم</h3><p>${MSG[n-1]}</p></div>
- <div class="card"><h2>مهام اليوم</h2><div class="mut">«الدنيا» تحسب. المهم ما تفلّتش.</div>
+ <div class="card"><h2>مهام اليوم</h2><div class="mut">«على الأقل» تحسب. المهم ما تفلّتش.</div>
  ${a.map(h=>habRow(n,h,newIds.includes(h.id))).join('')}</div>
  <div class="card"><h2>🕌 صلواتي اليوم</h2><div class="mut">${w<3?'الأسبوع هذا يحسب الفجر. سجّل البقية زادة.':'الأسبوع هذا تحسب الخمسة.'}</div>
  ${PR.map(([k,t])=>`<div class="pr"><div style="font-weight:800">${t}</div><div class="seg"><button class="f ${d.p[k]===1?'on':''}" data-p="${k}" data-v="1">في وقتها</button><button class="m ${d.p[k]===2?'on':''}" data-p="${k}" data-v="2">في نهارها</button></div></div>`).join('')}</div>
@@ -257,8 +257,8 @@ function habRow(n,h,isNew){
  if(h.sp&&v===3)return `<div class="hab"><div class="t">رياضة</div><small class="grn">😌 يوم راحة حسب برنامجك (يحسب)</small><small><a href="#" class="red" data-spe>بدّل البرنامج</a> · تمارينك: ${S.sp.days.map(i=>WD[i]).join('، ')} · ${S.sp.min} دقيقة</small></div>`;
  if(h.sp)h=Object.assign({},h,{full:S.sp.min+' دقيقة',hint:'اليوم نهار تمرين · <a href="#" class="red" data-spe>بدّل البرنامج</a>'});
  return `<div class="hab"><div class="t">${isNew?'<span class="new">جديد</span>':''}${h.t}</div>${h.hint?`<small>${h.hint}</small>`:''}
- ${auto?`<small class="${v?'grn':''}">${v===1?'✅ كاملة':v===2?'🟡 الدنيا':'سجّل في «صلواتي اليوم» اللوطة'}</small>`:
- `<div class="seg"><button class="f ${v===1?'on':''}" data-h="${h.id}" data-v="1">كاملة · ${h.full}</button><button class="m ${v===2?'on':''}" data-h="${h.id}" data-v="2">الدنيا · ${h.min}</button></div>`}
+ ${auto?`<small class="${v?'grn':''}">${v===1?'✅ كاملة':v===2?'🟡 على الأقل':'سجّل في «صلواتي اليوم» اللوطة'}</small>`:
+ `<div class="seg"><button class="f ${v===1?'on':''}" data-h="${h.id}" data-v="1">كاملة · ${h.full}</button><button class="m ${v===2?'on':''}" data-h="${h.id}" data-v="2">على الأقل · ${h.min}</button></div>`}
  ${h.inp?`<input id="tomi" placeholder="مهمة غدوة الوحيدة..." value="${esc(d.tom)}">${n>15&&S.days[n-1]&&S.days[n-1].tom?`<small>مهمة اليوم (كتبتها البارح): <b>${esc(S.days[n-1].tom)}</b></small>`:''}`:''}</div>`}
 function cardBox(){const cs=S.cs||'w';
  return `<div>${[['w','شفافة · نص أبيض'],['b','شفافة · نص أكحل'],['d','بخلفية']].map(([k,t])=>`<span class="pill ${cs===k?'on':''}" data-cs="${k}">${t}</span>`).join('')}</div>
@@ -302,7 +302,7 @@ let TM=null,TL=600;
 function priv(){const cl=Object.values(S.days).filter(d=>d.clean).length;
  if(VIEW==='sos')return sos();
  if(VIEW==='fall')return `<div class="card"><h2>طحت؟ الساعة الأولى</h2><p class="mut">الطيحة موش نهاية الطريق. المهم شنوة تعمل بعدها.</p><ol style="margin-top:8px">${FIRST.map(s=>`<li>${s}</li>`).join('')}</ol>
-  <p style="margin-top:8px">والتحدي العام ما يتكسرش: رجّع اليوم بالنسخة الدنيا.</p><button class="btn sec" data-back>رجوع</button></div>`;
+  <p style="margin-top:8px">والتحدي العام ما يتكسرش: رجّع اليوم بالنسخة الصغيرة (على الأقل).</p><button class="btn sec" data-back>رجوع</button></div>`;
  return `<div class="top"><div><div class="logo">معركة الخلوات</div><div class="mut">معركة من حرب النفس</div></div><div class="mut">🔒 خاص</div></div>
  <div class="card priv"><p>هذا القسم ليك إنت برك. ما يتشاركش، ما يظهرش في البطاقة، وما يخرجش من تليفونك.</p>
  <div class="stats" style="margin:10px 0 0"><div class="stat"><b class="grn">${cl}</b><span>نهارات نظيفة</span></div><div class="stat" style="grid-column:span 2"><b style="font-size:15px;line-height:1.6">«بلا عادة سيئة» ${S.cleanOn?'ظاهرة':'مخفية'} في صفحة اليوم</b><span><a href="#" id="tgl" class="red">${S.cleanOn?'خبّيها':'ورّيها'}</a></span></div></div></div>
@@ -385,7 +385,7 @@ async function prep(h){try{await document.fonts.load('800 40px Cairo');await doc
 function foot(x,y){x.fillStyle=x.M;x.globalAlpha=.6;x.fillRect(90,y,900,3);x.globalAlpha=1;
  x.fillStyle=x.T;x.font='800 40px Cairo';x.fillText(TAG,990,y+70);
  x.textAlign='left';x.direction='ltr';x.fillText('@'+VAY,90,y+70);x.direction='rtl';x.textAlign='right'}
-function rowsOf(n){const a=active(n),d=D(n);const r=a.map(h=>{const v=val(n,h);return[h.t+(v===2?' (الدنيا)':v===3?' · يوم راحة':''),v]});if(S.cleanOn&&d.clean)r.push(['بلا عادة سيئة',1]);return r}
+function rowsOf(n){const a=active(n),d=D(n);const r=a.map(h=>{const v=val(n,h);return[h.t+(v===2?' (على الأقل)':v===3?' · يوم راحة':''),v]});if(S.cleanOn&&d.clean)r.push(['بلا عادة سيئة',1]);return r}
 async function dayCard(n){const rows=rowsOf(n),H0=260,lh=92,h=H0+260+rows.length*lh+120;const x=await prep(h);
  // big day number
  x.fillStyle=won(n)?'#2fbf71':x.T;x.font='800 190px Cairo';const num=String(n);x.fillText(num,990,H0+150);
