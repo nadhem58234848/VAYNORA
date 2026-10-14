@@ -166,8 +166,8 @@ S=S||{name:'',start:'',why0:'',r0:null,why21:'',r21:null,days:{},cleanOn:true,ok
 function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 
 // ===== Nadhem's tracking: join info + daily progress go to his Google Form (responses land in his Sheet) =====
-const FORM='';  // e.g. 'https://docs.google.com/forms/d/e/XXXX/formResponse' (empty = nothing is sent)
-const FENTRY=''; // 'entry.NNN' of the form's only question «data»: each response is one JSON line
+const FORM='https://docs.google.com/forms/d/e/1FAIpQLSdyvgA839EsPHlgy6pyZMMwuSgvQf4a1MagdlA3QyCmFQA_jw/formResponse';  // e.g. 'https://docs.google.com/forms/d/e/XXXX/formResponse' (empty = nothing is sent)
+const FENTRY='entry.1472783396'; // 'entry.NNN' of the form's only question «data»: each response is one JSON line
 function pid(){if(!S.pid){S.pid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);save()}return S.pid}
 function qsend(o){S.q=S.q||[];S.q.push(Object.assign({pid:pid()},o));if(S.q.length>60)S.q=S.q.slice(-60);save();flush()}
 let flushing=false;
