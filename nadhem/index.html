@@ -34,11 +34,11 @@ function sid(u){const m=/\/d\/([a-zA-Z0-9_-]{20,})/.exec(u||'');return m?m[1]:(u
 function gviz(id,cb,err){const n='gv'+Date.now()+Math.floor(Math.random()*1e4),sc=document.createElement('script');let done=false;
  window[n]=r=>{done=true;delete window[n];sc.remove();if(r.status==='error')err&&err(r);else cb(r)};
  sc.onerror=()=>{delete window[n];sc.remove();err&&err()};setTimeout(()=>{if(!done)err&&err()},12000);
- sc.src='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=responseHandler:'+n+'&_='+Date.now();document.head.appendChild(sc)}
+ sc.src='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=responseHandler:'+n+'&headers=1&tq='+encodeURIComponent("select A,B where B contains 'event'")+'&_='+Date.now();document.head.appendChild(sc)}
 function gdate(v){const m=/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/.exec(v||'');return m?new Date(+m[1],+m[2],+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0)).getTime():0}
 let P=null,MS=[],ERR='',LOAD=false,OPEN=null;
 function load(){if(!C.sheet)return render();LOAD=true;ERR='';render();
- gviz(C.sheet,r=>{const rows=(r.table.rows||[]).map(x=>{let o={};try{o=JSON.parse(x.c[1]&&x.c[1].v||'{}')}catch(e){}o.ts=gdate(x.c[0]&&x.c[0].v);
+ gviz(C.sheet,r=>{const rows=(r.table.rows||[]).map(x=>{let o={};try{o=JSON.parse(x.c[1]&&(x.c[1].v||x.c[1].f)||'{}')}catch(e){}o.ts=gdate(x.c[0]&&x.c[0].v);
    ['name','age','city','instagram','why','start','day','done','won','chain'].forEach(k=>{if(o[k]==null)o[k]=''});return o});
   MS=rows.filter(o=>o.event==='msg'&&o.t).map(o=>({ts:o.ts,t:o.t})).sort((a,b)=>b.ts-a.ts);
   P=agg(rows);LOAD=false;render()},e=>{LOAD=false;ERR='ما نجمتش نقرا الشيت. تأكد إنو Share ← «Anyone with the link» ← Viewer، وإنو الرابط صحيح.';render()});
