@@ -219,6 +219,7 @@ document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>go(b.dataset.v
 function render(){
  const nav=$('#nav');
  if(V==='hub'){nav.classList.add('hide');$('#app').innerHTML=hub();bindHub();return}
+ if(!S.tour){nav.classList.add('hide');$('#app').innerHTML=tour();bindTour();return}
  if(!S.ok){nav.classList.add('hide');$('#app').innerHTML=onboard();bindOnboard();return}
  nav.classList.remove('hide');
  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===V));
@@ -239,6 +240,38 @@ function hub(){const n=dayNo(),st=!S.ok?'ابدا التحدي':n<1?`يبدا ب
  ${SOON.map(([i,t,d])=>`<div class="card lockc" style="opacity:.55;cursor:pointer"><div style="display:flex;align-items:center;gap:14px"><div style="font-size:28px;filter:grayscale(1)">${i}</div><div style="flex:1"><div style="font-weight:800">${t}</div><div class="mut">${d}</div></div><div>🔒</div></div></div>`).join('')}
  <p class="mut" style="text-align:center;margin-top:10px">التطبيق مازال يكبر. كمّل التحدي وتكون من الأوائل كي يتحلّو.</p>`}
 function bindHub(){$('#goch').onclick=()=>go('home');document.querySelectorAll('.lockc').forEach(c=>c.onclick=()=>toast('قريباً إن شاء الله 🔒'))}
+
+
+// ===== first-time guide (3 screens) =====
+let TS=0;
+function tour(){const dots=[0,1,2].map(i=>`<span style="display:inline-block;width:${i===TS?22:8}px;height:8px;border-radius:4px;margin:0 3px;background:${i===TS?'var(--red)':'#3a3a3a'}"></span>`).join('');
+ const scr=[
+ `<div style="font-size:44px">✅</div><h1>كل نهار: علّم مهامك</h1>
+ <p class="mut">كل مهمة عندها زرّين. الزوز يحسبو، المهم ما تفلّتش.</p>
+ <div class="card" style="text-align:right;margin-top:12px"><div class="hab" style="border:0;padding:0"><div class="t">أول ساعة بلا تليفون</div>
+ <div class="seg"><button class="f on">كاملة · ساعة</button><button class="m">على الأقل · 20 دقيقة</button></div></div></div>
+ <div class="card" style="text-align:right"><div class="hab" style="border:0;padding:0"><div class="t">🏋️ رياضة</div>
+ <div class="seg"><button class="f on">💪 تمرين</button><button class="f">😌 راحة</button><button class="x">✕ ضائع</button></div></div>
+ <small class="mut">الراحة تحسب. الضائع لا.</small></div>
+ <p class="mut">والصلوات تعلّمها في «صلواتي اليوم». كي تعمل الكل، تربح النهار 🏆</p>`,
+ `<div style="font-size:44px">📸</div><h1>كل نهار: شارك بطاقتك</h1>
+ <p class="mut">التطبيق يعملك بطاقة بلا خلفية فيها مهامك.</p>
+ <div class="ck" style="margin:12px auto;max-width:200px"><img id="tpv" alt="" style="max-height:230px"></div>
+ <div class="card" style="text-align:right"><ol style="margin:0"><li>صوّر لحظة من نهارك (صورة ولا فيديو).</li><li>حط البطاقة على الجنب اليمين.</li>
+ <li>انشرها <b>Post</b> مع collaboration لـ <b dir="ltr" style="unicode-bidi:isolate">@${VAY}</b>، ولا <b>Story</b> مع tag.</li><li>حط <b dir="ltr" style="unicode-bidi:isolate">@${VAY}</b> في الـbio متاعك.</li></ol></div>`,
+ `<div style="font-size:44px">⚔️</div><h1>5 قواعد برك</h1>
+ <div class="card" style="text-align:right;margin-top:12px">${RULES.map((r,i)=>`<div class="wk"><b>${i+1}</b><div style="font-weight:800">${r[0]}</div></div>`).join('')}</div>
+ <p class="mut">ناظم يعمل التحدي معاك نهار بنهار. ربي يعاونك 🤍</p>`];
+ return `<div style="text-align:center;padding-top:20px;min-height:80vh;display:flex;flex-direction:column">
+ <div style="text-align:left"><a href="#" id="tsk" class="mut" style="text-decoration:none">${TS<2?'تخطّى':''}</a></div>
+ <div style="flex:1">${scr[TS]}</div>
+ <div style="margin:14px 0 6px">${dots}</div>
+ <button class="btn" id="tnx">${TS<2?'التالي':'فهمت، نبداو'}</button>${TS?'<button class="btn sec" id="tpr">رجوع</button>':''}</div>`}
+function bindTour(){const end=()=>{S.tour=1;TS=0;save();render();scrollTo(0,0)};
+ $('#tnx').onclick=()=>{if(TS<2){TS++;render();scrollTo(0,0)}else end()};
+ const p=$('#tpr');if(p)p.onclick=()=>{TS--;render()};
+ const k=$('#tsk');if(k)k.onclick=e=>{e.preventDefault();end()};
+ if(TS===1)sticker('حرب النفس · اليوم 3',[['الفجر في وقتو',1],['أول ساعة بلا تليفون',1],['رياضة',1],['نوم وقيام في وقت ثابت',0]],{badge:0,chain:3}).then(cv=>{const i=$('#tpv');if(i)i.src=cv.toDataURL('image/png')})}
 
 // ===== onboarding =====
 function onboard(){
@@ -364,6 +397,7 @@ function set(){return head()+`<div class="card"><h2>الإعدادات</h2>
  <label>نهار البداية<input id="sst" type="date" value="${S.start}"></label>
  <button class="btn sec" id="ssv">سجّل</button></div>
  ${installCard(1)}${inviteCard()}
+ <div class="card"><h2>❓ كيفاش يخدم التطبيق؟</h2><button class="btn sec" id="rtour">شوف الشرح من جديد</button></div>
  <div class="card"><h2>⏰ تذكير كل ليلة</h2><p class="mut">يزيد في الكاليندر متاع تليفونك تذكير على 21:30 لمدة 21 يوم: «ابعث تقريرك».</p><button class="btn sec" id="ics">زيد التذكير</button></div>
  ${TG?`<div class="card"><a class="btn tg" href="${TG}" target="_blank">قروب التليغرام</a></div>`:''}
  <div class="card"><h2>نسخة احتياطية</h2><p class="mut">بياناتك في هالتليفون برك. كان تبدّل تليفون، انسخ الكود وحطّو في الجديد.</p>
@@ -406,6 +440,7 @@ function bind(){
  const tr=$('#trs');if(tr)tr.onclick=()=>{clearInterval(TM);TM=null;TL=600;render()};
  // settings
  const sv=$('#ssv');if(sv)sv.onclick=()=>{S.name=$('#snm').value.trim();if($('#sst').value)S.start=$('#sst').value;save();toast('تسجّل ✓')};
+ const rt=$('#rtour');if(rt)rt.onclick=()=>{S.tour=0;TS=0;save();render();scrollTo(0,0)};
  const ic=$('#ics');if(ic)ic.onclick=ics;
  const ex=$('#exp');if(ex)ex.onclick=()=>copy(btoa(unescape(encodeURIComponent(JSON.stringify(S)))));
  const im=$('#imp');if(im)im.onclick=()=>{try{const o=JSON.parse(decodeURIComponent(escape(atob($('#impt').value.trim()))));if(!o.days)throw 0;S=o;save();toast('رجعت البيانات ✓');go('home')}catch(e){toast('الكود موش صحيح')}};
