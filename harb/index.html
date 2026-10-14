@@ -184,7 +184,7 @@ window.addEventListener('online',flush);
 const MSG_SHEET='1eV8eqDMv2yP6FtBrH-zCd5GOo_FNUvQY1DoeEKPJUVE';  // Google Sheet id of the messages form responses (empty = off)
 function gviz(id,cb){const n='gv'+Date.now()+Math.floor(Math.random()*1e4),sc=document.createElement('script');
  window[n]=r=>{try{cb(r)}catch(e){}delete window[n];sc.remove()};sc.onerror=()=>{delete window[n];sc.remove()};
- sc.src='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=responseHandler:'+n;document.head.appendChild(sc)}
+ sc.src='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=responseHandler:'+n+'&headers=0&_='+Date.now();document.head.appendChild(sc)}
 function gdate(v){const m=/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/.exec(v||'');return m?new Date(+m[1],+m[2],+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0)).getTime():0}
 function pullMsg(){if(!MSG_SHEET)return;gviz(MSG_SHEET,r=>{const rows=(r.table.rows||[]).map(x=>{let t='';try{t=JSON.parse(x.c[1]&&x.c[1].v||'{}').t}catch(e){}return {ts:gdate(x.c[0]&&x.c[0].v),t}}).filter(x=>x.t);if(!rows.length)return;
  rows.sort((a,b)=>a.ts-b.ts);const l=rows[rows.length-1];if(!S.nm||S.nm.ts!==l.ts){S.nm=l;save();if(V==='home')render()}})}
