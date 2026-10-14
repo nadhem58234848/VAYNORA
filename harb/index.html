@@ -164,6 +164,33 @@ const K='vay_harb21_v1';
 let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
 S=S||{name:'',start:'',why0:'',r0:null,why21:'',r21:null,days:{},cleanOn:true,ok:false};
 function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
+
+// ===== Nadhem's tracking: join info + daily progress go to his Google Form (responses land in his Sheet) =====
+const FORM='';  // e.g. 'https://docs.google.com/forms/d/e/XXXX/formResponse' (empty = nothing is sent)
+const FE={pid:'',event:'',name:'',age:'',city:'',instagram:'',why:'',start:'',day:'',done:'',won:'',chain:''}; // entry.NNN ids
+function pid(){if(!S.pid){S.pid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);save()}return S.pid}
+function qsend(o){S.q=S.q||[];S.q.push(Object.assign({pid:pid()},o));if(S.q.length>60)S.q=S.q.slice(-60);save();flush()}
+let flushing=false;
+async function flush(){if(!FORM||flushing||!(S.q&&S.q.length)||!navigator.onLine)return;flushing=true;
+ try{while(S.q.length){const o=S.q[0],fd=new URLSearchParams();Object.keys(FE).forEach(k=>{if(FE[k]&&o[k]!==undefined&&o[k]!==null)fd.append(FE[k],String(o[k]))});
+  await fetch(FORM,{method:'POST',mode:'no-cors',body:fd});S.q.shift();save()}}catch(e){}flushing=false}
+function sendJoin(){qsend({event:'join',name:S.name||'',age:S.age||'',city:S.city||'',instagram:(S.ig||'').replace(/^@/,''),why:S.why0||'',start:S.start||''});S.joined=1;save()}
+let dayT=null;
+function sendDay(n,now){if(n<1||n>N)return;const go_=()=>{const o={event:'day',day:n,done:doneCount(n)+'/'+active(n).length,won:won(n)?1:0,chain:chain()},sig=o.done+'|'+o.won+'|'+o.chain;
+ S.sent=S.sent||{};if(S.sent[n]===sig)return;S.sent[n]=sig;save();qsend(o)};if(now)go_();else{clearTimeout(dayT);dayT=setTimeout(go_,4000)}}
+window.addEventListener('online',flush);
+
+// ===== messages from Nadhem: read the latest row of his public «رسائل» sheet (written from his dashboard) =====
+const MSG_SHEET='';  // Google Sheet id of the messages form responses (empty = off)
+function gviz(id,cb){const n='gv'+Date.now()+Math.floor(Math.random()*1e4),sc=document.createElement('script');
+ window[n]=r=>{try{cb(r)}catch(e){}delete window[n];sc.remove()};sc.onerror=()=>{delete window[n];sc.remove()};
+ sc.src='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=responseHandler:'+n;document.head.appendChild(sc)}
+function gdate(v){const m=/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/.exec(v||'');return m?new Date(+m[1],+m[2],+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0)).getTime():0}
+function pullMsg(){if(!MSG_SHEET)return;gviz(MSG_SHEET,r=>{const rows=(r.table.rows||[]).map(x=>({ts:gdate(x.c[0]&&x.c[0].v),t:x.c[1]&&x.c[1].v})).filter(x=>x.t);if(!rows.length)return;
+ rows.sort((a,b)=>a.ts-b.ts);const l=rows[rows.length-1];if(!S.nm||S.nm.ts!==l.ts){S.nm=l;save();if(V==='home')render()}})}
+function nmCard(){if(!S.nm||Date.now()-S.nm.ts>3*864e5)return '';return `<div class="card" style="border-color:var(--red)"><h3>📣 رسالة من ناظم</h3><p style="white-space:pre-line">${esc(S.nm.t)}</p></div>`}
+
+
 const $=s=>document.querySelector(s);
 const esc=s=>String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
@@ -280,20 +307,23 @@ function onboard(){
  <h3>القواعد الخمسة</h3>${RULES.map((r,i)=>`<div class="wk"><b>${i+1}</b><div><div class="t" style="font-weight:800">${r[0]}</div><div class="mut">${r[1]}</div></div></div>`).join('')}
  <h3>المهام تتزاد كل أسبوع</h3>${WEEKS.map((w,i)=>`<div class="wk"><b>${i+1}</b><div><div style="font-weight:800">${w.n.split('· ')[1]}</div><div class="mut">${w.d}</div></div></div>`).join('')}</div>
  <div class="card"><h2>النهار 0: علاش دخلت؟</h2>
- <label>اسمك (يظهر على بطاقتك، تنجم تخلّيه فارغ)<input id="nm" maxlength="24" value="${esc(S.name)}"></label>
- <label>علاش دخلت التحدي؟ (لروحك إنت)<textarea id="why0" placeholder="مثلاً: نحب نقوم للفجر ونحس اللي أنا نتحكّم في نهاري">${esc(S.why0)}</textarea></label>
+ <label>اسمك (يظهر على بطاقتك)<input id="nm" maxlength="24" value="${esc(S.name)}"></label>
+ <div class="row" style="gap:8px"><label style="flex:1">عمرك<input id="ag" type="number" inputmode="numeric" min="10" max="80" value="${esc(S.age)}"></label><label style="flex:2">مدينتك<input id="ct" maxlength="30" value="${esc(S.city)}"></label></div>
+ <label>حسابك في الإنستغرام<input id="ig" dir="ltr" maxlength="40" placeholder="@" value="${esc(S.ig)}"></label>
+ <label>علاش دخلت التحدي؟<textarea id="why0" placeholder="مثلاً: نحب نقوم للفجر ونحس اللي أنا نتحكّم في نهاري">${esc(S.why0)}</textarea></label>
  <h3>قيّم روحك توا من 10</h3><div class="mut">نرجعولها النهار 21 ونشوفو الفرق.</div>
  ${AREAS.map((a,i)=>`<div class="rate"><span>${a}</span><input type="range" min="1" max="10" value="${S.r0?S.r0[i]:5}" data-r="${i}"><b id="rv${i}">${S.r0?S.r0[i]:5}</b></div>`).join('')}
  <h3>وقتاش تبدا؟</h3>
  <button class="btn" id="st1">نبدا مع الجماعة: الأحد 1 نوفمبر</button>
  <button class="btn sec" id="st0">نبدا اليوم وحدي</button>
- <p class="mut" style="margin-top:10px">🔒 كل شي يتسجّل في تليفونك برك. ما فماش حساب، وحتى حد ما يشوف بياناتك.</p></div>`}
+ <p class="mut" style="margin-top:10px">📊 ناظم يتابع المشاركين: اسمك، عمرك، مدينتك، حسابك، وتقدّمك كل نهار (النهار، قدّاش مهمة، السلسلة) يوصلولو باش يتابعك ويشجّعك. «معركة الخلوات» ما يخرج منها حتى شي.</p></div>`}
 function bindOnboard(){
  document.querySelectorAll('[data-hub]').forEach(a=>a.onclick=e=>{e.preventDefault();go('hub')});
  document.querySelectorAll('[data-r]').forEach(r=>r.oninput=()=>$('#rv'+r.dataset.r).textContent=r.value);
- const fin=st=>{S.name=$('#nm').value.trim();S.why0=$('#why0').value.trim();S.r0=[...document.querySelectorAll('[data-r]')].map(r=>+r.value);
+ const fin=st=>{S.name=$('#nm').value.trim();S.age=$('#ag').value.trim();S.city=$('#ct').value.trim();S.ig=$('#ig').value.trim().replace(/^@/,'');S.why0=$('#why0').value.trim();
+  if(!S.name){toast('اكتب اسمك');$('#nm').focus();return}if(!S.ig){toast('اكتب حسابك في الإنستغرام');$('#ig').focus();return}S.r0=[...document.querySelectorAll('[data-r]')].map(r=>+r.value);
   if(!S.why0){toast('اكتب علاش دخلت، ولو جملة');$('#why0').focus();return}
-  S.start=st;S.ok=true;save();go('home')};
+  S.start=st;S.ok=true;save();sendJoin();go('home')};
  $('#st1').onclick=()=>fin(today()>GROUP_START?today():GROUP_START);
  $('#st0').onclick=()=>fin(today());
 }
@@ -312,6 +342,7 @@ function home(){
  return head()+`
  ${installCard()}
  <div class="stats"><div class="stat"><b>${n}<small style="font-size:13px">/21</small></b><span>النهار</span></div><div class="stat"><b class="grn">${ch}</b><span>السلسلة 🔗</span></div><div class="stat"><b>${dc}/${a.length}</b><span>مهام اليوم</span></div></div>
+ ${nmCard()}
  ${lastTwoMissed()?`<div class="card" style="border-color:var(--amb)"><b>⚠️ فلّتت زوز نهارات.</b><p class="mut">موش مشكلة، أما اليوم لازم ترجع. اعمل على الأقل النسخة الصغيرة من كل مهمة وتحسب.</p></div>`:''}
  <div class="card"><span class="phase">${wk.n}</span><h3 style="margin-top:2px">💬 رسالة اليوم من ناظم</h3><p>${MSG[n-1]}</p>
  <a class="btn sec" target="_blank" href="https://instagram.com/${VAY}">📲 شوف ستوري وريل اليوم في إنستغرام</a></div>
@@ -395,12 +426,14 @@ function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60)
 function set(){return head()+`<div class="card"><h2>الإعدادات</h2>
  <label>اسمك على البطاقة<input id="snm" maxlength="24" value="${esc(S.name)}"></label>
  <label>نهار البداية<input id="sst" type="date" value="${S.start}"></label>
+ <div class="row" style="gap:8px"><label style="flex:1">عمرك<input id="sag" type="number" inputmode="numeric" value="${esc(S.age)}"></label><label style="flex:2">مدينتك<input id="sct" maxlength="30" value="${esc(S.city)}"></label></div>
+ <label>حسابك في الإنستغرام<input id="sig" dir="ltr" maxlength="40" value="${esc(S.ig)}"></label>
  <button class="btn sec" id="ssv">سجّل</button></div>
  ${installCard(1)}${inviteCard()}
  <div class="card"><h2>❓ كيفاش يخدم التطبيق؟</h2><button class="btn sec" id="rtour">شوف الشرح من جديد</button></div>
  <div class="card"><h2>⏰ تذكير كل ليلة</h2><p class="mut">يزيد في الكاليندر متاع تليفونك تذكير على 21:30 لمدة 21 يوم: «ابعث تقريرك».</p><button class="btn sec" id="ics">زيد التذكير</button></div>
  ${TG?`<div class="card"><a class="btn tg" href="${TG}" target="_blank">قروب التليغرام</a></div>`:''}
- <div class="card"><h2>نسخة احتياطية</h2><p class="mut">بياناتك في هالتليفون برك. كان تبدّل تليفون، انسخ الكود وحطّو في الجديد.</p>
+ <div class="card"><h2>نسخة احتياطية</h2><p class="mut">مهامك وتقدّمك محفوظين في هالتليفون. كان تبدّل تليفون، انسخ الكود وحطّو في الجديد.</p>
  <button class="btn sec" id="exp">انسخ الكود</button><textarea id="impt" placeholder="حط الكود هنا"></textarea><button class="btn sec" id="imp">رجّع البيانات</button></div>
  <div class="card"><button class="btn sec" id="rst" style="color:var(--red)">امسح كل شي وابدا من جديد</button></div>
  <p class="mut" style="text-align:center">حرب النفس · ناظم العاشق · @${IG}</p>`}
@@ -439,14 +472,14 @@ function bind(){
  const ts=$('#tst');if(ts)ts.onclick=()=>{if(TM){clearInterval(TM);TM=null}else{TM=setInterval(()=>{TL--;const e=$('#tm');if(e)e.textContent=fmt(TL);if(TL<=0){clearInterval(TM);TM=null;TL=600;toast('عدّت الموجة. الحمد لله 💪');render()}},1000)}render()};
  const tr=$('#trs');if(tr)tr.onclick=()=>{clearInterval(TM);TM=null;TL=600;render()};
  // settings
- const sv=$('#ssv');if(sv)sv.onclick=()=>{S.name=$('#snm').value.trim();if($('#sst').value)S.start=$('#sst').value;save();toast('تسجّل ✓')};
+ const sv=$('#ssv');if(sv)sv.onclick=()=>{S.name=$('#snm').value.trim();if($('#sst').value)S.start=$('#sst').value;S.age=$('#sag').value.trim();S.city=$('#sct').value.trim();S.ig=$('#sig').value.trim().replace(/^@/,'');save();sendJoin();toast('تسجّل ✓')};
  const rt=$('#rtour');if(rt)rt.onclick=()=>{S.tour=0;TS=0;save();render();scrollTo(0,0)};
  const ic=$('#ics');if(ic)ic.onclick=ics;
  const ex=$('#exp');if(ex)ex.onclick=()=>copy(btoa(unescape(encodeURIComponent(JSON.stringify(S)))));
  const im=$('#imp');if(im)im.onclick=()=>{try{const o=JSON.parse(decodeURIComponent(escape(atob($('#impt').value.trim()))));if(!o.days)throw 0;S=o;save();toast('رجعت البيانات ✓');go('home')}catch(e){toast('الكود موش صحيح')}};
  const rs=$('#rst');if(rs)rs.onclick=()=>{if(rs.dataset.k){localStorage.removeItem(K);location.reload()}else{rs.dataset.k=1;rs.textContent='متأكد؟ اضغط مرة أخرى'}};
 }
-function after(n){const was=S._w===n;render();if(won(n)&&!was){S._w=n;save();toast('🏆 ربحت النهار '+n)}else if(!won(n)&&was){S._w=0;save()}}
+function after(n){sendDay(n);const was=S._w===n;render();if(won(n)&&!was){S._w=n;save();toast('🏆 ربحت النهار '+n)}else if(!won(n)&&was){S._w=0;save()}}
 function copy(t){if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>toast('تنسخ ✓'),()=>prompt('انسخ:',t));else prompt('انسخ:',t)}
 function report(n){const a=active(n),d=D(n);
  let t=`⚔️ حرب النفس · النهار ${n}/21 ${won(n)?'✅':'❌'}\n`;
@@ -538,6 +571,9 @@ function ics(){const s=(S.start||today()).replace(/-/g,'');
  const t=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//harb//ar','BEGIN:VEVENT','UID:harb21-'+s+'@vaynora','DTSTAMP:'+s+'T000000Z','DTSTART:'+s+'T213000','DURATION:PT10M','RRULE:FREQ=DAILY;COUNT=21','SUMMARY:حرب النفس: ابعث تقريرك','DESCRIPTION:'+APP_URL,'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:ابعث تقريرك','TRIGGER:PT0M','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
  const b=new Blob([t],{type:'text/calendar'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='harb-reminder.ics';document.body.appendChild(a);a.click();a.remove()}
 
+if(S.ok&&!S.joined)sendJoin();else flush();
+pullMsg();
+if(S.ok){const n=Math.min(dayNo(),N);if(n>1&&S.days[n-1])sendDay(n-1,1)}
 render();
 </script>
 </body>
