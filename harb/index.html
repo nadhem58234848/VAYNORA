@@ -103,7 +103,7 @@ canvas{display:none}
 <button data-v="map"><i>🗺️</i>الطريق</button>
 <button data-v="set"><i>⚙️</i>إعدادات</button>
 </div></nav>
-<canvas id="cv" width="1080" height="1920"></canvas>
+<canvas id="cv" width="1080" height="1920"></canvas><canvas id="cv2" width="1080" height="1350" style="display:none"></canvas>
 <script>
 // ===== settings Nadhem can change =====
 const WA='21658886475', IG='nadhem_elaashek', VAY='vaynora_', TAG='#حرب_النفس';
@@ -291,7 +291,7 @@ function home(){
  <ul class="mut" style="margin-top:4px"><li><b>Post</b>: اعمل collaboration مع <b dir="ltr" style="unicode-bidi:isolate">@${VAY}</b></li><li><b>Story</b>: اعمل tag لـ <b dir="ltr" style="unicode-bidi:isolate">@${VAY}</b></li><li>وحط <b dir="ltr" style="unicode-bidi:isolate">@${VAY}</b> في الـbio متاعك مدة التحدي</li></ul>
  ${cardBox()}
  <div class="row"><button class="btn sec" id="txt">انسخ التقرير</button>${TG?`<a class="btn tg" href="${TG}" target="_blank">القروب</a>`:`<button class="btn sec" id="shtxt">شارك</button>`}</div></div>
- ${n%7===0?review(n):''}
+ ${n%7===0?weekBox(n/7,1)+review(n):n>7&&n%7===1?weekBox((n-1)/7,1):''}
  ${inviteCard()}`}
 function habRow(n,h,isNew){
  const v=val(n,h),auto=!!h.pray,d=D(n);
@@ -325,7 +325,7 @@ function grad(){
  ${AREAS.map((a,i)=>`<div style="margin-top:10px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>${a}</span><span>${S.r0[i]} ← <b class="${S.r21[i]>S.r0[i]?'grn':''}">${S.r21[i]}</b></span></div>
  <div class="bar"><i style="width:${S.r0[i]*10}%;background:#555"></i><i style="width:${S.r21[i]*10}%;background:var(--grn);opacity:.85"></i></div></div>`).join('')}
  <p style="margin-top:12px">المجموع: ${sum0}/50 ← <b class="grn">${sum1}/50</b></p>
- </div><div class="card"><h2>📸 بطاقة النتيجة</h2>${cardBox()}</div>
+ </div><div class="card"><h2>📸 بطاقة النتيجة</h2>${cardBox()}</div>${weekBox(3,1)}
  <div class="card" style="border-color:var(--red)"><h2>الـ21 يوم بداية، والـ90 يوم تثبيت</h2>
  <p>كان تحب تكمّل، فما <b>البرنامج الخالص 90 يوم</b> مع ناظم:</p>
  <ul><li>مجموعة صغيرة (من 10 لـ20 واحد)</li><li>متابعة أسبوعية مع ناظم</li><li>خطة الـ90 يوم كاملة: الانضباط، الرياضة والأكل</li><li>18 سنة فما فوق · مرافقة، موش علاج</li></ul>
@@ -392,6 +392,7 @@ function bind(){
  document.querySelectorAll('[data-spe]').forEach(b=>b.onclick=e=>{e.preventDefault();S._spEdit=1;render()});
  const sps=$('#sps');if(sps)sps.onclick=()=>{const days=[...document.querySelectorAll('[data-wd].on')].map(b=>+b.dataset.wd);if(days.length<3){toast('اختار 3 أيام على الأقل');return}
   S.sp={days,min:Math.max(5,Math.min(180,+$('#spm').value||20))};delete S._spEdit;save();toast('تسجّل البرنامج ✓');render()};
+ const wb=$('#wcard');if(wb){const w=+wb.dataset.w;weekCard(w).then(cv=>{const p=$('#wpv');if(p)p.src=cv.toDataURL('image/png')});wb.onclick=()=>shareCard(Promise.resolve($('#cv2')),'harb-week'+w+'.png')}
  const tx=$('#txt');if(tx)tx.onclick=()=>copy(report(n));
  const st=$('#shtxt');if(st)st.onclick=()=>{if(navigator.share)navigator.share({text:report(n)}).catch(()=>{});else copy(report(n))};
  document.querySelectorAll('[data-r]').forEach(r=>r.oninput=()=>$('#rv'+r.dataset.r).textContent=r.value);
@@ -451,6 +452,41 @@ async function sticker(title,rows,ex){ex=ex||{};try{await document.fonts.load('8
  sh(0);x.fillStyle=RED;x.fillRect(P,y-LH/2+28,W-P*2,4);
  sh(1);x.fillStyle=T;x.font='400 38px Georgia,"Times New Roman",serif';x.textAlign='center';x.direction='ltr';x.fillText('V A Y N O R A',W/2,y-LH/2+80);
  sh(0);return cv}
+
+// weekly post card (1080x1350): habits x 7 days grid, like a Strava week
+function weekStats(w){const a=1+(w-1)*7,b=Math.min(w*7,dayNo(),N);let won_=0,sp=0,fj=0;
+ for(let i=a;i<=b;i++){if(won(i))won_++;const d=S.days[i];if(d&&d.h.sport===1)sp++;if(d&&d.p.fajr)fj++}return {a,b,won:won_,sp,fj,len:Math.max(0,b-a+1)}}
+async function weekCard(w){try{await document.fonts.load('800 40px Cairo')}catch(e){}
+ const cv=$('#cv2'),W=1080,Hh=1350,x=cv.getContext('2d');cv.width=W;cv.height=Hh;
+ const st=weekStats(w),hs=active(7*w),P=60,R0=W-P;
+ x.fillStyle='#0a0a0a';x.fillRect(0,0,W,Hh);x.direction='rtl';x.textBaseline='middle';
+ x.fillStyle=RED;rr(x,P,P,W-P*2,130,12);x.fill();
+ x.fillStyle='#fff';x.textAlign='center';x.font='800 62px Cairo';x.fillText('حرب النفس · الأسبوع '+w,W/2,P+68);
+ x.font='800 50px Cairo';x.fillText((S.name?S.name+' · ':'')+'ربحت '+st.won+' من 7 أيام',W/2,P+215);
+ const rows=hs.map(h=>[h.id==='sport'?'رياضة':h.t,h]).concat([['🏆 يوم كامل',null]]);
+ const LH=Math.min(108,Math.floor(720/(rows.length+0.8))),CELL=Math.min(78,LH-14),CG=90-CELL,GL=P+7*CELL+6*CG;let y=P+300+Math.max(0,(720-LH*(rows.length+0.8))/2);
+ // day numbers header (day 1 on the right)
+ x.font='800 34px Cairo';x.fillStyle='#8a8a8a';
+ for(let i=0;i<7;i++){const cx=P+CELL/2+(6-i)*(CELL+CG);x.fillText(String(st.a+i),cx,y)}
+ y+=LH*0.8;
+ rows.forEach(([t,h])=>{
+  x.textAlign='right';x.fillStyle='#fff';let fs=40;x.font='800 '+fs+'px Cairo';const maxw=R0-GL-30;while(x.measureText(t).width>maxw&&fs>26){fs-=2;x.font='800 '+fs+'px Cairo'}x.fillText(t,R0,y+3);
+  for(let i=0;i<7;i++){const n=st.a+i,X=P+(6-i)*(CELL+CG),Y=y-CELL/2;x.lineCap='round';x.lineJoin='round';
+   if(n>st.b){x.strokeStyle='#2a2a2a';x.lineWidth=3;rr(x,X,Y,CELL,CELL,14);x.stroke();continue}
+   const raw=h&&h.sp?(S.days[n]&&S.days[n].h.sport||0):0,ok=h?val(n,h)>0:won(n);
+   if(h&&h.sp&&raw===3){x.strokeStyle=RED;x.lineWidth=5;rr(x,X+2,Y+2,CELL-4,CELL-4,14);x.stroke();x.fillStyle='#d9a0a2';x.textAlign='center';x.font='800 30px Cairo';x.fillText('راحة',X+CELL/2,y+2);continue}
+   if(ok){x.fillStyle=h?RED:'#c82028';rr(x,X,Y,CELL,CELL,14);x.fill();x.strokeStyle='#fff';x.lineWidth=8;x.beginPath();const k=CELL/78;x.moveTo(X+20*k,y+2);x.lineTo(X+33*k,y+15*k);x.lineTo(X+58*k,y-13*k);x.stroke()}
+   else{x.fillStyle='#262626';rr(x,X,Y,CELL,CELL,14);x.fill();x.strokeStyle='#6a6a6a';x.lineWidth=6;x.beginPath();const k=CELL/78;x.moveTo(X+26*k,y-13*k);x.lineTo(X+52*k,y+13*k);x.moveTo(X+52*k,y-13*k);x.lineTo(X+26*k,y+13*k);x.stroke()}}
+  y+=LH});
+ // footer stats
+ y+=10;x.textAlign='center';x.fillStyle='#fff';x.font='800 40px Cairo';
+ x.fillText('💪 '+st.sp+' تمارين   ·   🌅 الفجر '+st.fj+'/'+st.len+'   ·   🔗 سلسلة '+chain(),W/2,y+10);
+ x.fillStyle=RED;x.fillRect(P,Hh-150,W-P*2,4);
+ x.fillStyle='#fff';x.font='400 40px Georgia,"Times New Roman",serif';x.direction='ltr';x.fillText('V A Y N O R A',W/2,Hh-95);
+ x.fillStyle='#8a8a8a';x.font='600 30px Cairo';x.textAlign='right';x.direction='ltr';x.fillText('@'+VAY,W/2-14,Hh-45);x.direction='rtl';x.textAlign='left';x.fillText('#حرب_النفس',W/2+14,Hh-45);x.textAlign='center';
+ return cv}
+function weekBox(w,done){return `<div class="card"><h2>📅 بطاقة الأسبوع ${w}</h2><p class="mut">${done?'كمّلت الأسبوع! انشرها <b>Post</b> مع collaboration لـ <b dir="ltr" style="unicode-bidi:isolate">@'+VAY+'</b>.':'الأسبوع مازال ما كملش. تنجم تشوفها توا، أما انشرها في آخر نهار.'}</p>
+ <div class="ck nock"><img id="wpv" data-w="${w}" alt="بطاقة الأسبوع"></div><button class="btn" id="wcard" data-w="${w}">حفظ بطاقة الأسبوع</button></div>`}
 function rowsOf(n){const a=active(n),d=D(n),r=[];
  a.forEach(h=>{const v=val(n,h);if(v)r.push([v===3?'رياضة: يوم راحة':h.t,1]);else if(S.showMiss!==false)r.push([h.t,0])});
  cust(n).forEach(c=>{const v=cval(n,c);if(v)r.push([c.t,1]);else if(S.showMiss!==false)r.push([c.t,0])});
