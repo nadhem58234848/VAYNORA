@@ -167,12 +167,12 @@ function save(){try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}}
 
 // ===== Nadhem's tracking: join info + daily progress go to his Google Form (responses land in his Sheet) =====
 const FORM='';  // e.g. 'https://docs.google.com/forms/d/e/XXXX/formResponse' (empty = nothing is sent)
-const FE={pid:'',event:'',name:'',age:'',city:'',instagram:'',why:'',start:'',day:'',done:'',won:'',chain:''}; // entry.NNN ids
+const FENTRY=''; // 'entry.NNN' of the form's only question «data»: each response is one JSON line
 function pid(){if(!S.pid){S.pid=Date.now().toString(36)+Math.random().toString(36).slice(2,7);save()}return S.pid}
 function qsend(o){S.q=S.q||[];S.q.push(Object.assign({pid:pid()},o));if(S.q.length>60)S.q=S.q.slice(-60);save();flush()}
 let flushing=false;
-async function flush(){if(!FORM||flushing||!(S.q&&S.q.length)||!navigator.onLine)return;flushing=true;
- try{while(S.q.length){const o=S.q[0],fd=new URLSearchParams();Object.keys(FE).forEach(k=>{if(FE[k]&&o[k]!==undefined&&o[k]!==null)fd.append(FE[k],String(o[k]))});
+async function flush(){if(!FORM||!FENTRY||flushing||!(S.q&&S.q.length)||!navigator.onLine)return;flushing=true;
+ try{while(S.q.length){const o=S.q[0],fd=new URLSearchParams();fd.append(FENTRY,JSON.stringify(o));
   await fetch(FORM,{method:'POST',mode:'no-cors',body:fd});S.q.shift();save()}}catch(e){}flushing=false}
 function sendJoin(){qsend({event:'join',name:S.name||'',age:S.age||'',city:S.city||'',instagram:(S.ig||'').replace(/^@/,''),why:S.why0||'',start:S.start||''});S.joined=1;save()}
 let dayT=null;
@@ -186,7 +186,7 @@ function gviz(id,cb){const n='gv'+Date.now()+Math.floor(Math.random()*1e4),sc=do
  window[n]=r=>{try{cb(r)}catch(e){}delete window[n];sc.remove()};sc.onerror=()=>{delete window[n];sc.remove()};
  sc.src='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=responseHandler:'+n;document.head.appendChild(sc)}
 function gdate(v){const m=/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/.exec(v||'');return m?new Date(+m[1],+m[2],+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0)).getTime():0}
-function pullMsg(){if(!MSG_SHEET)return;gviz(MSG_SHEET,r=>{const rows=(r.table.rows||[]).map(x=>({ts:gdate(x.c[0]&&x.c[0].v),t:x.c[1]&&x.c[1].v})).filter(x=>x.t);if(!rows.length)return;
+function pullMsg(){if(!MSG_SHEET)return;gviz(MSG_SHEET,r=>{const rows=(r.table.rows||[]).map(x=>{let t='';try{t=JSON.parse(x.c[1]&&x.c[1].v||'{}').t}catch(e){}return {ts:gdate(x.c[0]&&x.c[0].v),t}}).filter(x=>x.t);if(!rows.length)return;
  rows.sort((a,b)=>a.ts-b.ts);const l=rows[rows.length-1];if(!S.nm||S.nm.ts!==l.ts){S.nm=l;save();if(V==='home')render()}})}
 function nmCard(){if(!S.nm||Date.now()-S.nm.ts>3*864e5)return '';return `<div class="card" style="border-color:var(--red)"><h3>📣 رسالة من ناظم</h3><p style="white-space:pre-line">${esc(S.nm.t)}</p></div>`}
 

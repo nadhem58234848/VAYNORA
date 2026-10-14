@@ -24,7 +24,7 @@ input,textarea{width:100%;background:var(--card2);border:1px solid var(--line);c
 .row{display:flex;gap:8px}
 </style></head><body><div id="app"></div>
 <script>
-const K='vay_admin_v1';let C;try{C=JSON.parse(localStorage.getItem(K))}catch(e){}C=C||{sheet:'',msgForm:'',msgEntry:'',msgSheet:'',f:'all'};
+const K='vay_admin_v1';let C;try{C=JSON.parse(localStorage.getItem(K))}catch(e){}C=C||{sheet:'',form:'',entry:'',f:'all'};
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(C))}catch(e){}};const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const N=21;function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
@@ -38,12 +38,12 @@ function gviz(id,cb,err){const n='gv'+Date.now()+Math.floor(Math.random()*1e4),s
 function gdate(v){const m=/Date\((\d+),(\d+),(\d+)(?:,(\d+),(\d+),(\d+))?\)/.exec(v||'');return m?new Date(+m[1],+m[2],+m[3],+(m[4]||0),+(m[5]||0),+(m[6]||0)).getTime():0}
 let P=null,MS=[],ERR='',LOAD=false,OPEN=null;
 function load(){if(!C.sheet)return render();LOAD=true;ERR='';render();
- gviz(C.sheet,r=>{const cols=r.table.cols.map(c=>(c.label||'').trim().toLowerCase());const ix=k=>cols.indexOf(k);
-  const rows=(r.table.rows||[]).map(x=>{const o={ts:gdate(x.c[0]&&x.c[0].v)};['pid','event','name','age','city','instagram','why','start','day','done','won','chain'].forEach(k=>{const i=ix(k),c=i>=0?x.c[i]:null;o[k]=c?(c.f!=null&&k!=='start'?c.f:c.v):''});
-   if(o.start&&/Date\(/.test(o.start)){const d=new Date(gdate(o.start));o.start=ymd(d)}return o});
+ gviz(C.sheet,r=>{const rows=(r.table.rows||[]).map(x=>{let o={};try{o=JSON.parse(x.c[1]&&x.c[1].v||'{}')}catch(e){}o.ts=gdate(x.c[0]&&x.c[0].v);
+   ['name','age','city','instagram','why','start','day','done','won','chain'].forEach(k=>{if(o[k]==null)o[k]=''});return o});
+  MS=rows.filter(o=>o.event==='msg'&&o.t).map(o=>({ts:o.ts,t:o.t})).sort((a,b)=>b.ts-a.ts);
   P=agg(rows);LOAD=false;render()},e=>{LOAD=false;ERR='ما نجمتش نقرا الشيت. تأكد إنو Share ← «Anyone with the link» ← Viewer، وإنو الرابط صحيح.';render()});
- if(C.msgSheet)gviz(C.msgSheet,r=>{MS=(r.table.rows||[]).map(x=>({ts:gdate(x.c[0]&&x.c[0].v),t:x.c[1]&&x.c[1].v})).filter(x=>x.t).sort((a,b)=>b.ts-a.ts);render()})}
-function agg(rows){const m={};rows.forEach(o=>{if(!o.pid)return;const p=m[o.pid]=m[o.pid]||{pid:o.pid,days:{},last:0};p.last=Math.max(p.last,o.ts);
+}
+function agg(rows){const m={};rows.forEach(o=>{if(!o.pid||o.event==='msg')return;const p=m[o.pid]=m[o.pid]||{pid:o.pid,days:{},last:0};p.last=Math.max(p.last,o.ts);
   if(o.event==='join'){if(!p.jts||o.ts>=p.jts){p.jts=o.ts;['name','age','city','instagram','why','start'].forEach(k=>{if(o[k]!=='')p[k]=o[k]})}if(!p.first||o.ts<p.first)p.first=o.ts}
   else if(o.event==='day'){const d=parseInt(o.day);if(d>0){const ex=p.days[d];if(!ex||o.ts>=ex.ts)p.days[d]={ts:o.ts,done:o.done,won:String(o.won)==='1',chain:parseInt(o.chain)||0}}}});
  const t=ymd(new Date());return Object.values(m).map(p=>{const ds=Object.keys(p.days).map(Number);p.maxDay=ds.length?Math.max(...ds):0;p.wins=ds.filter(d=>p.days[d].won).length;
@@ -77,23 +77,22 @@ function card(p){const ig=(p.instagram||'').replace(/^@/,''),nm=p.name||ig||'ب�
 function bindMain(){$('#rf').onclick=load;document.querySelectorAll('[data-f]').forEach(t=>t.onclick=()=>{C.f=t.dataset.f;save();render()});
  $('#gm').onclick=()=>{OPEN='msg';render();scrollTo(0,0)};$('#gs').onclick=()=>{OPEN='set';render();scrollTo(0,0)}}
 function msgView(){return `<div class="top"><h1>📣 رسالة للمشاركين</h1><button class="btn sec" id="bk" style="width:auto;margin:0;padding:8px 14px">←</button></div>
- ${C.msgForm?`<div class="card"><p class="mut">الرسالة تظهر لكل المشاركين في صفحة اليوم كي يحلّو التطبيق (تقعد 3 أيام). للإشعار، ابعث نفس الرسالة في قروب التليغرام.</p>
+ ${C.form?`<div class="card"><p class="mut">الرسالة تظهر لكل المشاركين في صفحة اليوم كي يحلّو التطبيق (تقعد 3 أيام). للإشعار، ابعث نفس الرسالة في قروب التليغرام.</p>
  <textarea id="mt" placeholder="مثلاً: يا محاربين، اليوم صعيب؟ اعمل «على الأقل» وتحسب 💪"></textarea><button class="btn" id="ms">ابعث</button>
- <button class="btn sec" id="mtg">انسخها للتليغرام</button></div>`:`<div class="card">مازال ما ربطناش فورم الرسائل. ابعث لـClaude رابط الفورم المعبّى متاع الرسائل.</div>`}
+ <button class="btn sec" id="mtg">انسخها للتليغرام</button></div>`:`<div class="card">مازال ما ربطناش الفورم. حط الرابط المعبّى في ⚙️.</div>`}
  <h2 style="margin-top:6px">آخر الرسائل</h2>${MS.length?MS.slice(0,10).map(m=>`<div class="card"><div class="mut">${ago(m.ts)}</div><div style="white-space:pre-line">${esc(m.t)}</div></div>`).join(''):'<div class="mut">مازال حتى رسالة.</div>'}`}
 function bindMsg(){$('#bk').onclick=()=>{OPEN=null;render()};const ms=$('#ms');if(!ms)return;
  $('#mtg').onclick=()=>{const t=$('#mt').value.trim();if(!t)return;navigator.clipboard?navigator.clipboard.writeText(t).then(()=>toast('تنسخت ✓')):prompt('انسخ:',t)};
- ms.onclick=async()=>{const t=$('#mt').value.trim();if(!t){$('#mt').focus();return}const fd=new URLSearchParams();fd.append(C.msgEntry,t);ms.disabled=true;
-  try{await fetch(C.msgForm,{method:'POST',mode:'no-cors',body:fd});toast('تبعثت ✓');MS.unshift({ts:Date.now(),t});$('#mt').value='';setTimeout(load,4000)}catch(e){toast('ما تبعثتش، ثبّت في الإنترنت')}ms.disabled=false;render()}}
+ ms.onclick=async()=>{const t=$('#mt').value.trim();if(!t){$('#mt').focus();return}const fd=new URLSearchParams();fd.append(C.entry,JSON.stringify({event:'msg',t}));ms.disabled=true;
+  try{await fetch(C.form,{method:'POST',mode:'no-cors',body:fd});toast('تبعثت ✓');MS.unshift({ts:Date.now(),t});$('#mt').value='';setTimeout(load,4000)}catch(e){toast('ما تبعثتش، ثبّت في الإنترنت')}ms.disabled=false;render()}}
 function setup(edit){return `<h1 style="margin-bottom:10px">لوحة ناظم</h1><div class="card"><h2>${edit?'الإعدادات':'أول مرة'}</h2>
  <label>رابط شيت المشاركين<input id="s1" dir="ltr" value="${esc(C.sheet)}" placeholder="https://docs.google.com/spreadsheets/d/..."></label>
- <label>رابط شيت الرسائل (اختياري)<input id="s2" dir="ltr" value="${esc(C.msgSheet)}"></label>
- <label>رابط فورم الرسائل المعبّى (اختياري)<input id="s3" dir="ltr" value="${esc(C.msgPre||'')}"></label>
+ <label>رابط الفورم المعبّى (باش تبعث رسائل)<input id="s3" dir="ltr" value="${esc(C.pre||'')}"></label>
  <button class="btn" id="sv">سجّل</button>${edit?'<button class="btn sec" id="bk">رجوع</button>':''}
  <p class="mut" style="margin-top:8px">🔒 الروابط تتسجّل في تليفونك برك. اللي يحل الصفحة هذي من غير الروابط ما يشوف شي.</p></div>`}
 function bindSetup(){const b=$('#bk');if(b)b.onclick=()=>{OPEN=null;render()};
- $('#sv').onclick=()=>{C.sheet=sid($('#s1').value);C.msgSheet=sid($('#s2').value);const pre=$('#s3').value.trim();C.msgPre=pre;
-  const m=/^(https:\/\/docs\.google\.com\/forms\/d\/e\/[^/]+)\/viewform\?.*?(entry\.\d+)=/.exec(pre);if(m){C.msgForm=m[1]+'/formResponse';C.msgEntry=m[2]}else if(!pre){C.msgForm='';C.msgEntry=''}else{toast('رابط فورم الرسائل موش صحيح');return}
+ $('#sv').onclick=()=>{C.sheet=sid($('#s1').value);const pre=$('#s3').value.trim();C.pre=pre;
+  const m=/^(https:\/\/docs\.google\.com\/forms\/d\/e\/[^/]+)\/viewform\?.*?(entry\.\d+)=/.exec(pre);if(m){C.form=m[1]+'/formResponse';C.entry=m[2]}else if(!pre){C.form='';C.entry=''}else{toast('رابط الفورم موش صحيح');return}
   if(!C.sheet){toast('حط رابط شيت المشاركين');return}save();OPEN=null;load()}}
 load();setInterval(()=>{if(!OPEN&&document.visibilityState==='visible')load()},120000);
 </script></body></html>
