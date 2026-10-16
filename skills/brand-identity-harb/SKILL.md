@@ -9,7 +9,7 @@ description: Keep every visual and written piece on-brand for «حرب النف�
 - **«حرب النفس»** = umbrella identity (the war against the self). Don't cite the weak "الجهاد الأكبر" hadith; use «والمجاهد من جاهد نفسه في طاعة الله» (authentic, Ahmad/Tirmidhi; verify wording before quoting). Slogan: **«اصنع من الألم قوة»**.
 - **ناظم = the face**: personal account nadhem_elaashek. Write the name in Arabic as «ناظم», never «نذهم».
 - **«معركة الخلوات»** = one battle inside the war (the book on private sins/addiction). Not the whole brand.
-- **VAYNORA** = the clothing and the future training hall; IG vaynora_ with character VAY. VAYNORA and «حرب النفس» share ONE visual identity.
+- **VAYNORA** = a mindset and a community (Nadhem's definition, 2026-10-16) for people who want to break free from addiction, develop themselves and return to Allah. Its expressions: the community, the clothing, the future training hall; IG vaynora_ with character VAY. VAYNORA and «حرب النفس» share ONE visual identity.
 - Products (book, 21-day challenge, apps «حرب النفس» and warrior, compression shirt, 90-day program) all sit under this identity.
 
 ## Visual identity
