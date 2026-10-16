@@ -1,0 +1,36 @@
+:root{
+  --red-50:#FFEEEC;
+  --red-100:#FEDDDA;
+  --red-200:#FFBFB8;
+  --red-300:#FE8B82;
+  --red-400:#E0262B;
+  --red-500:#C81E1E;
+  --red-600:#A6192E;
+  --red-700:#88131E;
+  --red-800:#680E16;
+  --red-900:#49080D;
+  --red-950:#2C0304;
+  --night-950:#0A0A0A;
+  --night-900:#111111;
+  --night-850:#161616;
+  --night-800:#1C1C1C;
+  --night-700:#262626;
+  --night-600:#3A3A3A;
+  --night-500:#5C5C5C;
+  --night-400:#8A8A8A;
+  --night-300:#B3B3B3;
+  --night-200:#D6D6D6;
+  --night-100:#EDEDED;
+  --bone:#F4F1EC;
+  --brand-red:var(--red-500);
+  --print-red:var(--red-600); /* Pantone 187 C */
+  --bg:var(--night-950);
+  --surface:var(--night-850);
+  --border:var(--night-700);
+  --text:var(--bone);
+  --text-muted:var(--night-300);
+  --grad-ember:radial-gradient(90% 60% at 50% 35%,#49080D 0%,#160606 45%,#0A0A0A 80%);
+  --grad-blade:linear-gradient(90deg,#DC303C 0%,#A6192E 45%,#0A0A0A 100%);
+  --grad-night:linear-gradient(180deg,#0A0A0A 0%,#160606 55%,#2C0304 100%);
+  --font:'Cairo',sans-serif;
+}

@@ -13,7 +13,8 @@ description: Keep every visual and written piece on-brand for «حرب النف�
 - Products (book, 21-day challenge, apps «حرب النفس» and warrior, compression shirt, 90-day program) all sit under this identity.
 
 ## Visual identity
-- Colors: black background #0D0D0D; brand red #C81E1E (UI/text accents), #E0262B (bright accent on dark), deep print red #A6192E (Pantone 187 C) with highlight #DC303C for clothing; white text. Red is for ONE key word or element, not everything.
+OFFICIAL REFERENCE: brand guide https://nadhem58234848.github.io/VAYNORA/brand/ (source: repo brand/ and /mnt/project-files/brand/: logos SVG/PNG, brand.css + tokens.json color scales, 7 content templates, Cairo fonts). It wins over anything below if they differ.
+- Colors (v1.0 tokens): background Night 950 #0A0A0A (retires #0D0D0D); brand red Red 500 #C81E1E (logo); keyword red on dark Red 400 #E0262B; print red Red 600 #A6192E = Pantone 187 C; shirt highlight #DC303C; text Bone #F4F1EC. Retired: #8F1D21/#8E1D20 → Red 700 #88131E, #C42A30/#C82028 → Red 500. Official gradients: Ember, Night, Blade (stops in brand.css). Wordmark VAYNORA = custom monoline, open A (Λ), never typed in another font. Red is for ONE key word or element, not everything.
 - Font: **Cairo** (ExtraBold 800 for headlines and captions, Regular for body). Captions: white with black outline, 2-3 words per line, keyword red, no card behind.
 - Logo: the VAYNORA emblem (symmetrized version; source in project uploads). Keep clear space, never stretch, never recolor outside black/white/brand red. Watermark @nadhem_elaashek small on content.
 - Imagery: dark, high-contrast, real (Nadhem, studio, prayer mat, training, night city, Fajr light). Mood: discipline, struggle, quiet strength. No cheesy stock smiles, no glamorized sin, no women's photos in ads or content, no music-instrument visuals.
