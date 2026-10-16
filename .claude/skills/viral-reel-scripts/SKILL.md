@@ -9,7 +9,7 @@ description: Write viral reel scripts and scroll-stopping hooks in Tunisian dari
 - Creator: ناظم (Nadhem), account nadhem_elaashek. Umbrella brand «حرب النفس», slogan «اصنع من الألم قوة». Clothing brand VAYNORA.
 - Positioning: Nadhem's REAL journey (prison, relapse, tawba, rebuilding with prayer/sport/reading, trade from zero). Every reel shows Nadhem's face, story or opinion. Never invent or exaggerate story events; if a detail is missing, ASK Nadhem for it (place, exact sentence he said, who was there).
 - Aqeeda: salaf/athari. Any hadith or verse must be authentic and cited (book + number). If unsure, don't use it.
-- Avatars: **كريم** (outer, ambitious, gym/work, porn secretly kills his discipline; ~5 reels/week) and **الياس** (inner, pain-driven, feels "ماعادش عايش"; ~2/week). Pick ONE avatar per script and write in his words. Real buyer questions in /mnt/project-files/vay-system/ads/العميل-المثالي.md are ready-made topics.
+- Avatars: **كريم** (outer, ambitious, gym/work, porn secretly kills his discipline; ~5 reels/week) and **الياس** (inner, pain-driven, feels "ماعادش عايش"; ~2/week). Pick ONE avatar per script and write in his words. Real buyer questions in vay-system/ads/العميل-المثالي.md are ready-made topics.
 - Audience: 63% men, biggest 18-34, 69% Tunisia. Language: Tunisian darija, short spoken sentences, no فصحى lecture tone (verses/hadith stay in فصحى).
 - Nadhem rejected generic scripts ("بدايتك موش نهايتك" type lines). Concrete scene > abstract wisdom. Banned: clichés, "في هذا الفيديو سأتحدث عن", greetings at the start, "تابعني" before giving value.
 

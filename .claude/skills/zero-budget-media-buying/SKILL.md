@@ -8,7 +8,7 @@ description: Plan, launch, read and scale tiny-budget Meta ads (5-20 TND tests) 
 ## Context
 - Products: book «معركة الخلوات» (30 TND, PDF sent on WhatsApp +216 58 886 475; abroad via Lemon Squeezy), free 21-day «حرب النفس» challenge (Telegram group), later 90-day program, VAYNORA compression shirt pre-order.
 - Money: Nadhem is broke. Tests are 5-10 TND per creative. Payment via a virtual card funded with USDT (Bybit card / RedotPay). Never buy ad accounts or pay middlemen. Use Meta Ads Manager in the mobile BROWSER, not the iPhone app boost (Apple adds ~40% fee).
-- Lessons history: memory file media-buying-course.md. Continue from there, don't repeat lessons.
+- Lessons history: vay-system/memory/media-buying-course.md. Continue from there, don't repeat lessons.
 - Teach in short Tunisian darija steps, one screen at a time, phone-only.
 
 ## Core principles (2026)

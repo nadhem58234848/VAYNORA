@@ -7,7 +7,7 @@ description: Turn people who message Nadhem on WhatsApp or Instagram DM into buy
 
 ## Context
 - Seller: ناظم, WhatsApp +216 58 886 475, IG nadhem_elaashek. He writes in Tunisian darija. Phone only.
-- Offers: book «معركة الخلوات» (123 pages, PDF, 30 TND). Tunisia pays via Flouci then gets the PDF on WhatsApp; abroad pays via Lemon Squeezy (check memory for current store status before sending that link). Free 21-day «حرب النفس» challenge (Telegram group). Later: paid 90-day program, VAYNORA compression shirt pre-order (deposit).
+- Offers: book «معركة الخلوات» (123 pages, PDF, 30 TND). Tunisia pays via Flouci then gets the PDF on WhatsApp; abroad pays via Lemon Squeezy (check vay-system/memory/payments.md for current store status before sending that link). Free 21-day «حرب النفس» challenge (Telegram group). Later: paid 90-day program, VAYNORA compression shirt pre-order (deposit).
 - HARD RULE: never message cold/unsaved numbers in bulk. WhatsApp restricted Nadhem once for that. Buyers message first (from reels, ads, bio link); follow-ups only to people who already wrote.
 - The topic is private and shameful for the buyer. Discretion and zero judgment sell more than pressure.
 
@@ -31,7 +31,7 @@ description: Turn people who message Nadhem on WhatsApp or Instagram DM into buy
 - "غالي / ماعنديش فلوس": compare with what it costs him now; offer the free sample or free challenge first, no guilt. Never discount below the price Nadhem set without his OK.
 - "نخمم / مبعد": "مافي حتى مشكل. برك خوذ الفصل الأول مجانا، كان نفعك كمّل." Then ONE follow-up after 24-48h, max two total.
 - "جربت برشا حاجات وما نفعش": validate, explain what's different (plan + daily system + community, not just motivation).
-- "مانجمش نخلص بـ Flouci": offer the other methods Nadhem actually accepts (check memory), never ask for card numbers in chat.
+- "مانجمش نخلص بـ Flouci": offer the other methods Nadhem actually accepts (check vay-system/memory/payments.md), never ask for card numbers in chat.
 - "هل فما حد باش يعرف؟": guarantee privacy; PDF only, nothing published.
 - Minor (under 18) or crisis signs (self-harm talk): no sale. Kind words, advise trusted adult / professional help; give him free content.
 

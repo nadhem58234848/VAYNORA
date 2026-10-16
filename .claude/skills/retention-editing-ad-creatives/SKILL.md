@@ -6,7 +6,7 @@ description: Edit reels for retention and build ad creatives that sell the book,
 # Retention editing + ad creatives that sell (مونتاج يشد + كرييتيف يبيع)
 
 ## Constraints
-- Nadhem has a phone only, zero budget. Free tools: CapCut mobile (free features only), free ChatGPT for images, Claude for scripts/text/edits. When Claude edits in the cloud, use the «منتج» workflow and limits in memory file video-editing-montaj.md (Remotion, captions, loudnorm).
+- Nadhem has a phone only, zero budget. Free tools: CapCut mobile (free features only), free ChatGPT for images, Claude for scripts/text/edits. When Claude edits in the cloud, follow the `vaynora-edit` skill (Remotion, captions, loudnorm).
 - Brand look: background #0D0D0D, red #C81E1E / #E0262B, Cairo font, handle @nadhem_elaashek. Captions: no card, Cairo ExtraBold 800, white with black outline, 2-3 words per line, keyword in red. Voice finished at -14 LUFS / -1 dBTP.
 - Audio: original voice or royalty-free only. Licensed nasheeds block boosting/ads. No instruments (Nadhem's preference).
 
@@ -38,7 +38,7 @@ Ad creative formula (15-40s, 9:16):
 4. Offer (20-30s): what exactly he gets, price (book 30 TND), what makes it easy (PDF on WhatsApp in minutes).
 5. CTA: one action, matched to the ad button ("ابعثلي «الكتاب 1» في الواتساب").
 Make 3-5 variants that differ in the HOOK and ANGLE (hope / pain / contrarian / story / proof), not just colors: under Meta's Andromeda system creative diversity is what finds the audience.
-Formats to rotate: talking head (best for trust), story-with-B-roll, text-on-screen + voice, carousel (book pages / 7 steps of falling), static image with strong headline (ChatGPT image + Claude overlays Arabic text with render_carousel.py).
+Formats to rotate: talking head (best for trust), story-with-B-roll, text-on-screen + voice, carousel (book pages / 7 steps of falling), static image with strong headline (ChatGPT image + Claude overlays Arabic text, e.g. with video/src/Brand/VayCarousel.tsx).
 
 Ad copy (primary text): line 1 = hook; 2-3 short lines of benefit; price/offer; CTA. Headline ≤ 6 words. Darija.
 

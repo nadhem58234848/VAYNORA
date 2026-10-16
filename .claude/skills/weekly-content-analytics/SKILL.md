@@ -8,8 +8,8 @@ description: Weekly review of nadhem_elaashek and vaynora_ Instagram numbers (vi
 ## Data sources
 - Instagram accounts nadhem_elaashek and vaynora_ via the Windsor_ai MCP (connector slug `instagram`; use get_connectors, get_fields, get_data; trial plan, avoid force_refresh). If Windsor is unavailable, ask Nadhem for screenshots of IG Insights (Overview + top reels).
 - Sales: Nadhem's phone note / WhatsApp labels (keyword per ad), Lemon Squeezy orders if active, Meta Ads Manager numbers if ads ran.
-- Challenge «حرب النفس»: participants sheet (see memory harb-tracking-setup.md).
-- Previous weeks: /mnt/project-files/vay-system/analytics/ (create weekly-YYYY-MM-DD.md there; read last week first to compare).
+- Challenge «حرب النفس»: participants sheet (see vay-system/memory/harb-tracking-setup.md).
+- Previous weeks: vay-system/analytics/ (create weekly-YYYY-MM-DD.md there; read last week first to compare).
 
 ## What to measure (per reel, last 7 days)
 - Views, reach, % non-followers reached.
