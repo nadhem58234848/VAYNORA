@@ -39,8 +39,10 @@ Every week: at least 1 piece pushes the free challenge, 1 soft book mention. Nev
 - Don't post 4-5 times a day (burnout and falling reach happened in Sept 2026). Consistency > volume.
 
 ## Profile & bio
-- Name field with keyword: "ناظم | حرب النفس".
-- Bio: who he helps + proof + CTA. Example: "من الحبس للتوبة 🤍 نبني روتيني وديني قدامكم | تحدي حرب النفس 21 يوم مجاني 👇".
+- Current bios (v1.1, 2026-10-16, on https://nadhem58234848.github.io/VAYNORA/brand/content/):
+  - nadhem_elaashek, name «ناظم | حرب النفس»: "من الحبس للتوبة، نبني روتيني وديني قدامكم 🤍 / نعاونك تنظّم صلاتك وتبني روتينك وتتحرر من الإدمان / ⚔️ تحدي «حرب النفس» 21 يوم مجاني، يبدا 1 نوفمبر 👇"
+  - vaynora_, name «VAYNORA | حرب النفس»: "VAYNORA® · اصنع من الألم قوة / هنا VAY: المعركة ضد الشهوة والضعف ⚔️ / 📕 «معركة الخلوات»: خطة 90 يوم للتحرر 👇"
+  - Update the challenge line after 21 Nov (e.g. results / next round). Max 150 chars.
 - Link: one link page (book / challenge / WhatsApp). Highlights: قصتي، الكتاب، التحدي، آراء.
 - Pinned 3 reels: origin story, best value reel, offer (challenge or book).
 
