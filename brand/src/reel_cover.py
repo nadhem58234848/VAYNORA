@@ -75,8 +75,8 @@ body{{margin:0}}#c{{position:relative;width:1080px;height:1920px;overflow:hidden
 #c>img{{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}}
 .top{{position:absolute;inset:0 0 auto 0;height:520px;background:linear-gradient(180deg,rgba(10,10,10,.55),rgba(10,10,10,0))}}
 .bot{{position:absolute;inset:auto 0 0 0;height:900px;background:linear-gradient(0deg,rgba(10,10,10,.97) 0%,rgba(10,10,10,.9) 35%,rgba(10,10,10,0) 100%)}}
-.pill{{position:absolute;top:290px;left:50%;transform:translateX(-50%) rotate(-2deg);background:#C81E1E;border-radius:26px;padding:6px 64px 18px;font-weight:800;font-size:150px;line-height:1.25;white-space:nowrap;box-shadow:0 18px 50px rgba(0,0,0,.55),0 0 0 6px rgba(244,241,236,.08)}}
-.badge{{position:absolute;top:290px;right:76px;background:#C81E1E;border-radius:999px;padding:8px 34px;font-weight:800;font-size:42px}}
+.pill{{position:absolute;top:290px;left:50%;transform:translateX(-50%) rotate(-2deg);background:#8E1D20;border-radius:26px;padding:6px 64px 18px;font-weight:800;font-size:150px;line-height:1.25;white-space:nowrap;box-shadow:0 18px 50px rgba(0,0,0,.55),0 0 0 6px rgba(244,241,236,.08)}}
+.badge{{position:absolute;top:290px;right:76px;background:#8E1D20;border-radius:999px;padding:8px 34px;font-weight:800;font-size:42px}}
 .t{{position:absolute;left:70px;right:70px;bottom:300px;text-align:center;font-weight:800;font-size:{size}px;line-height:1.2;text-shadow:0 6px 30px #000}}
 .r{{color:#E0262B}}
 .sig{{position:absolute;bottom:150px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:18px;font-weight:600;font-size:30px;opacity:.85;direction:ltr}}
