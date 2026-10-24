@@ -1,0 +1,102 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>برومبتات VAY · الفجر</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0D0D0D;color:#F4F1EC;font-family:Cairo,sans-serif;padding:16px;max-width:720px;margin:auto;border-right:6px solid #C81E1E}
+h1{font-weight:800;font-size:24px;margin:8px 0} h2{color:#C81E1E;margin:28px 0 8px;font-size:20px}
+.step{background:#161616;border-radius:12px;padding:12px 14px;margin:10px 0;line-height:1.8}
+.card{background:#161616;border-radius:12px;padding:12px;margin:10px 0}
+.h{display:flex;justify-content:space-between;align-items:center} .star{color:#C81E1E;font-size:13px} .opt{color:#888;font-size:13px}
+.line{margin:6px 0;font-weight:700}
+pre{direction:ltr;text-align:left;white-space:pre-wrap;background:#0D0D0D;border:1px solid #333;border-radius:8px;padding:10px;font-size:13px;color:#ddd}
+button{width:100%;background:#8E1D20;color:#fff;border:0;border-radius:10px;padding:12px;font-family:Cairo;font-weight:700;font-size:15px}
+button.ok{background:#2b6b2b} img{width:100%;border-radius:12px} a{color:#C81E1E}
+</style></head><body>
+<h1>فيديو VAY: 3 أخطاء تخسّرك الفجر</h1>
+<div class="step"><b>كيفاش تخدم:</b><br>
+1. هبّط صورة VAY المرجع (تحت) وافتح chat جديد في ChatGPT.<br>
+2. ابعث الصورة + <b>البرومبت الأساسي</b>. يجاوبك OK.<br>
+3. في نفس الـ chat، ابعث برومبت كل صورة وحدة بوحدة. لو بدّل في VAY او حطلو وجه، قلّو: <i>keep VAY exactly like the reference, no face</i>.<br>
+4. ابدأ بالصور ★ (16). الاختيارية كان عندك وقت.<br>
+5. سجّل الصوت (السكريبت تحت)، وابعثلي الصور + الصوت، وأنا نركّب.<br>
+<small>ChatGPT المجاني يعطي عدد محدود من الصور في النهار، كان وقف كمل غدوة في نفس الـ chat.</small></div>
+<img src="../../ai-images/vay/vay-reference.jpg" alt="VAY"><p><a href="../../ai-images/vay/vay-reference.jpg" download>⬇ هبّط صورة VAY</a></p>
+<h2>البرومبت الأساسي (أول رسالة)</h2>
+<div class="card"><pre id="base">This is my character VAY (image attached). Keep him EXACTLY the same in every image I ask for in this chat:
+- muscular male fighter, full body
+- the head is a smooth plain black sphere with NO face at all: no eyes, no mouth, no nose, no facial features of any kind
+- red glowing V-shaped crown on the head
+- black body with thin red glowing lines and a red V emblem on the chest
+- red hand wraps, LONG black fight pants down to the ankles with red lines (never shorts)
+Style: clean 2D cartoon / comic illustration, bold dark outlines, flat colors, subtle red rim light so he stands out.
+Background: plain flat solid black (#0D0D0D) only. Only the props I mention, nothing else.
+NO text, NO letters, NO numbers, NO logos, NO icons or arrows, NO other people.
+Format: vertical 9:16, character centered with empty space above his head.
+Reply &quot;OK&quot; and wait for my poses.</pre><button onclick="cp('base',this)">انسخ البرومبت الأساسي</button></div>
+<h2>HOOK</h2><div class="card"><div class="h"><b>صورة 1</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 تحط المنبه للفجر… وتقوم مع الشمس؟</div>
+<pre id="p1">Same VAY, same style, same plain black background, no face, no text. Pose: VAY sleeping deeply on a simple bed, lying on his back, one arm hanging off the bed, an alarm clock fallen on the floor.</pre><button onclick="cp('p1',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 2</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 وتقول: إيماني ضعيف.</div>
+<pre id="p2">Same VAY, same style, same plain black background, no face, no text. Pose: VAY sitting on the edge of the bed, bent forward, head down in both hands, tired and sad body language.</pre><button onclick="cp('p2',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 3</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 لا. فما 3 أخطاء تعملهم في الليل…</div>
+<pre id="p3">Same VAY, same style, same plain black background, no face, no text. Pose: VAY standing straight, holding up three fingers of his right hand toward the viewer.</pre><button onclick="cp('p3',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 4</b><span class="opt">اختيارية</span></div>
+<div class="line">🎙 …يخسّروك الفجر قبل ما ترقد أصلا.</div>
+<pre id="p4">Same VAY, same style, same plain black background, no face, no text. Pose: VAY pointing his index finger straight at the viewer, strong confident stance.</pre><button onclick="cp('p4',this)">انسخ البرومبت</button></div><h2>الخطأ الأول</h2><div class="card"><div class="h"><b>صورة 5</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 الخطأ الأول: التليفون معاك في الفرش.</div>
+<pre id="p5">Same VAY, same style, same plain black background, no face, no text. Pose: VAY lying in bed holding a smartphone above his head with both hands, the phone screen glowing white-blue light on his body.</pre><button onclick="cp('p5',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 6</b><span class="opt">اختيارية</span></div>
+<div class="line">🎙 تقول دقيقة… تولّي ساعة.</div>
+<pre id="p6">Same VAY, same style, same plain black background, no face, no text. Pose: VAY sitting hunched on the bed scrolling his phone, shoulders slumped, the phone glow lighting him in the dark.</pre><button onclick="cp('p6',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 7</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 ضوء التليفون يقول لمخك: مازال النهار.</div>
+<pre id="p7">Same VAY, same style, same plain black background, no face, no text. Pose: Close-up of VAY&#x27;s hand (red wraps) holding a glowing smartphone, bright light rays from the screen.</pre><button onclick="cp('p7',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 8</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 الحل: التليفون يبات بعيد عليك، وساعة قبل الرقاد ما تحلّوش.</div>
+<pre id="p8">Same VAY, same style, same plain black background, no face, no text. Pose: VAY placing his phone on a small table on the far side, turning his back to it and walking away.</pre><button onclick="cp('p8',this)">انسخ البرومبت</button></div><h2>الخطأ الثاني</h2><div class="card"><div class="h"><b>صورة 9</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 الخطأ الثاني: المنبه حذاك.</div>
+<pre id="p9">Same VAY, same style, same plain black background, no face, no text. Pose: VAY lying in bed, reaching out lazily with one hand to press an alarm clock on the nightstand next to the bed.</pre><button onclick="cp('p9',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 10</b><span class="opt">اختيارية</span></div>
+<div class="line">🎙 تطفيه وانت راقد… وترجع ترقد.</div>
+<pre id="p10">Same VAY, same style, same plain black background, no face, no text. Pose: VAY curled up asleep under a blanket, back turned, the alarm clock silent on the nightstand.</pre><button onclick="cp('p10',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 11</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 الحل: حطّو في آخر البيت، باش تقوم على ساقيك باش تطفيه.</div>
+<pre id="p11">Same VAY, same style, same plain black background, no face, no text. Pose: VAY standing and walking across a room toward an alarm clock placed on a high shelf far away.</pre><button onclick="cp('p11',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 12</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 وتوضّى طول بالماء البارد.</div>
+<pre id="p12">Same VAY, same style, same plain black background, no face, no text. Pose: VAY washing his forearms under a running water tap, water splashing, side view, from the chest down to the hands.</pre><button onclick="cp('p12',this)">انسخ البرومبت</button></div><h2>الخطأ الثالث</h2><div class="card"><div class="h"><b>صورة 13</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 الخطأ الثالث: ترقد على الواحدة بالليل…</div>
+<pre id="p13">Same VAY, same style, same plain black background, no face, no text. Pose: VAY slouched on a couch late at night, very tired posture, a round wall clock with its hands pointing to one o&#x27;clock (clock without numbers).</pre><button onclick="cp('p13',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 14</b><span class="opt">اختيارية</span></div>
+<div class="line">🎙 …وتاكل ماكلة ثقيلة قبل الرقاد.</div>
+<pre id="p14">Same VAY, same style, same plain black background, no face, no text. Pose: VAY sitting at a table in front of a huge plate of food, one hand on his full belly, heavy tired posture.</pre><button onclick="cp('p14',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 15</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 الحل: ترقد بكري بعد العشاء، على وضوء، على جنبك اليمين، كيما علّمنا النبي صلى الله عليه وسلم.</div>
+<pre id="p15">Same VAY, same style, same plain black background, no face, no text. Pose: VAY lying calmly on his RIGHT side in bed, peaceful relaxed posture, soft red glow.</pre><button onclick="cp('p15',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 16</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 وتقرا أذكار النوم.</div>
+<pre id="p16">Same VAY, same style, same plain black background, no face, no text. Pose: VAY sitting on the bed with both palms raised in front of his chest in supplication (dua).</pre><button onclick="cp('p16',this)">انسخ البرومبت</button></div><h2>الدافع</h2><div class="card"><div class="h"><b>صورة 17</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 «ركعتا الفجر خير من الدنيا وما فيها» (رواه مسلم).</div>
+<pre id="p17">Same VAY, same style, same plain black background, no face, no text. Pose: VAY praying in sujood (prostration) on a red and black prayer rug, side view, wearing his long black pants.</pre><button onclick="cp('p17',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 18</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 الفجر هو أول معركة تربحها في نهارك.</div>
+<pre id="p18">Same VAY, same style, same plain black background, no face, no text. Pose: VAY in a powerful stance, both fists clenched, strong red glowing aura around him, low angle heroic view.</pre><button onclick="cp('p18',this)">انسخ البرومبت</button></div><h2>الدعوة</h2><div class="card"><div class="h"><b>صورة 19</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 تحدي «حرب النفس» يبدا 1 نوفمبر، ببلاش. الرابط في البايو.</div>
+<pre id="p19">Same VAY, same style, same plain black background, no face, no text. Pose: VAY standing confident, pointing up with his index finger to the empty space above his head.</pre><button onclick="cp('p19',this)">انسخ البرومبت</button></div><div class="card"><div class="h"><b>صورة 20</b><span class="star">★ ضرورية</span></div>
+<div class="line">🎙 وانت، أما خطأ فيهم تعمل فيه؟ اكتبلي في الكومنت.</div>
+<pre id="p20">Same VAY, same style, same plain black background, no face, no text. Pose: VAY in a thinking pose: one hand on the chin of his faceless sphere head, the other arm crossed on his chest.</pre><button onclick="cp('p20',this)">انسخ البرومبت</button></div>
+<h2>السكريبت كامل (للتسجيل)</h2>
+<div class="card"><div style="white-space:pre-wrap;line-height:2" id="scr">تحط المنبه للفجر… وتقوم مع الشمس؟
+وتقول: إيماني ضعيف.
+لا. فما 3 أخطاء تعملهم في الليل…
+…يخسّروك الفجر قبل ما ترقد أصلا.
+الخطأ الأول: التليفون معاك في الفرش.
+تقول دقيقة… تولّي ساعة.
+ضوء التليفون يقول لمخك: مازال النهار.
+الحل: التليفون يبات بعيد عليك، وساعة قبل الرقاد ما تحلّوش.
+الخطأ الثاني: المنبه حذاك.
+تطفيه وانت راقد… وترجع ترقد.
+الحل: حطّو في آخر البيت، باش تقوم على ساقيك باش تطفيه.
+وتوضّى طول بالماء البارد.
+الخطأ الثالث: ترقد على الواحدة بالليل…
+…وتاكل ماكلة ثقيلة قبل الرقاد.
+الحل: ترقد بكري بعد العشاء، على وضوء، على جنبك اليمين، كيما علّمنا النبي صلى الله عليه وسلم.
+وتقرا أذكار النوم.
+«ركعتا الفجر خير من الدنيا وما فيها» (رواه مسلم).
+الفجر هو أول معركة تربحها في نهارك.
+تحدي «حرب النفس» يبدا 1 نوفمبر، ببلاش. الرابط في البايو.
+وانت، أما خطأ فيهم تعمل فيه؟ اكتبلي في الكومنت.</div><button onclick="cp('scr',this)">انسخ السكريبت</button></div>
+<p style="color:#888;font-size:13px">الأيقونات (دواير حمرا، ✓ ✗، أسهم) والنص نزيدهم أنا في المونتاج، موش في الصور.</p>
+<script>function cp(id,b){const t=document.getElementById(id).innerText;const done=()=>{b.textContent='تنسخ ✓';b.classList.add('ok')};
+if(navigator.clipboard)navigator.clipboard.writeText(t).then(done,()=>fb(t,done));else fb(t,done)}
+function fb(t,d){const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');d()}catch(e){}a.remove()}</script>
+</body></html>
