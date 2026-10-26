@@ -1,0 +1,99 @@
+Sound effects found on Openverse (api.openverse.org), all allowed for commercial use.
+CC0 = free, no credit needed. CC BY = put the credit line in the video caption.
+File names = the names to save them as in sfx/.
+
+whoosh-1.mp3
+  Title: Swipe Whoosh
+  Author: qubodup
+  License: CC0 1.0 (public domain, no credit required) https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://freesound.org/people/qubodup/sounds/60007
+  Audio: https://cdn.freesound.org/previews/60/60007_71257-hq.mp3
+  Duration: 0.45s
+
+whoosh-2.mp3
+  Title: Swosh swoosh whoosh air sound, free, high quality
+  Author: qubodup
+  License: CC0 1.0 (public domain, no credit required) https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://freesound.org/people/qubodup/sounds/60026
+  Audio: https://cdn.freesound.org/previews/60/60026_71257-hq.mp3
+  Duration: 0.49s
+
+whoosh-3.mp3
+  Title: Whoosh #1
+  Author: Kinoton
+  License: CC0 1.0 (public domain, no credit required) https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://freesound.org/people/Kinoton/sounds/427823
+  Audio: https://cdn.freesound.org/previews/427/427823_2247456-hq.mp3
+  Duration: 0.80s
+
+soft-pop-1.mp3
+  Title: Mouth pop
+  Author: jcallison
+  License: CC0 1.0 (public domain, no credit required) https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://freesound.org/people/jcallison/sounds/258269
+  Audio: https://cdn.freesound.org/previews/258/258269_4824549-hq.mp3
+  Duration: 0.32s
+
+soft-pop-2.mp3
+  Title: Pop, Low, A (H1).wav
+  Author: InspectorJ
+  License: CC BY 4.0 (credit required) https://creativecommons.org/licenses/by/4.0/
+  Source: https://freesound.org/people/InspectorJ/sounds/411639
+  Audio: https://cdn.freesound.org/previews/411/411639_5121236-hq.mp3
+  Duration: 0.55s
+
+soft-pop-3.mp3
+  Title: Bubble Pop
+  Author: Mafon2
+  License: CC0 1.0 (public domain, no credit required) https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://freesound.org/people/Mafon2/sounds/253956
+  Audio: https://cdn.freesound.org/previews/253/253956_1196472-hq.mp3
+  Duration: 0.22s
+
+chime-1.mp3
+  Title: Chime Notification
+  Author: Jofae
+  License: CC0 1.0 (public domain, no credit required) https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://freesound.org/people/Jofae/sounds/380482
+  Audio: https://cdn.freesound.org/previews/380/380482_6512973-hq.mp3
+  Duration: 0.32s
+
+chime-2.mp3
+  Title: Complete Chime
+  Author: FoolBoyMedia
+  License: CC BY 4.0 (credit required) https://creativecommons.org/licenses/by/4.0/
+  Source: https://freesound.org/people/FoolBoyMedia/sounds/352661
+  Audio: https://cdn.freesound.org/previews/352/352661_4019029-hq.mp3
+  Duration: 1.28s
+
+chime-3.mp3
+  Title: Chime Glissando
+  Author: bone666138
+  License: CC BY 4.0 (credit required) https://creativecommons.org/licenses/by/4.0/
+  Source: https://freesound.org/people/bone666138/sounds/198850
+  Audio: https://cdn.freesound.org/previews/198/198850_285997-hq.mp3
+  Duration: 2.35s
+
+click-1.mp3
+  Title: SFX UI Button Click
+  Author: suntemple
+  License: CC0 1.0 (public domain, no credit required) https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://freesound.org/people/suntemple/sounds/253168
+  Audio: https://cdn.freesound.org/previews/253/253168_4404552-hq.mp3
+  Duration: 0.16s
+
+click-2.mp3
+  Title: UI Button Click
+  Author: benzix2
+  License: CC0 1.0 (public domain, no credit required) https://creativecommons.org/publicdomain/zero/1.0/
+  Source: https://freesound.org/people/benzix2/sounds/467951
+  Audio: https://cdn.freesound.org/previews/467/467951_6769414-hq.mp3
+  Duration: 0.12s
+
+click-3.mp3
+  Title: Click
+  Author: complex_waveform
+  License: CC BY 4.0 (credit required) https://creativecommons.org/licenses/by/4.0/
+  Source: https://freesound.org/people/complex_waveform/sounds/213148
+  Audio: https://cdn.freesound.org/previews/213/213148_2292431-hq.mp3
+  Duration: 0.21s
