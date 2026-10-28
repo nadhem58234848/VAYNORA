@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>صانع QR · كارت الطاولة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Cairo,sans-serif;background:#0D0D0D;color:#F4F1EC;padding:20px 16px 40px}
+.w{max-width:520px;margin:0 auto}
+h1{font-weight:800;font-size:24px;margin-bottom:4px}
+p{color:#A9A39A;font-size:14px;margin-bottom:14px}
+label{display:block;font-weight:800;font-size:14px;margin:12px 0 4px}
+input{width:100%;font:inherit;font-size:15px;padding:10px 12px;border-radius:10px;border:1.5px solid #333;background:#181818;color:#F4F1EC}
+.row{display:flex;gap:10px}.row>div{flex:1}
+input[type=color]{height:44px;padding:4px}
+button{width:100%;margin-top:16px;font:inherit;font-weight:800;font-size:16px;padding:12px;border:none;border-radius:12px;background:#C81E1E;color:#fff}
+button.s{background:#232323}
+#card{margin:22px auto 0;width:340px;background:#fff;color:#1b1b1b;border-radius:20px;padding:26px 24px;text-align:center}
+#card b{display:block;font-weight:800;font-size:24px}
+#card small{display:block;font-size:14px;color:#666;margin-bottom:14px}
+#q{display:flex;justify-content:center;margin:0 auto}
+#q img,#q canvas{width:230px;height:230px}
+#card .cta{margin-top:14px;font-weight:800;font-size:18px;padding:8px;border-radius:10px;color:#fff}
+</style>
+</head>
+<body><div class="w">
+<h1>صانع QR · كارت الطاولة</h1>
+<p>حط رابط المنيو (ولا رابط التقييم على Google)، واكتب العنوان، وصوّر الكارت ولا نزّلو.</p>
+<label>الرابط</label><input id="u" placeholder="https://..." value="https://nadhem58234848.github.io/VAYNORA/menu/">
+<div class="row"><div><label>اسم المطعم</label><input id="n" value="مطعم الزيتونة"></div><div><label>اللون</label><input id="c" type="color" value="#2E5E3A"></div></div>
+<label>الكلمة تحت الـQR</label><input id="t" value="سكاني وشوف المنيو 📱">
+<button id="g">اصنع الكارت</button>
+<div id="card"><b id="cn"></b><small>المنيو والطلبية على واتساب</small><div id="q"></div><div class="cta" id="ct"></div></div>
+<button class="s" id="d">نزّل الـQR (صورة)</button>
+<p style="margin-top:12px">باش تطبع الكارت كامل: خوذلو screenshot، ولا اطبع الصفحة.</p>
+</div>
+<script>
+const $=s=>document.querySelector(s);let qr;
+function make(){
+  $('#q').innerHTML='';const col=$('#c').value;
+  qr=new QRCode($('#q'),{text:$('#u').value.trim()||' ',width:460,height:460,colorDark:'#111111',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
+  $('#cn').textContent=$('#n').value;$('#ct').textContent=$('#t').value;$('#ct').style.background=col;$('#cn').style.color=col;
+}
+$('#g').onclick=make;
+$('#d').onclick=()=>{const cv=$('#q canvas');if(!cv)return;const a=document.createElement('a');a.download='qr.png';a.href=cv.toDataURL('image/png');a.click()};
+make();
+</script>
+</body></html>
