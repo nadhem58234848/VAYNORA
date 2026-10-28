@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>الكتالوغ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&display=swap" rel="stylesheet">
+<script>
+/* القيم هاذي تتبدل وحدها من الجدول (سطور "إعدادات"). ما يلزمكش تبدل الكود. */
+const CFG={name:"المحل",tagline:"",phone:"",sheet:"",hours:"",address:"",maps:"",review:"",color:"#0D0D0D",accent:"#C81E1E",currency:"د"};
+const P=new URLSearchParams(location.search);
+if(P.get('s'))CFG.sheet='https://docs.google.com/spreadsheets/d/e/'+P.get('s')+'/pub?output=csv';
+else if(P.get('csv'))CFG.sheet=P.get('csv');
+</script>
+<style>
+:root{--c:#0D0D0D;--a:#C81E1E;--bg:#F6F4F0;--t:#161616;--m:#6f6a62;--ln:#e6e1d8}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:Cairo,system-ui,sans-serif;background:var(--bg);color:var(--t);padding-bottom:110px}
+header{background:var(--c);color:#fff;padding:30px 18px 20px;text-align:center}
+header h1{font-weight:800;font-size:28px;letter-spacing:.5px}
+header p{opacity:.8;font-size:14px}
+.info{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px}
+.info a,.info span{background:rgba(255,255,255,.12);color:#fff;text-decoration:none;font-size:12.5px;padding:5px 12px;border-radius:999px}
+nav{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--ln);display:flex;gap:8px;overflow-x:auto;padding:10px 14px;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:none;border:1.5px solid var(--c);background:transparent;color:var(--c);font:inherit;font-weight:700;font-size:14px;padding:5px 16px;border-radius:999px}
+nav button.on{background:var(--c);color:#fff}
+main{max-width:720px;margin:0 auto;padding:4px 12px}
+h2{font-weight:800;font-size:19px;margin:20px 4px 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pc{background:#fff;border:1px solid var(--ln);border-radius:16px;overflow:hidden;cursor:pointer;position:relative}
+.pc .im{aspect-ratio:1/1;background:#ece8e1;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.pc .im img{width:100%;height:100%;object-fit:cover}
+.pc .im svg{width:70%;height:70%}
+.pc .tx{padding:8px 10px 12px}
+.pc b{display:block;font-weight:700;font-size:14.5px;line-height:1.35}
+.pr{font-weight:800;font-size:15px;margin-top:2px}
+.pr s{color:var(--m);font-weight:600;font-size:12.5px;margin-inline-start:6px}
+.promo{position:absolute;top:8px;right:8px;background:var(--a);color:#fff;font-weight:800;font-size:12px;padding:2px 9px;border-radius:8px}
+.pc.off{opacity:.5}.pc.off .promo{display:none}
+.pc.off:after{content:"نفد";position:absolute;top:8px;left:8px;background:#555;color:#fff;font-weight:800;font-size:12px;padding:2px 9px;border-radius:8px}
+.bar{position:fixed;left:12px;right:12px;bottom:max(12px,env(safe-area-inset-bottom));max-width:696px;margin:0 auto;background:var(--a);color:#fff;border-radius:18px;padding:14px 18px;display:none;align-items:center;justify-content:space-between;box-shadow:0 10px 30px rgba(0,0,0,.25);border:none;font:inherit}
+.bar.show{display:flex}.bar b{font-weight:800;font-size:17px}
+.bar .tot{background:#fff;color:#161616;font-weight:800;padding:4px 12px;border-radius:10px}
+.sheet{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;z-index:10}
+.sheet.show{display:flex}
+.pane{background:#fff;width:100%;max-width:720px;margin:0 auto;border-radius:22px 22px 0 0;padding:18px 18px max(20px,env(safe-area-inset-bottom));max-height:90vh;overflow:auto}
+.pane h3{font-weight:800;font-size:20px;margin-bottom:6px}
+.big{aspect-ratio:1/1;max-height:42vh;margin:0 auto 12px;border-radius:14px;background:#ece8e1;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.big img{width:100%;height:100%;object-fit:contain}.big svg{width:65%;height:65%}
+.ds{color:var(--m);font-size:14px;line-height:1.6;margin-bottom:8px}
+.lb{font-weight:800;font-size:14px;margin:12px 0 6px}
+.sz{display:flex;gap:8px;flex-wrap:wrap}
+.sz button{min-width:48px;border:1.5px solid var(--ln);background:#fff;font:inherit;font-weight:800;font-size:15px;padding:8px 12px;border-radius:12px}
+.sz button.on{border-color:var(--c);background:var(--c);color:#fff}
+.q{display:flex;align-items:center;gap:14px}
+.q button{width:38px;height:38px;border-radius:50%;border:none;background:var(--ln);font:inherit;font-size:20px;font-weight:800}
+.q span{font-weight:800;font-size:18px;min-width:18px;text-align:center}
+.add{display:block;width:100%;margin-top:16px;border:none;border-radius:14px;background:var(--c);color:#fff;font:inherit;font-weight:800;font-size:17px;padding:14px}
+.add:disabled{opacity:.4}
+.ln{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 0;border-bottom:1px dashed var(--ln);font-size:14.5px}
+.ln .rm{border:none;background:none;color:var(--a);font:inherit;font-weight:800;font-size:13px}
+.ln.t{font-weight:800;border:none;font-size:17px}
+.seg{display:flex;gap:8px;margin:12px 0 8px}
+.seg label{flex:1;text-align:center;border:1.5px solid var(--ln);border-radius:12px;padding:10px;font-weight:700;font-size:14px}
+.seg input{display:none}
+.seg label:has(input:checked){border-color:var(--c);color:var(--c)}
+input[type=text],textarea{width:100%;font:inherit;font-size:15px;border:1.5px solid var(--ln);border-radius:12px;padding:10px 12px;margin-top:6px}
+.go{display:block;width:100%;margin-top:14px;border:none;border-radius:14px;background:#25D366;color:#fff;font:inherit;font-weight:800;font-size:17px;padding:14px}
+.x{background:none;border:none;font:inherit;color:var(--m);width:100%;margin-top:6px;padding:8px}
+footer{text-align:center;color:var(--m);font-size:12px;margin:30px 0 10px}
+.msg{text-align:center;color:var(--m);padding:40px 10px}
+</style>
+</head>
+<body>
+<header><h1 id="nm"></h1><p id="tg"></p><div class="info" id="info"></div></header>
+<nav id="nav"></nav>
+<main id="cat"><p class="msg">جاري تحميل الكتالوغ…</p></main>
+<footer>صُنع بواسطة ناظم · محتوى وتصميم</footer>
+<button class="bar" id="bar"><b>السلة (<span id="cnt">0</span>)</b><span class="tot" id="tot"></span></button>
+
+<div class="sheet" id="ps"><div class="pane">
+  <div class="big" id="pbig"></div>
+  <h3 id="pnm"></h3><div class="pr" id="ppr"></div><p class="ds" id="pds"></p>
+  <div id="pszw"><div class="lb">المقاس</div><div class="sz" id="psz"></div></div>
+  <div class="lb">العدد</div><div class="q"><button id="qm">−</button><span id="qn">1</span><button id="qp">+</button></div>
+  <button class="add" id="padd">زيد للسلة</button>
+  <button class="x" data-close="ps">رجوع</button>
+</div></div>
+
+<div class="sheet" id="cs"><div class="pane">
+  <h3>السلة</h3><div id="lines"></div>
+  <div class="seg">
+    <label><input type="radio" name="tp" value="توصيل" checked><span>🚚 توصيل</span></label>
+    <label><input type="radio" name="tp" value="نجي للمحل"><span>🏬 نجي للمحل</span></label>
+  </div>
+  <input type="text" id="who" placeholder="الاسم">
+  <textarea id="note" rows="2" placeholder="الولاية والعنوان / ملاحظة"></textarea>
+  <button class="go" id="go">ابعث الطلبية على واتساب</button>
+  <button class="x" data-close="cs">نكمّل نختار</button>
+</div></div>
+
+<script>
+const $=s=>document.querySelector(s);
+let items=[],cart=[],cur=null,selSz='',qn=1;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fmt=n=>(Math.round(n*1000)/1000).toString().replace('.',',')+' '+CFG.currency;
+const SH={tee:'M30 18l20-8h20l20 8 18 22-16 12-8-8v76H36V44l-8 8-16-12z',hoodie:'M38 22l14-10h16l14 10 22 26-14 12-8-8v74H38V52l-8 8-14-12zM50 12c0 16 20 16 20 0',pants:'M36 10h48l6 110H66l-6-70-6 70H30z'};
+function pic(src,cls){
+  if(!src)return `<svg viewBox="0 0 120 130"><path d="${SH.tee}" fill="#cfc8bc"/></svg>`;
+  const m=src.match(/^#(\w+):(#?[0-9a-fA-F]{3,6})$/);
+  if(m)return `<svg viewBox="0 0 120 130"><path d="${SH[m[1]]||SH.tee}" fill="${m[2]}" stroke="#00000022" stroke-width="1.5"/></svg>`;
+  const d=src.match(/drive\.google\.com\/(?:file\/d\/|open\?id=)([\w-]+)/);if(d)src='https://lh3.googleusercontent.com/d/'+d[1];
+  return `<img src="${esc(src)}" alt="" loading="lazy">`;
+}
+function parseCSV(t){const rows=[];let r=[],f='',q=false;
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){if(c=='"'){if(t[i+1]=='"'){f+='"';i++}else q=false}else f+=c}
+    else if(c=='"')q=true;else if(c==','){r.push(f);f=''}
+    else if(c=='\n'||c=='\r'){if(c=='\r'&&t[i+1]=='\n')i++;r.push(f);rows.push(r);r=[];f=''}else f+=c}
+  if(f||r.length){r.push(f);rows.push(r)}return rows.filter(x=>x.some(v=>v.trim()))}
+function setup(){
+  document.documentElement.style.setProperty('--c',CFG.color);document.documentElement.style.setProperty('--a',CFG.accent);
+  document.title=CFG.name+' · الكتالوغ';$('#nm').textContent=CFG.name;$('#tg').textContent=CFG.tagline;
+  const i=[];if(CFG.hours)i.push(`<span>🕘 ${esc(CFG.hours)}</span>`);
+  if(CFG.maps)i.push(`<a href="${esc(CFG.maps)}" target="_blank" rel="noopener">📍 ${esc(CFG.address||'الطريق')}</a>`);
+  if(CFG.phone)i.push(`<a href="tel:+${CFG.phone}">📞 اتصل</a>`);
+  if(CFG.review)i.push(`<a href="${esc(CFG.review)}" target="_blank" rel="noopener">⭐ قيّمنا</a>`);
+  $('#info').innerHTML=i.join('');
+}
+async function load(){
+  const src=(CFG.sheet||'demo.csv')+((CFG.sheet||'').includes('?')?'&':'?')+'t='+Date.now();
+  try{const r=await fetch(src);if(!r.ok)throw 0;
+    const all=parseCSV(await r.text()).slice(1);
+    const K={'الاسم':'name','الوصف':'tagline','واتساب':'phone','الأوقات':'hours','العنوان':'address','الخريطة':'maps','التقييم':'review','اللون':'color','اللون2':'accent','العملة':'currency'};
+    all.filter(x=>(x[0]||'').trim()=='إعدادات').forEach(x=>{const k=K[(x[1]||'').trim()],v=(x[2]||'').trim();if(k&&v)CFG[k]=k=='phone'?v.replace(/\D/g,''):v});
+    if(CFG.phone.length==8)CFG.phone='216'+CFG.phone;
+    setup();
+    items=all.filter(x=>(x[0]||'').trim()!='إعدادات').map(x=>({cat:(x[0]||'').trim()||'الكل',name:(x[1]||'').trim(),desc:(x[2]||'').trim(),
+      price:parseFloat(String(x[3]||'0').replace(',','.'))||0,on:!/^(لا|no|0|non)$/i.test((x[4]||'').trim()),img:(x[5]||'').trim(),
+      sizes:(x[6]||'').split(/[\s\/,\-–]+/).map(s=>s.trim()).filter(Boolean),old:parseFloat(String(x[7]||'').replace(',','.'))||0}))
+      .filter(x=>x.name).map((x,i)=>(x.id=i,x));
+    render();
+  }catch(e){setup();$('#cat').innerHTML='<p class="msg">ما نجمناش نحلّو الكتالوغ. عاود جرّب بعد شوية.</p>'}
+}
+function render(){
+  const cats=[...new Set(items.map(x=>x.cat))];
+  $('#nav').innerHTML=cats.map((c,i)=>`<button data-i="${i}" class="${i?'':'on'}">${esc(c)}</button>`).join('');
+  $('#cat').innerHTML=cats.map((c,i)=>`<h2 id="c${i}">${esc(c)}</h2><div class="grid">`+items.filter(x=>x.cat==c).map(x=>`
+    <div class="pc ${x.on?'':'off'}" data-id="${x.id}"><div class="im">${pic(x.img)}</div>${x.old>x.price?`<span class="promo">-${Math.round(100-x.price*100/x.old)}%</span>`:''}
+    <div class="tx"><b>${esc(x.name)}</b><div class="pr">${fmt(x.price)}${x.old>x.price?`<s>${fmt(x.old)}</s>`:''}</div></div></div>`).join('')+'</div>').join('');
+  $('#nav').onclick=e=>{const b=e.target.closest('button');if(!b)return;document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('on',x==b));
+    window.scrollTo({top:$('#c'+b.dataset.i).offsetTop-60,behavior:'smooth'})};
+  $('#cat').onclick=e=>{const c=e.target.closest('.pc');if(c)openP(items[c.dataset.id])};
+}
+function openP(x){cur=x;selSz=x.sizes.length==1?x.sizes[0]:'';qn=1;
+  $('#pbig').innerHTML=pic(x.img);$('#pnm').textContent=x.name;$('#ppr').innerHTML=fmt(x.price)+(x.old>x.price?`<s>${fmt(x.old)}</s>`:'');
+  $('#pds').textContent=x.desc;$('#pszw').style.display=x.sizes.length?'':'none';
+  $('#psz').innerHTML=x.sizes.map(s=>`<button class="${s==selSz?'on':''}">${esc(s)}</button>`).join('');$('#qn').textContent=qn;updAdd();
+  $('#ps').classList.add('show')}
+function updAdd(){const b=$('#padd');if(!cur.on){b.disabled=true;b.textContent='نفد من المخزون'}
+  else if(cur.sizes.length&&!selSz){b.disabled=true;b.textContent='اختار المقاس'}
+  else if(!CFG.phone){b.disabled=true;b.textContent='الطلب غير متاح'}else{b.disabled=false;b.textContent='زيد للسلة · '+fmt(cur.price*qn)}}
+$('#psz').onclick=e=>{const b=e.target.closest('button');if(!b)return;selSz=b.textContent;[...$('#psz').children].forEach(x=>x.classList.toggle('on',x==b));updAdd()};
+$('#qm').onclick=()=>{qn=Math.max(1,qn-1);$('#qn').textContent=qn;updAdd()};
+$('#qp').onclick=()=>{qn++;$('#qn').textContent=qn;updAdd()};
+$('#padd').onclick=()=>{const f=cart.find(c=>c.id==cur.id&&c.sz==selSz);if(f)f.n+=qn;else cart.push({id:cur.id,sz:selSz,n:qn});
+  $('#ps').classList.remove('show');upd()};
+function tot(){return cart.reduce((a,c)=>a+c.n*items[c.id].price,0)}
+function upd(){const n=cart.reduce((a,c)=>a+c.n,0);$('#cnt').textContent=n;$('#tot').textContent=fmt(tot());$('#bar').classList.toggle('show',n>0)}
+function drawCart(){$('#lines').innerHTML=cart.map((c,i)=>`<div class="ln"><span>${c.n} × ${esc(items[c.id].name)}${c.sz?` · <b>${esc(c.sz)}</b>`:''}</span><span>${fmt(c.n*items[c.id].price)} <button class="rm" data-i="${i}">نحّي</button></span></div>`).join('')+
+  `<div class="ln t"><span>المجموع</span><span>${fmt(tot())}</span></div>`}
+$('#bar').onclick=()=>{drawCart();$('#cs').classList.add('show')};
+$('#lines').onclick=e=>{const b=e.target.closest('.rm');if(!b)return;cart.splice(+b.dataset.i,1);upd();if(!cart.length)$('#cs').classList.remove('show');else drawCart()};
+document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$('#'+b.dataset.close).classList.remove('show'));
+document.querySelectorAll('.sheet').forEach(s=>s.onclick=e=>{if(e.target==s)s.classList.remove('show')});
+$('#go').onclick=()=>{const tp=document.querySelector('input[name=tp]:checked').value;
+  const msg=`السلام عليكم، طلبية من الكتالوغ:\n`+cart.map(c=>`• ${c.n} × ${items[c.id].name}${c.sz?` (مقاس ${c.sz})`:''} = ${fmt(c.n*items[c.id].price)}`).join('\n')+
+  `\nالمجموع: ${fmt(tot())}\nالنوع: ${tp}`+($('#who').value.trim()?`\nالاسم: ${$('#who').value.trim()}`:'')+($('#note').value.trim()?`\nالعنوان/ملاحظة: ${$('#note').value.trim()}`:'');
+  window.open('https://wa.me/'+CFG.phone+'?text='+encodeURIComponent(msg),'_blank')};
+load();
+</script>
+</body>
+</html>
