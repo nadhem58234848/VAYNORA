@@ -1,0 +1,17 @@
+<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>الرجولة</title>
+<body style="margin:0;background:#3a4128;color:#F4F1EC;font-family:sans-serif;text-align:center;padding:16px">
+<h2>صورة بلا خلفية</h2>
+<img src="rujula-1080x1920.png" style="width:60%;max-width:300px;border:1px dashed #fff8">
+<button data-f="rujula-1080x1920.png" style="display:block;width:100%;max-width:420px;margin:14px auto;padding:18px;font-size:22px;font-weight:bold;background:#C81E1E;color:#fff;border:0;border-radius:14px">⬇ تحميل (مقاس الريل 1080×1920)</button>
+<button data-f="rujula-text-only.png" style="display:block;width:100%;max-width:420px;margin:14px auto;padding:18px;font-size:22px;font-weight:bold;background:#0D0D0D;color:#fff;border:0;border-radius:14px">⬇ تحميل (الكتيبة برك)</button>
+<p id="st"></p>
+<script>
+const st=document.getElementById('st');
+document.querySelectorAll('button').forEach(b=>b.onclick=async()=>{
+ const n=b.dataset.f; st.textContent='استنى…';
+ try{const bl=await (await fetch(n)).blob(); const f=new File([bl],n,{type:'image/png'});
+  if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});st.textContent='✅';return;}
+  const u=URL.createObjectURL(bl),a=document.createElement('a');a.href=u;a.download=n;a.click();st.textContent='✅';
+ }catch(e){st.textContent=e.name==='AbortError'?'':'عاود اضغط';}
+});
+</script></body></html>
