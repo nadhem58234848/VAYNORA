@@ -14,4 +14,26 @@ document.getElementById('dl').onclick=async()=>{
     const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=NAME;document.body.appendChild(a);a.click();a.remove();st.textContent='✅ تلقاه في Téléchargements';
   }catch(e){ if(e.name!=='AbortError'){st.textContent='عاود اضغط';} else st.textContent=''; }
 };
+</script><h3 style="margin-top:28px">الكوفر</h3><img src="cover.png" style="width:80%;max-width:360px;border-radius:12px">
+<button data-img="cover.png" style="display:block;width:100%;max-width:420px;margin:12px auto;padding:16px;font-size:20px;font-weight:bold;background:#C81E1E;color:#fff;border:0;border-radius:14px">⬇ تحميل الكوفر</button>
+<h3>الكابشن</h3><pre id="cap" style="white-space:pre-wrap;text-align:right;background:#1a1a1a;padding:14px;border-radius:12px;max-width:420px;margin:auto;font-family:inherit;font-size:16px">اليوم الأول من تحدّي «حرب النفس» ⚔️
+
+استيقظتُ قبل الفجر، وتجهّزتُ للصلاة، وبعد الفجر حفظتُ نصف صفحة من القرآن، وفي الليل تدرّبت.
+
+لستُ كاملًا… لكنّ اليوم كان لي، لا لنفسي.
+
+الرجولة ليست أن تقدر على الحرام فتفعله،
+الرجولة أن تقدر عليه… ثم تتركه لوجه الله.
+
+بقي 20 يومًا.
+إن كنتَ معنا، اكتب «حرب» في التعليقات، وابدأ معي من الليلة.
+
+#حرب_النفس #تحدي_21_يوم #الانضباط #صلاة_الفجر #اصنع_من_الألم_قوة
+</pre>
+<button id="cp" style="display:block;width:100%;max-width:420px;margin:12px auto;padding:16px;font-size:20px;font-weight:bold;background:#F4F1EC;color:#0D0D0D;border:0;border-radius:14px">📋 انسخ الكابشن</button>
+<script>
+document.getElementById('cp').onclick=async()=>{await navigator.clipboard.writeText(document.getElementById('cap').innerText);document.getElementById('cp').textContent='✅ تنسخ';};
+document.querySelector('[data-img]').onclick=async()=>{const bl=await (await fetch('cover.png')).blob();const f=new File([bl],'cover-nahar1.png',{type:'image/png'});
+if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]})}catch(e){}return;}
+const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='cover-nahar1.png';a.click();};
 </script></body></html>
