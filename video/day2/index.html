@@ -1,0 +1,39 @@
+<!doctype html><html lang="ar" dir="rtl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>النهار 2</title>
+<body style="margin:0;background:#0D0D0D;color:#F4F1EC;font-family:sans-serif;text-align:center;padding:16px">
+<h2 style="color:#C81E1E">ريل النهار 2 · نسخة 1</h2>
+<button id="dl" style="width:100%;max-width:420px;padding:20px;font-size:24px;font-weight:bold;background:#C81E1E;color:#fff;border:0;border-radius:14px;margin:8px 0 16px">⬇ تحميل الفيديو</button>
+<p id="st" style="min-height:24px"></p>
+<video src="day2-v1.mp4" controls playsinline style="width:100%;max-width:420px;border-radius:12px"></video>
+<script>
+const SRC='day2-v1.mp4',NAME='nahar2-v1.mp4',st=document.getElementById('st');
+document.getElementById('dl').onclick=async()=>{
+  st.textContent='قاعد يتحمّل… استنى';
+  try{
+    const b=await (await fetch(SRC)).blob(); const f=new File([b],NAME,{type:'video/mp4'});
+    if(navigator.canShare&&navigator.canShare({files:[f]})){st.textContent='اختار «Enregistrer la vidéo»';await navigator.share({files:[f]});st.textContent='✅';return;}
+    const u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=NAME;document.body.appendChild(a);a.click();a.remove();st.textContent='✅ تلقاه في Téléchargements';
+  }catch(e){ if(e.name!=='AbortError'){st.textContent='عاود اضغط';} else st.textContent=''; }
+};
+</script><h3 style="margin-top:28px">الكوفر</h3><img src="cover.png" style="width:80%;max-width:360px;border-radius:12px">
+<button data-img="cover.png" style="display:block;width:100%;max-width:420px;margin:12px auto;padding:16px;font-size:20px;font-weight:bold;background:#C81E1E;color:#fff;border:0;border-radius:14px">⬇ تحميل الكوفر</button>
+<h3>الكابشن</h3><pre id="cap" style="white-space:pre-wrap;text-align:right;background:#1a1a1a;padding:14px;border-radius:12px;max-width:420px;margin:auto;font-family:inherit;font-size:16px">اليوم الثاني من تحدّي «حرب النفس» ⚔️
+
+اغتسلتُ وتجهّزتُ، وخرجتُ في الظلام إلى المسجد، ثم ذهبتُ إلى أول يوم في عملي الجديد.
+
+العمل لا يُلغي الحرب… بل يجعلها أصعب.
+
+الانضباط هو أن تبدأ يومك مع الله،
+قبل أن يأخذك العمل.
+
+بقي 19 يومًا.
+إن كنتَ معنا، اكتب «حرب» في التعليقات، وابدأ معي من الليلة.
+
+#حرب_النفس #تحدي_21_يوم #الانضباط #صلاة_الفجر #اصنع_من_الألم_قوة
+</pre>
+<button id="cp" style="display:block;width:100%;max-width:420px;margin:12px auto;padding:16px;font-size:20px;font-weight:bold;background:#F4F1EC;color:#0D0D0D;border:0;border-radius:14px">📋 انسخ الكابشن</button>
+<script>
+document.getElementById('cp').onclick=async()=>{await navigator.clipboard.writeText(document.getElementById('cap').innerText);document.getElementById('cp').textContent='✅ تنسخ';};
+document.querySelector('[data-img]').onclick=async()=>{const bl=await (await fetch('cover.png')).blob();const f=new File([bl],'cover-nahar2.png',{type:'image/png'});
+if(navigator.canShare&&navigator.canShare({files:[f]})){try{await navigator.share({files:[f]})}catch(e){}return;}
+const a=document.createElement('a');a.href=URL.createObjectURL(bl);a.download='cover-nahar2.png';a.click();};
+</script></body></html>
