@@ -15,8 +15,11 @@ cd "$CLAUDE_PROJECT_DIR/video"
 ONNXRUNTIME_NODE_INSTALL_CUDA=skip ONNXRUNTIME_NODE_INSTALL=skip \
   npm install --no-audit --no-fund --loglevel=error
 
-# numpy is needed by scripts/make-sfx.py.
+# numpy: scripts/make-sfx.py. OpenCV 4 (bundles the Haar face detector,
+# which OpenCV 5 dropped): face-aware caption slots in prepare-talking.py.
 python3 -c "import numpy" 2>/dev/null || pip install --quiet numpy
+python3 -c "import cv2, os; assert os.path.exists(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')" 2>/dev/null \
+  || pip install --quiet "opencv-python-headless<5"
 
 # Whisper small (ONNX q8) for scripts/transcribe.mjs. huggingface.co is not
 # reachable from the cloud environment, so the model comes from the npm

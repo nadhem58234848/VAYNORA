@@ -17,7 +17,13 @@ import { BG, FONT, GRAY, HEADLINE, RED, WHITE } from "./theme";
 
 type Word = { text: string; start: number; end: number; key: boolean };
 type Cue = { start: number; end: number; words: Word[] };
-type TalkingData = { video: string; duration: number; cues: Cue[] };
+type Slot = { x: number; y: number };
+type TalkingData = {
+  video: string;
+  duration: number;
+  cues: Cue[];
+  slots?: Slot[]; // face-aware positions from prepare-talking.py
+};
 
 export type TalkingReelProps = {
   name: string; // public/talking/<name>.json
@@ -49,13 +55,10 @@ export const calculateTalkingMetadata: CalculateMetadataFunction<
   };
 };
 
-const CaptionWord: React.FC<{ word: Word; slot: number }> = ({
-  word,
-  slot,
-}) => {
+const CaptionWord: React.FC<{ word: Word; slot: Slot }> = ({ word, slot }) => {
   const frame = useCurrentFrame();
   const { width, height } = useVideoConfig();
-  const { x, y } = SLOTS[slot];
+  const { x, y } = slot;
   const base = width * (word.key ? 0.12 : 0.1);
   // Long words shrink so they never leave their half of the screen.
   const fontSize = Math.min(base, (width * 0.44) / (word.text.length * 0.55));
@@ -137,6 +140,7 @@ const EndCard: React.FC<{ handle: string }> = ({ handle }) => {
 export const TalkingReel: React.FC<TalkingReelProps> = ({ handle, data }) => {
   const { width, height } = useVideoConfig();
   if (!data) return null;
+  const slots = data.slots?.length ? data.slots : SLOTS;
   const end = Math.ceil(data.duration * FPS);
   const f = (seconds: number) => Math.round(seconds * FPS);
 
@@ -150,8 +154,12 @@ export const TalkingReel: React.FC<TalkingReelProps> = ({ handle, data }) => {
         <Sequence key={`cue-${c}`} from={f(cue.start)} layout="none">
           {cue.words.map((word, w) => {
             const next = cue.words[w + 1];
-            // A word stays until the next word, or briefly past the cue end.
-            const until = next ? next.start : cue.end + 0.15;
+            // A word stays until the next word, or briefly past the cue
+            // end — but never into the next phrase (no two words at once).
+            const nextCue = data.cues[c + 1];
+            const until = next
+              ? next.start
+              : Math.min(cue.end + 0.15, nextCue ? nextCue.start : Infinity);
             return (
               <Sequence
                 key={w}
@@ -159,7 +167,7 @@ export const TalkingReel: React.FC<TalkingReelProps> = ({ handle, data }) => {
                 durationInFrames={Math.max(1, f(until - word.start))}
                 layout="none"
               >
-                <CaptionWord word={word} slot={c % SLOTS.length} />
+                <CaptionWord word={word} slot={slots[c % slots.length]} />
                 {word.key ? <SoundEffect type="hit" at={0} /> : null}
               </Sequence>
             );
