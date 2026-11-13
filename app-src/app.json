@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "VAYNORA",
+    "slug": "vaynora",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.vaynora.harb"
+    },
+    "android": {
+      "package": "com.vaynora.harb",
+      "adaptiveIcon": {
+        "backgroundColor": "#0D0D0D",
+        "foregroundImage": "./assets/icon.png"
+      },
+      "permissions": [
+        "POST_NOTIFICATIONS",
+        "SCHEDULE_EXACT_ALARM"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/icon.png",
+      "name": "VAYNORA",
+      "backgroundColor": "#0D0D0D",
+      "themeColor": "#0D0D0D"
+    },
+    "plugins": [
+      "expo-font",
+      "expo-notifications"
+    ],
+    "backgroundColor": "#0D0D0D",
+    "splash": {
+      "image": "./assets/icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0D0D0D"
+    },
+    "experiments": {
+      "baseUrl": "/VAYNORA/app"
+    }
+  }
+}
