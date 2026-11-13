@@ -8,7 +8,10 @@ import * as Clipboard from 'expo-clipboard';
 import { C, MSG, MSG_AFTER, TASK, PRAYERS, WEEKS, TEN, FIRST, ZUMAR, CITIES, SHOP, IG_DM, WIN_DAYS } from './src/data';
 import { emptyState, keyOf, dayIndex, weekOf, activeHabits, prayerTimes, dayXP, stats, hm, addDays } from './src/logic';
 import { rescheduleAll } from './src/notify';
-import Battle from './src/Battle';
+import Path from './src/Path';
+import Fight from './src/Fight';
+import { POSE } from './src/Battle';
+import { Image } from 'react-native';
 import Squad from './src/Squad';
 import Icon from './src/icons';
 
@@ -38,6 +41,8 @@ export default function App() {
   const [S, setS] = useState(null);
   const [tab, setTab] = useState('today');
   const [sos, setSos] = useState(false);
+  const [fight, setFight] = useState(false);
+  const [more, setMore] = useState(null);
   const loaded = useRef(false);
 
   useEffect(() => {
@@ -66,17 +71,24 @@ export default function App() {
           <View style={{ flex: 1 }}>
             <Header S={S} />
             <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 110 }}>
-              {tab === 'today' && <Battle S={S} save={save} />}
+              {tab === 'today' && <Path S={S} save={save} openFight={() => setFight(true)} />}
               {tab === 'squad' && <Squad S={S} save={save} />}
-              {tab === 'chain' && <Chain S={S} />}
-              {tab === 'fajr' && <Fajr S={S} save={save} />}
-              {tab === 'rem' && <Reminders S={S} save={save} />}
-              {tab === 'shop' && <Shop S={S} save={save} />}
+              {tab === 'me' && <Chain S={S} />}
+              {tab === 'more' && !more && <More setMore={setMore} />}
+              {tab === 'more' && more && <Pressable onPress={() => setMore(null)}><T s={14} style={{ color: C.muted, marginBottom: 8 }}>→ رجوع</T></Pressable>}
+              {tab === 'more' && more === 'fajr' && <Fajr S={S} save={save} />}
+              {tab === 'more' && more === 'rem' && <Reminders S={S} save={save} />}
+              {tab === 'more' && more === 'shop' && <Shop S={S} save={save} />}
             </ScrollView>
             <Pressable onPress={() => setSos(true)} style={[st.sos, { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 }]}><Icon name="sos" size={20} color={C.bone} accent={C.bone} /><T b s={15}>طوارئ</T></Pressable>
-            <Tabs tab={tab} setTab={setTab} />
+            <Tabs tab={tab} setTab={(t) => { setTab(t); setMore(null); }} />
           </View>
         )}
+        <Modal visible={fight} animationType="slide" onRequestClose={() => setFight(false)}>
+          <SafeAreaView style={{ flex: 1, backgroundColor: C.night }}>
+            {fight && <Fight S={S} save={save} close={() => setFight(false)} />}
+          </SafeAreaView>
+        </Modal>
         <Modal visible={sos} animationType="slide" onRequestClose={() => setSos(false)}>
           <SafeAreaView style={{ flex: 1, backgroundColor: C.night }}>
             <Emergency save={save} close={() => setSos(false)} />
@@ -91,20 +103,33 @@ function Header({ S }) {
   const s = stats(S);
   return (
     <View style={st.header}>
-      <View>
-        <T b s={18} style={{ letterSpacing: 2 }}>VAYNORA</T>
-        <T s={12} style={{ color: C.muted }}>حرب النفس · اصنع من الألم قوة</T>
-      </View>
-      <View style={{ alignItems: 'flex-start' }}>
-        <T b s={14}>🔗 {s.chain}  ·  ⭐ {s.xp}</T>
-        <T s={12} style={{ color: C.red }}>{s.rank}</T>
+      <T b s={15} style={{ letterSpacing: 3, color: C.red }}>VAYNORA</T>
+      <View style={{ flexDirection: 'row-reverse', gap: 16, alignItems: 'center' }}>
+        <View style={st.hstat}><Icon name="chain" size={20} /><T b s={16}>{s.chain}</T></View>
+        <View style={st.hstat}><T s={16}>⭐</T><T b s={16}>{s.xp}</T></View>
+        <View style={st.hstat}><Icon name="shield" size={20} accent={C.green} /><T b s={16}>{s.shields}</T></View>
       </View>
     </View>
   );
 }
 
+function More({ setMore }) {
+  const items = [['fajr', 'sun', 'الفجر والنوم', 'منبّه الفجر، خطة النوم، أيام الفجر'], ['rem', 'bell', 'التذكيرات', 'الصلاة، الرياضة، درع الليل، مهامي'], ['shop', 'bag', 'المتجر', 'دفتر حرب النفس بالدفع عند الاستلام']];
+  return (
+    <View>
+      {items.map(([id, ic, n, d]) => (
+        <Pressable key={id} onPress={() => setMore(id)} style={[st.card, { flexDirection: 'row-reverse', alignItems: 'center', gap: 12 }]}>
+          <Icon name={ic} size={28} />
+          <View style={{ flex: 1 }}><T b s={17}>{n}</T><T s={12} style={{ color: C.muted }}>{d}</T></View>
+          <T s={18} style={{ color: C.muted }}>‹</T>
+        </Pressable>
+      ))}
+    </View>
+  );
+}
+
 function Tabs({ tab, setTab }) {
-  const items = [['today', 'sword', 'الساحة'], ['chain', 'chain', 'السلسلة'], ['squad', 'flag', 'الكتيبة'], ['fajr', 'sun', 'الفجر'], ['rem', 'bell', 'التذكير'], ['shop', 'bag', 'المتجر']];
+  const items = [['today', 'sword', 'الطريق'], ['squad', 'flag', 'الكتيبة'], ['me', 'crown', 'VAY'], ['more', 'bell', 'المزيد']];
   return (
     <View style={st.tabs}>
       {items.map(([id, ic, n]) => (
@@ -118,18 +143,35 @@ function Tabs({ tab, setTab }) {
 }
 
 // ---------- onboarding ----------
+const INTRO = [
+  ['fight', 'أنا VAY.', 'كل واحد فينا في حرب. الحرب العظمى هي حرب النفس، والعدو الكبير هو «النفس الأمّارة».'],
+  ['fall', 'وكل يوم معارك صغيرة.', 'شيطان الفجر يعقدلك 3 عقد وانت راقد. خنزب يسرقلك الخشوع. الكسل والتسويف يقولولك «غدوة».'],
+  ['win', 'ما تحاربش وحدك.', 'كل صلاة وكل عادة ضربة. 21 يوم، 3 جبهات، وأنا معاك. وكي تطيح، نقوّموك. يزّي؟'],
+];
 function Onboard({ save }) {
+  const [step, setStep] = useState(0);
   const [name, setName] = useState('');
   const [city, setCity] = useState('سوسة');
+  if (step < 3) {
+    const [pose, t1, t2] = INTRO[step];
+    return (
+      <View style={{ flex: 1, padding: 24, justifyContent: 'center' }}>
+        <View style={{ flexDirection: 'row-reverse', gap: 6, justifyContent: 'center', marginBottom: 20 }}>
+          {[0, 1, 2].map((i) => <View key={i} style={{ width: i === step ? 26 : 8, height: 8, borderRadius: 4, backgroundColor: i === step ? C.red : '#333' }} />)}
+        </View>
+        <Image source={POSE[pose]} style={{ width: 200, height: 300, alignSelf: 'center' }} resizeMode="contain" />
+        <T b s={28} style={{ textAlign: 'center', marginTop: 16 }}>{t1}</T>
+        <T s={16} style={{ textAlign: 'center', color: '#cfc6bd', marginTop: 8 }}>{t2}</T>
+        <Btn style={{ marginTop: 28 }} title={step < 2 ? 'كمّل' : 'نبدا الحرب ⚔️'} onPress={() => setStep(step + 1)} />
+      </View>
+    );
+  }
   return (
     <ScrollView contentContainerStyle={{ padding: 20 }}>
-      <T b s={30} style={{ letterSpacing: 3, textAlign: 'center', marginTop: 20 }}>VAYNORA</T>
-      <T b s={22} style={{ textAlign: 'center', color: C.red }}>حرب النفس</T>
+      <T b s={30} style={{ letterSpacing: 3, textAlign: 'center', marginTop: 20, color: C.red }}>VAYNORA</T>
+      <T b s={22} style={{ textAlign: 'center' }}>حرب النفس</T>
       <T s={15} style={{ textAlign: 'center', color: C.muted, marginBottom: 24 }}>اصنع من الألم قوة</T>
-      <Card>
-        <T s={15}>مرحبا بيك يا محارب. 21 يوم باش تبني روتين: الصلاة، الفجر، النوم، الرياضة، والقراية. ما نحبّوكش تكون مثالي، نحبّوك تكون حاضر.</T>
-      </Card>
-      <T b style={{ marginTop: 12 }}>اسمك</T>
+      <T b style={{ marginTop: 12 }}>شنوة اسمك يا محارب؟</T>
       <TextInput value={name} onChangeText={setName} placeholder="اسمك" placeholderTextColor={C.muted} style={st.input} />
       <T b style={{ marginTop: 12 }}>مدينتك (لمواقيت الصلاة)</T>
       <View style={st.wrap}>{CITIES.map(([c]) => <Chip key={c} title={c} on={city === c} onPress={() => setCity(c)} />)}</View>
@@ -137,7 +179,7 @@ function Onboard({ save }) {
         if (!name.trim()) return;
         save((s) => { s.profile = { name: name.trim(), city, start: keyOf(new Date()) }; return s; }, true);
       }} />
-      <T s={12} style={{ color: C.muted, textAlign: 'center', marginTop: 10 }}>البيانات متاعك تقعد في التلفون متاعك برك.</T>
+      <T s={12} style={{ color: C.muted, textAlign: 'center', marginTop: 10 }}>بياناتك تقعد في تلفونك. حساب VAYNORA تعملو من بعد في «الكتيبة».</T>
     </ScrollView>
   );
 }
@@ -490,6 +532,7 @@ const st = StyleSheet.create({
   btnGhost: { borderWidth: 1, borderColor: C.line },
   chip: { borderWidth: 1, borderColor: C.line, borderRadius: 20, paddingVertical: 4, paddingHorizontal: 10 },
   input: { backgroundColor: '#111', borderWidth: 1, borderColor: C.line, borderRadius: 10, color: C.bone, fontFamily: 'C6', fontSize: 15, padding: 10, textAlign: 'right', marginTop: 6 },
+  hstat: { flexDirection: 'row-reverse', alignItems: 'center', gap: 4 },
   header: { flexDirection: 'row-reverse', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: C.line },
   tabs: { position: 'absolute', bottom: 0, left: 0, right: 0, flexDirection: 'row-reverse', backgroundColor: '#111', borderTopWidth: 1, borderTopColor: C.line, paddingVertical: 6 },
   tab: { flex: 1, alignItems: 'center' },

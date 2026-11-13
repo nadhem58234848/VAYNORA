@@ -9,7 +9,7 @@ import { C, MSG, MSG_AFTER, TASK, PRAYERS, HABITS } from './data';
 import { keyOf, dayIndex, weekOf, prayerTimes, hm, stats } from './logic';
 import { ENEMIES, FRONTS, BOSS, GEAR, activeEnemies, enemyHP, isDown, beast } from './battle';
 
-const POSE = {
+export const POSE = {
   fight: require('../assets/vay/P22.png'), win: require('../assets/vay/P18.png'),
   fall: require('../assets/vay/P16.png'), wudu: require('../assets/vay/P35.png'),
 };
@@ -22,7 +22,7 @@ const T = ({ s = 15, b, style, children }) => (
 );
 
 // Faceless smoke silhouette of an enemy
-function Smoke({ tint, size = 70, dead }) {
+export function Smoke({ tint, size = 70, dead }) {
   return (
     <Svg width={size} height={size} viewBox="0 0 100 100">
       <Defs>
@@ -39,7 +39,7 @@ function Smoke({ tint, size = 70, dead }) {
   );
 }
 
-function Bar({ v, max = 100, h = 8, color = C.red }) {
+export function Bar({ v, max = 100, h = 8, color = C.red }) {
   return (
     <View style={{ height: h, backgroundColor: '#262626', borderRadius: h / 2, overflow: 'hidden' }}>
       <View style={{ height: h, width: `${Math.max(0, Math.min(100, (v / max) * 100))}%`, backgroundColor: color }} />
@@ -94,7 +94,7 @@ function EnemyCard({ e, day, idx, open, setOpen, act, onShare, hit }) {
   );
 }
 
-function Action({ it, day, act }) {
+export function Action({ it, day, act }) {
   const [kind, id] = it;
   if (kind === 'k') {
     const kn = day.knots || [false, false, false];
@@ -147,7 +147,7 @@ function Action({ it, day, act }) {
   );
 }
 
-function StoryCard({ e, name, idx, refCb }) {
+export function StoryCard({ e, name, idx, refCb }) {
   return (
     <View ref={refCb} collapsable={false} style={st.story}>
       <View style={st.storyBanner}><T b s={14} style={{ textAlign: 'center', letterSpacing: 3 }}>VAYNORA · حرب النفس</T></View>
