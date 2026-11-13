@@ -22,7 +22,7 @@ const buzz = () => { if (Platform.OS !== 'web') Haptics.impactAsync(Haptics.Impa
 
 // Big Duolingo-style option
 const Opt = ({ title, dmg, on, onPress, color = C.red }) => (
-  <Pressable onPress={onPress} style={[st.opt, on && { borderColor: color, backgroundColor: color === C.red ? '#2a1214' : '#13261a' }]}>
+  <Pressable onPress={onPress} style={[st.opt, on && { borderColor: color, backgroundColor: color === C.red ? '#2a1214' : '#1d1b19' }]}>
     <T s={15} b={on} style={{ flex: 1 }}>{title}</T>
     {!!dmg && <T b s={14} style={{ color: C.red }}>-{dmg}</T>}
   </Pressable>

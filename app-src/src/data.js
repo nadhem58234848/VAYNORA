@@ -2,7 +2,7 @@
 
 export const C = {
   night: '#0D0D0D', card: '#181818', line: '#2A2A2A', bone: '#F4F1EC',
-  muted: '#9E978D', red: '#C81E1E', crimson: '#8E1D20', green: '#5DBB63', amber: '#E0A63A',
+  muted: '#9E978D', red: '#C81E1E', crimson: '#8E1D20', green: '#F4F1EC', amber: '#B9B2A8', // brand only: no green/yellow, bone tones instead
 };
 
 // Morning message from ناظم, one per day (day 1..21)

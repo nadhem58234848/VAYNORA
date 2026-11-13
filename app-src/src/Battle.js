@@ -295,7 +295,7 @@ export function EnemyArt({ id, size = 200, dead }) {
   return (
     <View style={{ width: size, height: size, borderRadius: 20, overflow: 'hidden', borderWidth: 1, borderColor: dead ? '#2a2a2a' : '#5a1214' }}>
       <Image source={src} style={{ width: size, height: size, opacity: dead ? 0.25 : 1 }} resizeMode="cover" />
-      {dead ? <View style={{ position: 'absolute', inset: 0, top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#5DBB63', fontSize: 42, fontFamily: 'C8' }}>سقط</Text></View> : null}
+      {dead ? <View style={{ position: 'absolute', inset: 0, top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#F4F1EC', fontSize: 42, fontFamily: 'C8' }}>سقط</Text></View> : null}
     </View>
   );
 }

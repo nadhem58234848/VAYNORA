@@ -103,7 +103,7 @@ function Header({ S }) {
   const s = stats(S);
   return (
     <View style={st.header}>
-      <T b s={15} style={{ letterSpacing: 3, color: C.red }}>VAYNORA</T>
+      <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}><Image source={require('./assets/logo-sm.png')} style={{ width: 30, height: 30, borderRadius: 15 }} /><T b s={15} style={{ letterSpacing: 3, color: C.red }}>VAYNORA</T></View>
       <View style={{ flexDirection: 'row-reverse', gap: 16, alignItems: 'center' }}>
         <View style={st.hstat}><Icon name="chain" size={20} /><T b s={16}>{s.chain}</T></View>
         <View style={st.hstat}><T s={16}>⭐</T><T b s={16}>{s.xp}</T></View>
@@ -168,7 +168,8 @@ function Onboard({ save }) {
   }
   return (
     <ScrollView contentContainerStyle={{ padding: 20 }}>
-      <T b s={30} style={{ letterSpacing: 3, textAlign: 'center', marginTop: 20, color: C.red }}>VAYNORA</T>
+      <Image source={require('./assets/logo-harb.png')} style={{ width: 170, height: 170, alignSelf: 'center', marginTop: 10 }} />
+      <T b s={30} style={{ letterSpacing: 3, textAlign: 'center', marginTop: 8, color: C.red }}>VAYNORA</T>
       <T b s={22} style={{ textAlign: 'center' }}>حرب النفس</T>
       <T s={15} style={{ textAlign: 'center', color: C.muted, marginBottom: 24 }}>اصنع من الألم قوة</T>
       <T b style={{ marginTop: 12 }}>ما اسمك أيها المحارب؟</T>
