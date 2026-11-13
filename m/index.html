@@ -1,0 +1,46 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ناظم · حرب النفس · المتابعة</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#000;color:#3d3d3d;font-family:Cairo,system-ui,sans-serif;text-align:center;padding:28px 16px 60px}
+.w{max-width:480px;margin:auto}.r{color:#E8282B}.b{color:#ececec}
+h1{font-weight:800;font-size:40px;line-height:1.25;margin:10px 0 6px;color:#8a8a8a}
+.sub{font-weight:600;color:#8a8a8a;font-size:17px;margin:0 0 26px}
+.proof{display:flex;gap:10px;justify-content:center;margin:0 0 28px}.proof div{background:#141414;border-radius:14px;padding:10px 14px;color:#bbb;font-weight:600;font-size:14px}.proof b{display:block;color:#ececec;font-size:20px}
+.c{background:#0e0e0e;border:1px solid #222;border-radius:22px;padding:22px 20px;margin:0 0 16px;text-align:right}
+.c.hot{border-color:#C81E1E}
+.tag{display:inline-block;background:#C81E1E;color:#fff;font-size:12px;font-weight:800;padding:3px 10px;border-radius:20px;margin-bottom:8px}
+.c h2{margin:0;font-size:24px;color:#ececec;font-weight:800}.p{font-size:34px;font-weight:800;color:#E8282B;margin:4px 0 10px}.p small{font-size:15px;color:#8a8a8a}
+.c ul{margin:0 0 16px;padding:0 18px 0 0;color:#aaa;font-weight:600;font-size:15px;line-height:1.9}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:14px;background:#C81E1E;color:#fff;font:800 17px Cairo,sans-serif;cursor:pointer}
+.c:not(.hot) .btn{background:#262626}
+.note{font-size:13px;color:#666;margin-top:6px}
+.lock{font-size:13px;color:#8a8a8a;margin:-6px 0 14px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ececec;color:#000;padding:10px 18px;border-radius:12px;font-weight:800;display:none}
+footer{margin-top:30px;color:#444;font-size:13px;font-weight:600}
+</style></head><body><div class="w">
+<div class="sub" style="margin:0">ناظم · حرب النفس</div>
+<h1>ما تحاربش <span class="r">وحدك</span>.</h1>
+<p class="sub">نتبّعك خطوة بخطوة: تفيق للفجر، تخرج من الإدمان وتبني انضباطك.</p>
+<div class="proof"><div><b>+2000</b>محارب في التحدّي</div><div><b>2.1M</b>مشاهدة في 30 يوم</div></div>
+
+<div class="c"><h2>متابعة جماعية · 21 يوم</h2><div class="p">29 <small>دينار</small></div>
+<ul><li>مجموعة صغيرة من المحاربين</li><li>تقرير كل ليلة: الفجر، الصلوات، العادات</li><li>نجاوبك ونوجّهك</li><li>أوديو مني كل جمعة</li></ul>
+<button class="btn" data-m="السلام عليكم، نحب ندخل المتابعة الجماعية 21 يوم (29 دينار)">نحب ندخل</button></div>
+
+<div class="c hot"><span class="tag">5 أماكن برك</span><h2>متابعة شخصية · 21 يوم</h2><div class="p">79 <small>دينار</small></div>
+<ul><li>واحد لواحد معايا على واتساب</li><li>خطة نوم وفجر على قدّك</li><li>تشيك يومي</li><li>3 مكالمات: البداية، النص، الآخر</li><li>شهادة VAYNORA كي تكمّل</li></ul>
+<button class="btn" data-m="السلام عليكم، نحب المتابعة الشخصية 21 يوم (79 دينار)">نحجز بلاصتي</button></div>
+
+<div class="c"><span class="tag">مستوى أعلى</span><h2>نظام 90 يوم</h2><div class="p">149 <small>دينار · ولا 3 × 50</small></div>
+<div class="lock">🔒 كان للي كمّل الـ21 يوم وخذا شهادتو</div>
+<ul><li>بناء كامل: نفس، جسد، دين</li><li>متابعة 3 شهور</li><li>5 أماكن في كل دفعة</li></ul>
+<button class="btn" data-m="السلام عليكم، عندي شهادة 21 يوم ونحب نظام 90 يوم">عندي الشهادة، نحب ندخل</button></div>
+
+<p class="note">تضغط على الزر ← يتنسخ الميساج ← يتحلّ الإنستا ← تلصقو وتبعث.</p>
+<footer>حرب النفس · اصنع من الألم قوة</footer>
+</div><div class="toast" id="t">تنسخ الميساج ✓ الصقو في الإنستا</div>
+<script>
+document.querySelectorAll('.btn').forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.m)}catch(e){}
+const t=document.getElementById('t');t.style.display='block';setTimeout(()=>{location.href='https://ig.me/m/nadhem_elaashek'},900)});
+</script></body></html>
