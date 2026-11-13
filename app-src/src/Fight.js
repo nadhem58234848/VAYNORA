@@ -8,7 +8,7 @@ import Icon from './icons';
 import { C, PRAYERS, HABITS, MSG, MSG_AFTER } from './data';
 import { keyOf, dayIndex, weekOf, dayXP, stats, prayerTimes, hm } from './logic';
 import { activeEnemies, enemyHP, isDown } from './battle';
-import { Smoke, Bar, POSE, StoryCard } from './Battle';
+import { EnemyArt, Bar, POSE, StoryCard } from './Battle';
 
 const PRAY = Object.fromEntries(PRAYERS);
 const HAB = Object.fromEntries(HABITS.map((h) => [h.id, h]));
@@ -169,7 +169,7 @@ export default function Fight({ S, save, close }) {
         </View>
         <View style={st.bubble}><T s={14} style={{ textAlign: 'center', color: down ? C.green : '#e6d9d0' }}>«{down ? e.dead : line}»</T></View>
         <Animated.View style={{ alignItems: 'center', transform: [{ translateX: shake }], marginVertical: 6 }}>
-          <Smoke tint={e.tint} size={170} dead={down} />
+          <EnemyArt id={e.id} size={230} dead={down} />
         </Animated.View>
         <Questions e={e} day={day} idx={idx} set={set} city={S.profile.city} />
       </ScrollView>

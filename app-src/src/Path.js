@@ -5,7 +5,7 @@ import Icon from './icons';
 import { C, MSG, MSG_AFTER } from './data';
 import { keyOf, dayIndex, weekOf, stats, addDays, parseKey } from './logic';
 import { FRONTS, BOSS, activeEnemies, enemyHP, isDown, beast } from './battle';
-import { Bar, POSE } from './Battle';
+import { Bar, POSE, ENEMY_IMG } from './Battle';
 
 const T = ({ s = 15, b, style, children }) => (
   <Text style={[{ color: C.bone, fontFamily: b ? 'C8' : 'C6', fontSize: s, textAlign: 'right', writingDirection: 'rtl' }, style]}>{children}</Text>
@@ -96,8 +96,14 @@ export default function Path({ S, save, openFight }) {
         <View style={{ flex: 1 }}><T s={12} style={{ opacity: 0.85 }}>الجبهة {wk} · الأسبوع {wk}</T><T b s={22}>{front.n}</T><T s={12} style={{ opacity: 0.8 }}>{front.d}</T></View>
         <View style={st.unitIc}><Icon name={['knot', 'eye', 'flame'][wk - 1]} size={28} /></View>
       </View>
+      <View style={st.beast}>
+        <Image source={ENEMY_IMG.beast} style={StyleSheet.absoluteFill} resizeMode="cover" />
+        <View style={st.beastShade} />
+        <T b s={20} style={{ color: C.bone }}>النفس الأمّارة بالسوء</T>
+        <T s={12} style={{ color: '#d9cfc6' }}>الوحش الكبير · تهزمو في 21 يوم</T>
+      </View>
       <View style={[st.row, { gap: 8, marginVertical: 10 }]}>
-        <T s={12} style={{ color: C.muted }}>النفس الأمّارة</T>
+        <T s={12} style={{ color: C.muted }}>صحة الوحش</T>
         <View style={{ flex: 1 }}><Bar v={bst.hp} max={bst.max} h={10} /></View>
         <T s={12} style={{ color: C.muted }}>{Math.round((bst.hp / bst.max) * 100)}%</T>
       </View>
@@ -148,6 +154,8 @@ export default function Path({ S, save, openFight }) {
 }
 
 const st = StyleSheet.create({
+  beast: { height: 190, borderRadius: 18, overflow: 'hidden', marginTop: 10, justifyContent: 'flex-end', padding: 14, borderWidth: 1, borderColor: '#5a1214' },
+  beastShade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 80, backgroundColor: 'rgba(0,0,0,0.6)' },
   row: { flexDirection: 'row-reverse', alignItems: 'center' },
   unit: { flexDirection: 'row-reverse', alignItems: 'center', backgroundColor: C.crimson, borderRadius: 18, padding: 14, borderBottomWidth: 5, borderBottomColor: '#5a1214' },
   unitIc: { borderWidth: 2, borderColor: 'rgba(255,255,255,0.3)', borderRadius: 12, padding: 6 },

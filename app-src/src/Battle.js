@@ -277,3 +277,25 @@ const st = StyleSheet.create({
   story: { width: 300, height: 533, backgroundColor: C.night, borderRadius: 18, borderWidth: 2, borderColor: C.red, overflow: 'hidden' },
   storyBanner: { backgroundColor: C.crimson, paddingVertical: 10 },
 });
+
+// Faceless shadow art for each enemy (assets/enemies)
+export const ENEMY_IMG = {
+  beast: require('../assets/enemies/beast.jpg'),
+  fajr: require('../assets/enemies/fajr.jpg'),
+  khanzab: require('../assets/enemies/khanzab.jpg'),
+  kasal: require('../assets/enemies/kasal.jpg'),
+  taswif: require('../assets/enemies/taswif.jpg'),
+  nadhar: require('../assets/enemies/nadhar.jpg'),
+  ghafla: require('../assets/enemies/ghafla.jpg'),
+  khalawat: require('../assets/enemies/khalawat.jpg'),
+};
+export function EnemyArt({ id, size = 200, dead }) {
+  const src = ENEMY_IMG[id];
+  if (!src) return <Smoke tint="#111" size={size} dead={dead} />;
+  return (
+    <View style={{ width: size, height: size, borderRadius: 20, overflow: 'hidden', borderWidth: 1, borderColor: dead ? '#2a2a2a' : '#5a1214' }}>
+      <Image source={src} style={{ width: size, height: size, opacity: dead ? 0.25 : 1 }} resizeMode="cover" />
+      {dead ? <View style={{ position: 'absolute', inset: 0, top: 0, left: 0, right: 0, bottom: 0, alignItems: 'center', justifyContent: 'center' }}><Text style={{ color: '#5DBB63', fontSize: 42, fontFamily: 'C8' }}>طاح</Text></View> : null}
+    </View>
+  );
+}
