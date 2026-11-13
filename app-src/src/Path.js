@@ -4,7 +4,7 @@ import { View, Text, Pressable, Image, Animated, StyleSheet, Platform, AppState,
 import Icon from './icons';
 import { C, MSG, MSG_AFTER } from './data';
 import { keyOf, dayIndex, weekOf, stats, addDays, parseKey } from './logic';
-import { FRONTS, BOSS, activeEnemies, enemyHP, isDown, beast } from './battle';
+import { FRONTS, bossOf, activeEnemies, enemyHP, isDown, beast, nafsStage } from './battle';
 import { Bar, POSE, ENEMY_IMG } from './Battle';
 
 const T = ({ s = 15, b, style, children }) => (
@@ -72,8 +72,10 @@ export default function Path({ S, save, openFight }) {
   const bst = beast(S);
   const enemies = activeEnemies(idx);
   const downN = enemies.filter((e) => isDown(enemyHP(e, day, idx))).length;
-  const wk = idx > 21 ? 3 : weekOf(idx);
-  const front = FRONTS[wk - 1];
+  const wk = Math.ceil(idx / 7);
+  const front = FRONTS[Math.min(wk, 3) - 1];
+  const stage = nafsStage(bst.hp);
+  const nf = bst.hp / 100;
   const pulse = useRef(new Animated.Value(1)).current;
   const [ribat, setRibat] = useState(false);
   const [orders, setOrders] = useState(S.lastOrders !== k);
@@ -93,19 +95,23 @@ export default function Path({ S, save, openFight }) {
   return (
     <View>
       <View style={st.unit}>
-        <View style={{ flex: 1 }}><T s={12} style={{ opacity: 0.85 }}>الجبهة {wk} · الأسبوع {wk}</T><T b s={22}>{front.n}</T><T s={12} style={{ opacity: 0.8 }}>{front.d}</T></View>
-        <View style={st.unitIc}><Icon name={['knot', 'eye', 'flame'][wk - 1]} size={28} /></View>
+        <View style={{ flex: 1 }}><T s={12} style={{ opacity: 0.85 }}>الأسبوع {wk}</T><T b s={22}>{front.n}</T><T s={12} style={{ opacity: 0.8 }}>{front.d}</T></View>
+        <View style={st.unitIc}><Icon name={['knot', 'eye', 'flame'][Math.min(wk, 3) - 1]} size={28} /></View>
       </View>
       <View style={st.beast}>
-        <Image source={ENEMY_IMG.beast} style={StyleSheet.absoluteFill} resizeMode="cover" />
-        <View style={st.beastShade} />
-        <T b s={20} style={{ color: C.bone }}>النفس الأمّارة بالسوء</T>
-        <T s={12} style={{ color: '#d9cfc6' }}>الوحش الأكبر · تهزمه في 21 يومًا</T>
+        <View style={[StyleSheet.absoluteFill, { backgroundColor: C.red, opacity: nf * 0.22 }]} />
+        <View style={[st.row, { justifyContent: 'space-between', alignItems: 'flex-end', height: 150 }]}>
+          <Image source={POSE.fight} style={{ width: 150 * (0.45 + (1 - nf) * 0.55), height: 150 * (0.45 + (1 - nf) * 0.55) }} resizeMode="contain" />
+          <T b s={18} style={{ color: C.muted, marginBottom: 50 }}>ضد</T>
+          <Image source={ENEMY_IMG.beast} style={{ width: 150 * (0.45 + nf * 0.55), height: 150 * (0.45 + nf * 0.55), borderRadius: 14, opacity: 0.55 + nf * 0.45 }} resizeMode="cover" />
+        </View>
+        <T b s={18} style={{ marginTop: 8 }}>{stage[0]}</T>
+        <T s={12} style={{ color: '#d9cfc6' }}>{stage[1]} · كل انتصار يقوّيك ويصغّرها، وكل خسارة تقوّيها</T>
       </View>
       <View style={[st.row, { gap: 8, marginVertical: 10 }]}>
-        <T s={12} style={{ color: C.muted }}>صحة الوحش</T>
+        <T s={12} style={{ color: C.muted }}>النفس {bst.hp}%</T>
         <View style={{ flex: 1 }}><Bar v={bst.hp} max={bst.max} h={10} /></View>
-        <T s={12} style={{ color: C.muted }}>{Math.round((bst.hp / bst.max) * 100)}%</T>
+        <T s={12} style={{ color: C.green }}>أنت {bst.you}%</T>
       </View>
 
       <View style={st.say}><T s={14}>{vaySays(S, idx, day, downN, enemies.length)}</T></View>
@@ -113,7 +119,7 @@ export default function Path({ S, save, openFight }) {
         <Image source={day.fell ? POSE.fall : downN === enemies.length ? POSE.win : POSE.fight} style={st.vay} resizeMode="contain" />
         {days.map((d, j) => {
           const off = OFF[(d - 1) % 7];
-          const isToday = d === idx; const past = d < idx; const boss = !!BOSS[d];
+          const isToday = d === idx; const past = d < idx; const boss = d % 7 === 0;
           const node = (
             <View style={[st.node, past && (won[d] ? st.done : st.lost), isToday && st.today, !past && !isToday && (boss ? st.boss : st.locked)]}>
               <Icon name={isToday ? 'sword' : past ? (won[d] ? 'shield' : 'chain') : boss ? 'crown' : 'knot'} size={isToday ? 38 : 30} color={!past && !isToday ? '#555' : C.bone} accent={!past && !isToday ? (boss ? C.amber : '#555') : C.bone} />
@@ -154,7 +160,7 @@ export default function Path({ S, save, openFight }) {
 }
 
 const st = StyleSheet.create({
-  beast: { height: 190, borderRadius: 18, overflow: 'hidden', marginTop: 10, justifyContent: 'flex-end', padding: 14, borderWidth: 1, borderColor: '#5a1214' },
+  beast: { borderRadius: 18, overflow: 'hidden', marginTop: 10, padding: 14, backgroundColor: '#121212', borderWidth: 1, borderColor: '#5a1214' },
   beastShade: { position: 'absolute', left: 0, right: 0, bottom: 0, height: 80, backgroundColor: 'rgba(0,0,0,0.6)' },
   row: { flexDirection: 'row-reverse', alignItems: 'center' },
   unit: { flexDirection: 'row-reverse', alignItems: 'center', backgroundColor: C.crimson, borderRadius: 18, padding: 14, borderBottomWidth: 5, borderBottomColor: '#5a1214' },

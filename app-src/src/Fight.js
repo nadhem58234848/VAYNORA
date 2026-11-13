@@ -5,9 +5,11 @@ import * as Haptics from 'expo-haptics';
 import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 import Icon from './icons';
+import { sfx } from './sfx';
+import Svg, { Path as SP } from 'react-native-svg';
 import { C, PRAYERS, HABITS, MSG, MSG_AFTER, TASK, RANKS } from './data';
-import { keyOf, dayIndex, weekOf, dayXP, stats, prayerTimes, hm, addDays, activeHabits } from './logic';
-import { activeEnemies, enemyHP, isDown, beast, GEAR } from './battle';
+import { keyOf, dayIndex, weekOf, dayXP, stats, prayerTimes, hm, addDays, activeHabits, parseKey, dayWon } from './logic';
+import { activeEnemies, enemyHP, isDown, beast, GEAR, nafsStage } from './battle';
 import { EnemyArt, Bar, POSE } from './Battle';
 
 const PRAY = Object.fromEntries(PRAYERS);
@@ -27,7 +29,7 @@ const Opt = ({ title, dmg, on, onPress, color = C.red }) => (
 );
 
 function Questions({ e, day, idx, set, city }) {
-  const w = idx > 21 ? 3 : weekOf(idx);
+  const w = Math.min(3, Math.ceil(idx / 7));
   const items = e.items.filter((it) => it[4] <= w);
   const pt = prayerTimes(city);
   return items.map((it) => {
@@ -88,6 +90,81 @@ function TomInput({ day, set }) {
   );
 }
 
+const PRAISE = ['ضربة موفّقة!', 'أحسنت!', 'ثبّتك الله', 'هكذا يُقاتل المحارب', 'ضربة في الصميم!', 'واصل، هو يضعف'];
+const DAYL = ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'];
+const FLAME_SAY = [
+  'أول شعلة. من هنا تبدأ الحرب حقًّا.',
+  'كنت أعلم أنك ستعود. موعدنا غدًا.',
+  'ثلاثة أيام. الشيطان بدأ يحسب لك حسابًا.',
+];
+const flameSay = (n) => (n <= 3 ? FLAME_SAY[n - 1] : n % 7 === 0 ? `${n} يومًا! أسبوع كامل من الثبات. أحبّ الأعمال إلى الله أدومها.` : `${n} يومًا والشعلة لم تنطفئ. لا تُضيّع يومين متتاليين.`);
+
+// Our own flame: crimson blade-shaped fire
+const FlameArt = ({ size = 150 }) => (
+  <Svg width={size} height={size} viewBox="0 0 100 100">
+    <SP fill={C.crimson} d="M50 4C56 22 78 34 78 60C78 80 66 96 50 96C34 96 22 80 22 60C22 46 30 38 34 26C40 34 42 40 44 44C46 30 46 16 50 4Z" />
+    <SP fill={C.red} d="M50 28C54 42 68 50 68 66C68 80 60 90 50 90C40 90 32 80 32 66C32 58 36 52 40 46C43 52 44 56 46 58C48 48 48 38 50 28Z" />
+    <SP fill={C.bone} d="M50 58C53 66 59 70 59 78C59 85 55 89 50 89C45 89 41 85 41 78C41 73 44 69 46 66C48 70 49 72 50 74C50 68 50 63 50 58Z" />
+  </Svg>
+);
+
+function Flame({ S, onNext }) {
+  const s = stats(S);
+  const idx = dayIndex(S.profile);
+  const n = Math.max(1, s.chain);
+  const grow = useRef(new Animated.Value(0)).current;
+  const pulse = useRef(new Animated.Value(1)).current;
+  const [shown, setShown] = useState(Math.max(0, n - 1));
+  const nd = Platform.OS !== 'web';
+  useEffect(() => {
+    sfx('flame');
+    Animated.spring(grow, { toValue: 1, friction: 4, tension: 60, useNativeDriver: nd }).start();
+    const t = setTimeout(() => { setShown(n); buzz(); }, 650);
+    Animated.loop(Animated.sequence([
+      Animated.timing(pulse, { toValue: 1.06, duration: 600, useNativeDriver: nd }),
+      Animated.timing(pulse, { toValue: 1, duration: 600, useNativeDriver: nd }),
+    ])).start();
+    return () => clearTimeout(t);
+  }, []);
+  const start = parseKey(S.profile.start);
+  const wk = Math.ceil(idx / 7);
+  const first = (wk - 1) * 7 + 1;
+  const wonMap = Object.fromEntries(s.list.map((x) => [x.i, x.won]));
+  const invite = () => Share.share({ message: `شعلتي ${n} ${n >= 3 && n <= 10 ? 'أيام' : 'يومًا'} في حرب النفس مع VAYNORA 🔥 هل تقبل التحدي؟\nhttps://nadhem58234848.github.io/VAYNORA/app/` }).catch(() => {});
+  return (
+    <View style={{ flex: 1, padding: 20, justifyContent: 'space-between' }}>
+      <View />
+      <View style={{ alignItems: 'center' }}>
+        <View style={st.bubbleBig}><T s={16} style={{ textAlign: 'center' }}>{flameSay(n)}</T></View>
+        <View style={[st.row, { justifyContent: 'center', alignItems: 'flex-end', marginTop: 16 }]}>
+          <Image source={POSE.win} style={{ width: 120, height: 170 }} resizeMode="contain" />
+          <Animated.View style={{ transform: [{ scale: Animated.multiply(grow, pulse) }] }}><FlameArt size={150} /></Animated.View>
+        </View>
+        <T b s={84} style={{ color: C.red, lineHeight: 104, textAlign: 'center' }}>{shown}</T>
+        <T b s={24} style={{ color: C.red, textAlign: 'center', marginTop: -8 }}>{n === 1 ? 'يوم ثبات' : n === 2 ? 'يوما ثبات' : n <= 10 ? 'أيام ثبات' : 'يوم ثبات'}</T>
+        <View style={[st.row, { justifyContent: 'space-between', alignSelf: 'stretch', marginTop: 26 }]}>
+          {[0, 1, 2, 3, 4, 5, 6].map((j) => {
+            const d = first + j; const w = wonMap[d]; const isT = d === idx;
+            return (
+              <View key={d} style={{ alignItems: 'center' }}>
+                <T s={13} style={{ color: isT ? C.red : C.muted, marginBottom: 4 }}>{DAYL[addDays(start, d - 1).getDay()]}</T>
+                <View style={[st.dot, { width: 36, height: 36, borderRadius: 18 }, w && { backgroundColor: C.red, borderColor: C.red }, d % 7 === 0 && !w && { borderColor: C.amber }]}>
+                  {w ? <T b s={15}>✓</T> : d % 7 === 0 ? <Icon name="crown" size={16} /> : null}
+                </View>
+              </View>
+            );
+          })}
+        </View>
+      </View>
+      <View style={[st.row, { gap: 10 }]}>
+        <Pressable style={[st.cta, { flex: 1, marginTop: 0 }]} onPress={() => { buzz(); sfx('tap'); onNext(); }}><T b s={18} style={{ textAlign: 'center' }}>أنا ثابت</T></Pressable>
+        <Pressable style={[st.ghost, { marginTop: 0, alignSelf: 'auto', paddingHorizontal: 16 }]} onPress={invite}><Icon name="share" size={22} /></Pressable>
+      </View>
+    </View>
+  );
+}
+const BOSS_DAYS = [7, 14, 21];
+
 // ---------- Achievements card (after the day battle) ----------
 const Sec = ({ title, children }) => (
   <View style={st.sec}><T b s={13} style={{ color: C.muted, marginBottom: 8 }}>{title}</T>{children}</View>
@@ -117,7 +194,7 @@ function DayStory({ S, refCb }) {
   return (
     <View ref={refCb} collapsable={false} style={st.story}>
       <View style={st.storyBanner}><T b s={14} style={{ textAlign: 'center', letterSpacing: 3 }}>VAYNORA · حرب النفس</T></View>
-      <T s={15} style={{ textAlign: 'center', color: C.muted, marginTop: 16 }}>اليوم {f.idx}{f.idx <= 21 ? ' من 21' : ''}</T>
+      <T s={15} style={{ textAlign: 'center', color: C.muted, marginTop: 16 }}>اليوم {f.idx}</T>
       <T b s={54} style={{ textAlign: 'center', color: C.red, lineHeight: 70 }}>{f.s.chain}</T>
       <T b s={16} style={{ textAlign: 'center', marginTop: -6 }}>أيام في السلسلة</T>
       <T s={13} style={{ textAlign: 'center', color: C.muted, marginTop: 16 }}>أسقطتُ اليوم {f.down.length} من {f.enemies.length}</T>
@@ -125,7 +202,7 @@ function DayStory({ S, refCb }) {
         {f.enemies.map((x) => <View key={x.id} style={{ opacity: f.down.includes(x) ? 1 : 0.25 }}><EnemyArt id={x.id} size={58} /></View>)}
       </View>
       <View style={{ paddingHorizontal: 22, marginTop: 18 }}>
-        <T s={12} style={{ color: C.muted, textAlign: 'center', marginBottom: 6 }}>النفس الأمّارة بالسوء · بقي منها {Math.round((f.bst.hp / f.bst.max) * 100)}%</T>
+        <T s={12} style={{ color: C.muted, textAlign: 'center', marginBottom: 6 }}>قوة النفس {f.bst.hp}% · قوتي {f.bst.you}%</T>
         <Bar v={f.bst.hp} max={f.bst.max} h={10} />
       </View>
       <View style={{ flex: 1 }} />
@@ -141,7 +218,7 @@ function Result({ S, save, close, pop }) {
   const [best, setBest] = useState(day.win || '');
   const [story, setStory] = useState(false);
   const cardRef = useRef(null);
-  const wk = idx > 21 ? 3 : weekOf(idx);
+  const wk = Math.ceil(idx / 7);
   const first = (wk - 1) * 7 + 1;
   const wonMap = Object.fromEntries(s.list.map((x) => [x.i, x.won]));
   const habits = HABITS.filter((h) => day.h && (day.h[h.id] === 'f' || day.h[h.id] === 'm'));
@@ -155,10 +232,11 @@ function Result({ S, save, close, pop }) {
   if ((day.sos || 0) > 0) news.push(['sos', 'تجاوزت موجة اليوم (+20 نقطة)']);
   const quote = idx <= 21 ? MSG[idx - 1] : MSG_AFTER;
   const tomorrow = idx < 21 ? TASK[idx] : null;
+  const stage = nafsStage(bst.hp);
   const invite = () => Share.share({ message: `أنا في اليوم ${idx} من حرب النفس مع VAYNORA ⚔️ سلسلتي ${s.chain}. هل تقبل التحدي؟\nhttps://nadhem58234848.github.io/VAYNORA/app/` }).catch(() => {});
   return (
     <ScrollView contentContainerStyle={{ padding: 18, paddingBottom: 40 }}>
-      <T s={15} style={{ color: C.muted, textAlign: 'center' }}>اليوم {idx}{idx <= 21 ? ' من 21' : ''}</T>
+      <T s={15} style={{ color: C.muted, textAlign: 'center' }}>اليوم {idx}</T>
       <T b s={32} style={{ color: won ? C.red : C.bone, textAlign: 'center' }}>{won ? 'انتصرت اليوم' : 'أتممت جولتك'}</T>
       {!won && <T s={13} style={{ color: C.muted, textAlign: 'center' }}>المعركة مفتوحة إلى آخر اليوم. عُد وأسقِط من بقي.</T>}
       <Animated.Image source={day.fell ? POSE.fall : won ? POSE.win : POSE.fight} style={{ width: 150, height: 210, alignSelf: 'center', transform: [{ scale: pop.interpolate({ inputRange: [0, 1], outputRange: [0.6, 1] }) }] }} resizeMode="contain" />
@@ -223,8 +301,10 @@ function Result({ S, save, close, pop }) {
         {!!day.ribat && <Line label="الرباط" value={`${day.ribat} دقيقة`} color={C.green} />}
       </Sec>
 
-      <Sec title="ضربتك للنفس الأمّارة">
-        <T s={14}>أضعفتها اليوم بمقدار <T b s={16} style={{ color: C.red }}>{hit}</T> · بقي منها {Math.round((bst.hp / bst.max) * 100)}%</T>
+      <Sec title="الميزان بينك وبين نفسك">
+        <T b s={15}>{stage[0]}</T>
+        <T s={13} style={{ color: bst.gain >= 0 ? C.green : C.red, marginTop: 2 }}>{bst.gain >= 0 ? `قويتَ اليوم +${bst.gain} وصغرت هي` : `قويت هي اليوم ${-bst.gain} وضعفت أنت`}</T>
+        <View style={[st.row, { justifyContent: 'space-between', marginTop: 6 }]}><T s={12} style={{ color: C.muted }}>النفس {bst.hp}%</T><T s={12} style={{ color: C.green }}>أنت {bst.you}%</T></View>
         <View style={{ marginTop: 8 }}><Bar v={bst.hp} max={bst.max} h={10} /></View>
       </Sec>
 
@@ -274,7 +354,10 @@ export default function Fight({ S, save, close }) {
   const [i, setI] = useState(0);
   const [done, setDone] = useState(false);
   const [line, setLine] = useState('');
-  const [shareE, setShareE] = useState(null);
+  const [praise, setPraise] = useState(null);
+  const combo = useRef(0);
+  const praiseT = useRef(null);
+  const [phase, setPhase] = useState('fight');
   const shake = useRef(new Animated.Value(0)).current;
   const pop = useRef(new Animated.Value(0)).current;
   const cardRef = useRef(null);
@@ -284,14 +367,34 @@ export default function Fight({ S, save, close }) {
 
   const set = (fn, isHit) => {
     save((s) => { s.days[k] = s.days[k] || {}; fn(s.days[k]); return s; });
+    if (!isHit) { combo.current = 0; sfx('tap'); }
     if (isHit) {
       buzz();
+      combo.current += 1;
+      const s2 = { ...S, days: { ...S.days, [k]: JSON.parse(JSON.stringify(S.days[k] || {})) } };
+      fn(s2.days[k]);
+      const fell = !isDown(enemyHP(e, day, idx)) && isDown(enemyHP(e, s2.days[k], idx));
+      sfx(fell ? 'down' : 'hit');
+      const c = combo.current;
+      setPraise(fell ? `سقط ${e.n.split(' · ')[0]}!` : c >= 5 ? `${c} ضربات متتالية! لا تتوقف` : c >= 3 ? `${c} ضربات متتالية 🔥` : pick(PRAISE));
+      clearTimeout(praiseT.current);
+      praiseT.current = setTimeout(() => setPraise(null), 1500);
       setLine(pick(e.hit));
       Animated.sequence([14, -14, 8, -8, 0].map((x) => Animated.timing(shake, { toValue: x, duration: 55, useNativeDriver: Platform.OS !== 'web' }))).start();
     }
   };
-  const next = () => { buzz(); if (i < enemies.length - 1) setI(i + 1); else setDone(true); };
+  const next = () => {
+    buzz(); sfx('tap'); setPraise(null);
+    if (i < enemies.length - 1) { setI(i + 1); return; }
+    const allDown = enemies.every((x) => isDown(enemyHP(x, day, idx)));
+    const first = dayWon(day, idx) && !day.flame;
+    if (first) save((x) => { x.days[k] = x.days[k] || {}; x.days[k].flame = true; return x; });
+    setPhase(first ? 'flame' : 'card');
+    sfx(allDown ? 'win' : 'tap');
+    setDone(true);
+  };
 
+  if (done && phase === 'flame') return <Flame S={S} onNext={() => setPhase('card')} />;
   if (done) return <Result S={S} save={save} close={close} pop={pop} />;
 
   const hp = enemyHP(e, day, idx);
@@ -320,6 +423,9 @@ export default function Fight({ S, save, close }) {
         </Animated.View>
         <Questions e={e} day={day} idx={idx} set={set} city={S.profile.city} />
       </ScrollView>
+      {praise && (
+        <View style={st.praise} pointerEvents="none"><Icon name="sword" size={22} color={C.night} accent={C.night} /><T b s={17} style={{ color: C.night, flex: 1 }}>{praise}</T></View>
+      )}
       <Pressable style={[st.cta, { position: 'absolute', bottom: 20, left: 20, right: 20 }]} onPress={next}>
         <T b s={18} style={{ textAlign: 'center' }}>{down ? (i < enemies.length - 1 ? 'سقط! العدو التالي ⚔️' : 'النتيجة 🏆') : (i < enemies.length - 1 ? 'أُكمل لاحقًا · العدو التالي' : 'النتيجة')}</T>
       </Pressable>
@@ -328,6 +434,8 @@ export default function Fight({ S, save, close }) {
 }
 
 const st = StyleSheet.create({
+  praise: { position: 'absolute', bottom: 92, left: 20, right: 20, backgroundColor: C.green, borderRadius: 14, paddingVertical: 10, paddingHorizontal: 14, flexDirection: 'row-reverse', alignItems: 'center', gap: 10 },
+  bubbleBig: { borderWidth: 2, borderColor: '#333', borderRadius: 18, paddingVertical: 12, paddingHorizontal: 16, marginHorizontal: 10 },
   sec: { backgroundColor: '#151515', borderWidth: 1, borderColor: '#2a2a2a', borderRadius: 16, padding: 14, marginTop: 12 },
   dot: { width: 30, height: 30, borderRadius: 15, borderWidth: 2, borderColor: '#333', alignItems: 'center', justifyContent: 'center' },
   story: { width: 300, height: 533, backgroundColor: C.night, borderWidth: 1, borderColor: '#5a1214', borderRadius: 18, overflow: 'hidden' },

@@ -49,7 +49,7 @@ export default function Squad({ S, save }) {
         <View style={[st.row, { justifyContent: 'space-around', marginTop: 10 }]}>
           <View style={{ alignItems: 'center' }}><T b s={20}>🔗 {s.chain}</T><T s={11} style={{ color: C.muted }}>السلسلة</T></View>
           <View style={{ alignItems: 'center' }}><T b s={20}>⭐ {s.xp}</T><T s={11} style={{ color: C.muted }}>النقاط</T></View>
-          <View style={{ alignItems: 'center' }}><T b s={20}>{Math.round(100 - (b.hp / b.max) * 100)}%</T><T s={11} style={{ color: C.muted }}>ضعف الوحش</T></View>
+          <View style={{ alignItems: 'center' }}><T b s={20}>{Math.round(100 - (b.hp / b.max) * 100)}%</T><T s={11} style={{ color: C.muted }}>قوتي على النفس</T></View>
         </View>
       </View>
       <Pressable style={st.red} onPress={invite}><T b style={{ textAlign: 'center' }}>تحدَّ صديقك لينضمّ إليك</T></Pressable>

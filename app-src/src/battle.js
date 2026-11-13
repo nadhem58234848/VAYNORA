@@ -10,7 +10,7 @@ export const ENEMIES = [
     taunts: ['خمس دقائق فقط...', 'الفراش دافئ، نَم.', 'البرد في الخارج، ماذا ستفعل؟', 'الفجر لن يهرب، صلِّه لاحقًا.'],
     hit: ['آه! سقطت عقدة!', 'من قال لك أن تتوضّأ؟!', 'حسنًا حسنًا... لقد قمت.'],
     dead: 'حللتَ عقدي كلها... سأعود إليك الليلة.',
-    items: [['k', 'knots', 45, 0, 1], ['p', 'fajr', 40, 10, 1], ['h', 'sleep', 15, 8, 1]],
+    items: [['k', 'knots', 40, 0, 1], ['p', 'fajr', 35, 10, 1], ['h', 'sleep', 15, 8, 1], ['h', 'adhkar', 10, 5, 1]],
   },
   {
     id: 'khanzab', n: 'خنزب · شيطان الخشوع', icon: 'mat', week: 1, tint: '#2b1416',
@@ -59,7 +59,7 @@ export const ENEMIES = [
 export const FRONTS = [
   { n: 'جبهة الأساس', d: 'الفجر، الخشوع، الكسل والتسويف' },
   { n: 'جبهة الجسد والعقل', d: 'نضيف: النظر والغفلة' },
-  { n: 'جبهة الاتجاه', d: 'نضيف: الخلوات، وكل الأعداء معًا' },
+  { n: 'الحرب المفتوحة', d: 'كل الأعداء معًا، والخلوات أخطرهم' },
 ];
 
 export const BOSS = {
@@ -101,20 +101,30 @@ export function enemyHP(e, day, idx) {
 }
 export const isDown = (hp) => hp <= 25;
 
-// Beast: the commanding soul. HP 2100 over 21 days.
+// The balance between you and the commanding soul (endless). Both powers sum to 100.
+// Every victory strengthens you and shrinks it; every loss feeds it.
 export function beast(state) {
   const pr = state.profile;
   const today = dayIndex(pr);
-  let dmg = 0;
-  for (let i = 1; i <= Math.min(today, 21); i++) {
+  let you = 25, gain = 0;
+  for (let i = 1; i <= today; i++) {
     const k = keyOf(addDays(parseKey(pr.start), i - 1));
     const d = state.days[k];
     const es = activeEnemies(i);
-    const avg = es.reduce((a, e) => a + (100 - enemyHP(e, d, i)), 0) / es.length;
-    dmg += avg;
-    if (d && d.boss) dmg += 100;
+    const frac = es.reduce((a, e) => a + (100 - enemyHP(e, d, i)), 0) / es.length / 100;
+    const won = es.every((e) => isDown(enemyHP(e, d, i)));
+    let g = 3 * frac;
+    if (i < today && !won) g -= 2; // a lost day feeds the soul
+    if (d && d.boss) g += 3;
+    if (d && d.fell) g -= 4;
+    if (d && d.sos) g += Math.min(3, d.sos);
+    if (i === today) gain = g;
+    you = Math.max(5, Math.min(95, you + g));
   }
-  dmg -= (state.sos.falls || 0) * 30; // a fall heals the beast a little
-  const max = 2100;
-  return { hp: Math.max(0, Math.round(max - Math.max(0, dmg))), max };
+  you = Math.round(you);
+  return { hp: 100 - you, max: 100, you, gain: Math.round(gain * 10) / 10 };
 }
+export const nafsStage = (nafs) => (nafs >= 60
+  ? ['النفس الأمّارة بالسوء', 'غالبة عليك الآن، نار مشتعلة']
+  : nafs >= 35 ? ['النفس اللوّامة', 'كرٌّ وفرّ، الميزان يميل إليك'] : ['نحو النفس المطمئنة', 'صغرت وذلّت، فاثبت']);
+export const bossOf = (d) => (d % 7 === 0 ? (BOSS[d] || { n: `معركة الأسبوع ${d / 7}`, d: BOSS[21].d }) : null);

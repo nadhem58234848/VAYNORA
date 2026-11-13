@@ -1,5 +1,6 @@
 import { Coordinates, CalculationMethod, PrayerTimes } from 'adhan';
 import { HABITS, RANKS, CITIES, PRAYERS, WIN_DAYS } from './data';
+import { activeEnemies, enemyHP, isDown } from './battle';
 
 export const pad = (n) => String(n).padStart(2, '0');
 export const keyOf = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
@@ -36,13 +37,10 @@ export function prayerTimes(cityName, date = new Date()) {
   return { fajr: pt.fajr, sunrise: pt.sunrise, dhuhr: pt.dhuhr, asr: pt.asr, maghrib: pt.maghrib, isha: pt.isha };
 }
 
-// Is a day "won"? all active habits counted (full or min) + no prayer missed
+// Is a day "won"? every enemy of that day is down.
 export function dayWon(day, idx) {
   if (!day) return false;
-  const hs = activeHabits(idx);
-  const habitsOk = hs.every((h) => day.h && (day.h[h.id] === 'f' || day.h[h.id] === 'm'));
-  const prOk = PRAYERS.every(([id]) => day.pr && (day.pr[id] === 'w' || day.pr[id] === 'd'));
-  return habitsOk && prOk;
+  return activeEnemies(idx).every((e) => isDown(enemyHP(e, day, idx)));
 }
 
 export function dayXP(day, idx) {
