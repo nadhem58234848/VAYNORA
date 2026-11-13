@@ -6,6 +6,7 @@ import { C, MSG, MSG_AFTER } from './data';
 import { keyOf, dayIndex, weekOf, stats, addDays, parseKey } from './logic';
 import { FRONTS, bossOf, activeEnemies, enemyHP, isDown, beast, nafsStage } from './battle';
 import { Bar, POSE, ENEMY_IMG } from './Battle';
+import Quests from './Quests';
 
 const T = ({ s = 15, b, style, children }) => (
   <Text style={[{ color: C.bone, fontFamily: b ? 'C8' : 'C6', fontSize: s, textAlign: 'right', writingDirection: 'rtl' }, style]}>{children}</Text>
@@ -115,6 +116,8 @@ export default function Path({ S, save, openFight }) {
       </View>
 
       <View style={st.say}><T s={14}>{vaySays(S, idx, day, downN, enemies.length)}</T></View>
+      <Quests S={S} save={save} />
+      <View style={{ height: 14 }} />
       <View style={{ minHeight: 560 }}>
         <Image source={day.fell ? POSE.fall : downN === enemies.length ? POSE.win : POSE.fight} style={st.vay} resizeMode="contain" />
         {days.map((d, j) => {
@@ -127,7 +130,7 @@ export default function Path({ S, save, openFight }) {
           );
           return (
             <View key={d} style={{ alignItems: 'center', marginBottom: 14, transform: [{ translateX: off }] }}>
-              {isToday && <Pressable onPress={openFight} style={st.go}><T b s={13} style={{ color: C.night }}>{downN === enemies.length ? 'ربحت اليوم ✓' : `ابدأ معركة اليوم ${d}`}</T></Pressable>}
+              {isToday && <Pressable onPress={openFight} style={st.go}><T b s={13} style={{ color: C.night }}>{day.closed ? '🔒 انتصرت اليوم · النتيجة' : `ابدأ معركة اليوم ${d}`}</T></Pressable>}
               {isToday ? (
                 <Pressable onPress={openFight}><Animated.View style={{ transform: [{ scale: pulse }] }}>{node}</Animated.View></Pressable>
               ) : node}

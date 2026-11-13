@@ -51,6 +51,7 @@ export function dayXP(day, idx) {
   xp += (day.knots || []).filter(Boolean).length * 5;
   if (day.task) xp += 10;
   if (day.lesson === 'ok') xp += 10;
+  if (day.chest) xp += day.chest.xp || 0;
   xp += Math.min(60, day.ribat || 0);
   if (day.boss) xp += 50;
   if (day.report) xp += 15;
@@ -73,6 +74,7 @@ export function stats(state) {
     const adh = d && d.h && (d.h.adhkar === 'f' || d.h.adhkar === 'm');
     adhRun = adh ? adhRun + 1 : (isToday ? adhRun : 0);
     if (adh && adhRun % 3 === 0) shields = Math.min(2, shields + 1);
+    if (d && d.chest && d.chest.shield) shields = Math.min(2, shields + 1);
     if (w) { won++; chain++; prevLost = false; }
     else if (!isToday) {
       if (shields > 0) { shields--; usedShields++; }

@@ -7,6 +7,7 @@ import * as Sharing from 'expo-sharing';
 import Icon from './icons';
 import { sfx } from './sfx';
 import Lesson from './Lesson';
+import Quests from './Quests';
 import Svg, { Path as SP } from 'react-native-svg';
 import { C, PRAYERS, HABITS, MSG, MSG_AFTER, TASK, RANKS } from './data';
 import { keyOf, dayIndex, weekOf, dayXP, stats, prayerTimes, hm, addDays, activeHabits, parseKey, dayWon } from './logic';
@@ -25,7 +26,7 @@ const buzz = () => { if (Platform.OS !== 'web') Haptics.impactAsync(Haptics.Impa
 const Opt = ({ title, dmg, on, onPress, color = C.red }) => (
   <Pressable onPress={onPress} style={[st.opt, on && { borderColor: color, backgroundColor: color === C.red ? '#2a1214' : '#1d1b19' }]}>
     <T s={15} b={on} style={{ flex: 1 }}>{title}</T>
-    {!!dmg && <T b s={14} style={{ color: C.red }}>-{dmg}</T>}
+    {on ? <T s={13} style={{ color: C.muted }}>🔒</T> : !!dmg && <T b s={14} style={{ color: C.red }}>-{dmg}</T>}
   </Pressable>
 );
 
@@ -42,7 +43,7 @@ function Questions({ e, day, idx, set, city }) {
         <View key={id} style={{ marginBottom: 6 }}>
           <T b s={18} style={{ textAlign: 'center' }}>حُلَّ العقد الثلاث</T>
           <T s={11} style={{ color: C.muted, textAlign: 'center', marginBottom: 4 }}>«يعقد الشيطان على قافية رأس أحدكم إذا هو نام ثلاث عقد» (البخاري 1142)</T>
-          {names.map((n, i) => <Opt key={i} title={(kn[i] ? '✓ ' : '') + n} dmg={15} on={kn[i]} onPress={() => set((d) => { d.knots = [...kn]; d.knots[i] = !kn[i]; }, !kn[i])} />)}
+          {names.map((n, i) => <Opt key={i} title={(kn[i] ? '✓ ' : '') + n} dmg={15} on={kn[i]} onPress={() => !kn[i] && set((d) => { d.knots = [...kn]; d.knots[i] = true; }, true)} />)}
         </View>
       );
     }
@@ -52,8 +53,8 @@ function Questions({ e, day, idx, set, city }) {
         <View key={id} style={{ marginBottom: 6 }}>
           <T b s={16}>{PRAY[id]} <T s={12} style={{ color: C.muted }}>· {hm(pt[id])}</T></T>
           <View style={st.two}>
-            <View style={{ flex: 1 }}><Opt title="في وقتها" dmg={full} on={v === 'w'} onPress={() => set((d) => { d.pr = d.pr || {}; d.pr[id] = v === 'w' ? null : 'w'; }, v !== 'w')} /></View>
-            <View style={{ flex: 1 }}><Opt title="في يومها" dmg={min} on={v === 'd'} color={C.amber} onPress={() => set((d) => { d.pr = d.pr || {}; d.pr[id] = v === 'd' ? null : 'd'; }, v !== 'd')} /></View>
+            <View style={{ flex: 1 }}><Opt title="في وقتها" dmg={full} on={v === 'w'} onPress={() => !v && set((d) => { d.pr = d.pr || {}; d.pr[id] = 'w'; }, true)} /></View>
+            <View style={{ flex: 1 }}><Opt title="في يومها" dmg={min} on={v === 'd'} color={C.amber} onPress={() => !v && set((d) => { d.pr = d.pr || {}; d.pr[id] = 'd'; }, true)} /></View>
           </View>
         </View>
       );
@@ -63,13 +64,13 @@ function Questions({ e, day, idx, set, city }) {
       return (
         <View key={id} style={{ marginBottom: 6 }}>
           <T b s={16}>{h.t}</T>
-          <Opt title={'💪 كاملة · ' + h.full} dmg={full} on={v === 'f'} onPress={() => set((d) => { d.h = d.h || {}; d.h[id] = v === 'f' ? null : 'f'; }, v !== 'f')} />
-          <Opt title={'على الأقل · ' + h.min} dmg={min} on={v === 'm'} color={C.amber} onPress={() => set((d) => { d.h = d.h || {}; d.h[id] = v === 'm' ? null : 'm'; }, v !== 'm')} />
+          <Opt title={'💪 كاملة · ' + h.full} dmg={full} on={v === 'f'} onPress={() => !v && set((d) => { d.h = d.h || {}; d.h[id] = 'f'; }, true)} />
+          <Opt title={'على الأقل · ' + h.min} dmg={min} on={v === 'm'} color={C.amber} onPress={() => !v && set((d) => { d.h = d.h || {}; d.h[id] = 'm'; }, true)} />
         </View>
       );
     }
-    if (id === 'task') return <Opt key={id} title="🎯 أنجزت مهمة اليوم" dmg={full} on={!!day.task} onPress={() => set((d) => { d.task = !d.task; }, !day.task)} />;
-    if (id === 'safe') return <Opt key={id} title="🛡️ يومي وليلتي سالمان" dmg={full} on={!!day.safe} onPress={() => set((d) => { d.safe = !d.safe; }, !day.safe)} />;
+    if (id === 'task') return <Opt key={id} title="🎯 أنجزت مهمة اليوم" dmg={full} on={!!day.task} onPress={() => !day.task && set((d) => { d.task = true; }, true)} />;
+    if (id === 'safe') return <Opt key={id} title="🛡️ يومي وليلتي سالمان" dmg={full} on={!!day.safe} onPress={() => !day.safe && set((d) => { d.safe = true; }, true)} />;
     if (id === 'tom') return (
       <View key={id}>
         <T b s={16}>مهمة الغد الوحيدة</T>
@@ -85,8 +86,8 @@ function TomInput({ day, set }) {
   const [v, setV] = useState(day.tom || '');
   return (
     <View>
-      <TextInput value={v} onChangeText={setV} placeholder="شيء واحد، الأهم" placeholderTextColor={C.muted} style={st.input} />
-      <Opt title={day.tom ? '✓ مكتوبة' : '✍️ اكتبها'} dmg={40} on={!!(day.report && day.tom)} onPress={() => v.trim() && set((d) => { d.tom = v.trim(); d.report = true; }, true)} />
+      <TextInput editable={!(day.report && day.tom)} value={v} onChangeText={setV} placeholder="شيء واحد، الأهم" placeholderTextColor={C.muted} style={st.input} />
+      <Opt title={day.tom ? '✓ مكتوبة' : '✍️ اكتبها'} dmg={40} on={!!(day.report && day.tom)} onPress={() => v.trim() && !(day.report && day.tom) && set((d) => { d.tom = v.trim(); d.report = true; }, true)} />
     </View>
   );
 }
@@ -242,6 +243,7 @@ function Result({ S, save, close, pop }) {
       <T s={15} style={{ color: C.muted, textAlign: 'center' }}>اليوم {idx}</T>
       <T b s={32} style={{ color: won ? C.red : C.bone, textAlign: 'center' }}>{won ? 'انتصرت اليوم' : 'أتممت جولتك'}</T>
       {!won && <T s={13} style={{ color: C.muted, textAlign: 'center' }}>المعركة مفتوحة إلى آخر اليوم. عُد وأسقِط من بقي.</T>}
+      {day.closed && <T s={13} style={{ color: C.muted, textAlign: 'center' }}>🔒 أُغلقت معركة اليوم. موعدك غدًا مع معركة جديدة.</T>}
       <Animated.Image source={day.fell ? POSE.fall : won ? POSE.win : POSE.fight} style={{ width: 150, height: 210, alignSelf: 'center', transform: [{ scale: pop.interpolate({ inputRange: [0, 1], outputRange: [0.6, 1] }) }] }} resizeMode="contain" />
 
       <Sec title="السلسلة">
@@ -280,6 +282,8 @@ function Result({ S, save, close, pop }) {
           })}
         </View>
       </Sec>
+
+      <Quests S={S} save={save} />
 
       <Sec title="الصلوات الخمس">
         <View style={[st.row, { justifyContent: 'space-between' }]}>
@@ -356,12 +360,12 @@ export default function Fight({ S, save, close }) {
   const day = S.days[k] || {};
   const enemies = activeEnemies(idx);
   const [i, setI] = useState(0);
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState(!!day.closed);
   const [line, setLine] = useState('');
   const [praise, setPraise] = useState(null);
   const combo = useRef(0);
   const praiseT = useRef(null);
-  const [phase, setPhase] = useState('fight');
+  const [phase, setPhase] = useState(day.closed ? 'card' : 'fight');
   const [skipL, setSkipL] = useState(false);
   const shake = useRef(new Animated.Value(0)).current;
   const pop = useRef(new Animated.Value(0)).current;
@@ -381,6 +385,7 @@ export default function Fight({ S, save, close }) {
       const fell = !isDown(enemyHP(e, day, idx)) && isDown(enemyHP(e, s2.days[k], idx));
       sfx(fell ? 'down' : 'hit');
       const c = combo.current;
+      if (c > (day.combo || 0)) save((x) => { x.days[k] = x.days[k] || {}; x.days[k].combo = Math.max(x.days[k].combo || 0, c); return x; });
       setPraise(fell ? `سقط ${e.n.split(' · ')[0]}!` : c >= 5 ? `${c} ضربات متتالية! لا تتوقف` : c >= 3 ? `${c} ضربات متتالية 🔥` : pick(PRAISE));
       clearTimeout(praiseT.current);
       praiseT.current = setTimeout(() => setPraise(null), 1500);
@@ -393,7 +398,7 @@ export default function Fight({ S, save, close }) {
     if (i < enemies.length - 1) { setI(i + 1); return; }
     const allDown = enemies.every((x) => isDown(enemyHP(x, day, idx)));
     const first = dayWon(day, idx) && !day.flame;
-    if (first) save((x) => { x.days[k] = x.days[k] || {}; x.days[k].flame = true; return x; });
+    save((x) => { x.days[k] = x.days[k] || {}; if (first) x.days[k].flame = true; if (allDown) x.days[k].closed = true; return x; });
     setPhase(first ? 'flame' : 'card');
     sfx(allDown ? 'win' : 'tap');
     setDone(true);
