@@ -54,6 +54,8 @@ export const HABITS = [
   { id: 'read', week: 2, t: 'قراية', full: '10 صفحات', min: 'صفحتين' },
   { id: 'water', week: 2, t: 'الماء', full: '2 لتر', min: '1 لتر' },
   { id: 'quran', week: 3, t: 'ورد القرآن', full: 'وردي كامل', min: 'صفحة' },
+  { id: 'gaze', week: 2, t: 'غضّ البصر', full: 'النهار الكل', min: 'رجعت بسرعة' },
+  { id: 'adhkar', week: 1, t: 'أذكار الصباح والمساء', full: 'الزوز', min: 'واحد منهم' },
 ];
 
 export const WEEKS = [

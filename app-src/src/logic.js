@@ -50,6 +50,9 @@ export function dayXP(day, idx) {
   let xp = 0;
   PRAYERS.forEach(([id]) => { const v = day.pr && day.pr[id]; if (v === 'w') xp += 10; else if (v === 'd') xp += 5; });
   activeHabits(idx).forEach((h) => { const v = day.h && day.h[h.id]; if (v === 'f') xp += 10; else if (v === 'm') xp += 5; });
+  xp += (day.knots || []).filter(Boolean).length * 5;
+  if (day.task) xp += 10;
+  if (day.boss) xp += 50;
   if (day.report) xp += 15;
   if (dayWon(day, idx)) xp += 30;
   return xp;
@@ -59,7 +62,7 @@ export function stats(state) {
   const pr = state.profile;
   const today = new Date();
   const todayIdx = dayIndex(pr, today);
-  let xp = state.sos.passed * 20, won = 0, chain = 0, best = 0, prevLost = false, fajrRun = 0, fajrDays = 0;
+  let xp = state.sos.passed * 20, won = 0, chain = 0, best = 0, prevLost = false, fajrRun = 0, fajrDays = 0, adhRun = 0, shields = 0, usedShields = 0;
   const list = [];
   for (let i = 1; i <= todayIdx; i++) {
     const k = keyOf(addDays(parseKey(pr.start), i - 1));
@@ -67,8 +70,14 @@ export function stats(state) {
     const w = dayWon(d, i);
     xp += dayXP(d, i);
     const isToday = i === todayIdx;
+    const adh = d && d.h && (d.h.adhkar === 'f' || d.h.adhkar === 'm');
+    adhRun = adh ? adhRun + 1 : (isToday ? adhRun : 0);
+    if (adh && adhRun % 3 === 0) shields = Math.min(2, shields + 1);
     if (w) { won++; chain++; prevLost = false; }
-    else if (!isToday) { if (prevLost) chain = 0; prevLost = true; }
+    else if (!isToday) {
+      if (shields > 0) { shields--; usedShields++; }
+      else { if (prevLost) chain = 0; prevLost = true; }
+    }
     best = Math.max(best, chain);
     const fj = d && d.pr && d.pr.fajr === 'w';
     if (fj) { fajrRun++; fajrDays++; } else if (!isToday) fajrRun = 0;
@@ -84,5 +93,5 @@ export function stats(state) {
     ['🛡️', 'عدّيت 3 موجات', state.sos.passed >= 3],
     ['⚔️', 'ربحت 21 يوم', first21 >= 21],
   ];
-  return { todayIdx, xp, won, chain, best, fajrRun, fajrDays, list, rank, next, badges, first21, certified: todayIdx >= 21 && first21 >= WIN_DAYS };
+  return { shields, usedShields, todayIdx, xp, won, chain, best, fajrRun, fajrDays, list, rank, next, badges, first21, certified: todayIdx >= 21 && first21 >= WIN_DAYS };
 }

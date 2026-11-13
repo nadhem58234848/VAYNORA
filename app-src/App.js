@@ -8,6 +8,9 @@ import * as Clipboard from 'expo-clipboard';
 import { C, MSG, MSG_AFTER, TASK, PRAYERS, WEEKS, TEN, FIRST, ZUMAR, CITIES, SHOP, IG_DM, WIN_DAYS } from './src/data';
 import { emptyState, keyOf, dayIndex, weekOf, activeHabits, prayerTimes, dayXP, stats, hm, addDays } from './src/logic';
 import { rescheduleAll } from './src/notify';
+import Battle from './src/Battle';
+import Squad from './src/Squad';
+import Icon from './src/icons';
 
 const KEY = 'vay_app_v1';
 
@@ -63,13 +66,14 @@ export default function App() {
           <View style={{ flex: 1 }}>
             <Header S={S} />
             <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: 110 }}>
-              {tab === 'today' && <Today S={S} save={save} />}
+              {tab === 'today' && <Battle S={S} save={save} />}
+              {tab === 'squad' && <Squad S={S} save={save} />}
               {tab === 'chain' && <Chain S={S} />}
               {tab === 'fajr' && <Fajr S={S} save={save} />}
               {tab === 'rem' && <Reminders S={S} save={save} />}
               {tab === 'shop' && <Shop S={S} save={save} />}
             </ScrollView>
-            <Pressable onPress={() => setSos(true)} style={st.sos}><T b s={15}>🔴 طوارئ</T></Pressable>
+            <Pressable onPress={() => setSos(true)} style={[st.sos, { flexDirection: 'row-reverse', alignItems: 'center', gap: 6 }]}><Icon name="sos" size={20} color={C.bone} accent={C.bone} /><T b s={15}>طوارئ</T></Pressable>
             <Tabs tab={tab} setTab={setTab} />
           </View>
         )}
@@ -100,12 +104,12 @@ function Header({ S }) {
 }
 
 function Tabs({ tab, setTab }) {
-  const items = [['today', '☀️', 'اليوم'], ['chain', '🔗', 'السلسلة'], ['fajr', '🌅', 'الفجر'], ['rem', '⏰', 'التذكير'], ['shop', '📒', 'المتجر']];
+  const items = [['today', 'sword', 'الساحة'], ['chain', 'chain', 'السلسلة'], ['squad', 'flag', 'الكتيبة'], ['fajr', 'sun', 'الفجر'], ['rem', 'bell', 'التذكير'], ['shop', 'bag', 'المتجر']];
   return (
     <View style={st.tabs}>
       {items.map(([id, ic, n]) => (
         <Pressable key={id} onPress={() => setTab(id)} style={st.tab}>
-          <T s={20}>{ic}</T>
+          <Icon name={ic} size={22} color={tab === id ? C.bone : C.muted} accent={tab === id ? C.red : C.muted} />
           <T s={11} b={tab === id} style={{ color: tab === id ? C.red : C.muted }}>{n}</T>
         </Pressable>
       ))}
@@ -450,8 +454,8 @@ function Emergency({ save, close }) {
             <Btn small kind="ghost" title="الخطوة اللي قبل" onPress={() => setStep(Math.max(0, step - 1))} />
             <Btn small kind="ghost" title="الخطوة الجاية" onPress={() => setStep(Math.min(TEN.length - 1, step + 1))} />
           </Row>
-          <Btn style={{ marginTop: 16 }} title="✓ عدّات الموجة" onPress={() => { save((s) => { s.sos.passed++; return s; }); setMode('passed'); }} />
-          <Btn kind="ghost" style={{ marginTop: 10 }} title="طحت" onPress={() => { save((s) => { s.sos.falls++; return s; }); setMode('fell'); }} />
+          <Btn style={{ marginTop: 16 }} title="✓ عدّات الموجة" onPress={() => { save((s) => { s.sos.passed++; const k = keyOf(new Date()); s.days[k] = s.days[k] || {}; s.days[k].sos = (s.days[k].sos || 0) + 1; return s; }); setMode('passed'); }} />
+          <Btn kind="ghost" style={{ marginTop: 10 }} title="طحت" onPress={() => { save((s) => { s.sos.falls++; const k = keyOf(new Date()); s.days[k] = s.days[k] || {}; s.days[k].fell = true; return s; }); setMode('fell'); }} />
         </View>
       )}
       {mode === 'passed' && (

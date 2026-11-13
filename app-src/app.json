@@ -29,7 +29,8 @@
     },
     "plugins": [
       "expo-font",
-      "expo-notifications"
+      "expo-notifications",
+      "expo-sharing"
     ],
     "backgroundColor": "#0D0D0D",
     "splash": {
