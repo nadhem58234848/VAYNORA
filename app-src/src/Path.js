@@ -15,12 +15,12 @@ const OFF = [0, -60, -90, -60, 0, 60, 90];
 // What VAY says, depending on the day
 function vaySays(S, idx, day, downN, total) {
   const h = new Date().getHours();
-  if (day.fell) return 'طحت؟ حتى أنا طحت. قوم، نكمّلو مع بعضنا.';
-  if (downN === total) return 'طيّحناهم الكل اليوم! غدوة نرجعو.';
-  if (h < 9 && !(day.knots || []).some(Boolean)) return 'صباح الخير يا محارب. شيطان الفجر عقدلك 3 عقد، يزّي نفكّوهم.';
-  if (h >= 21) return 'الليل جا. كمّل تقرير المعركة وحط التليفون برّا البيت.';
-  if (downN === 0) return 'وينك؟ الأعداء قاعدين يضحكو عليّ. ادخل للمعركة!';
-  return `طيّحنا ${downN} من ${total}. باقي ${total - downN}، ما تخلّيهمش يرتاحو.`;
+  if (day.fell) return 'سقطت؟ أنا أيضًا سقطت. قُم، نُكمل معًا.';
+  if (downN === total) return 'أسقطناهم جميعًا اليوم! غدًا نعود.';
+  if (h < 9 && !(day.knots || []).some(Boolean)) return 'صباح الخير أيها المحارب. شيطان الفجر عقد عليك 3 عقد، هيّا نحلّها.';
+  if (h >= 21) return 'جاء الليل. أتمم تقرير المعركة وضع الهاتف خارج الغرفة.';
+  if (downN === 0) return 'أين أنت؟ الأعداء يسخرون منّي. ادخل المعركة!';
+  return `أسقطنا ${downN} من ${total}. بقي ${total - downN}، لا تدعهم يرتاحون.`;
 }
 
 function Ribat({ close, save }) {
@@ -39,26 +39,26 @@ function Ribat({ close, save }) {
       <Pressable onPress={close} style={{ position: 'absolute', top: 20, right: 20 }}><T s={26} style={{ color: C.muted }}>✕</T></Pressable>
       <T b s={28} style={{ textAlign: 'center' }}>⏳ الرباط</T>
       {state === 'pick' && (<>
-        <T s={15} style={{ textAlign: 'center', color: C.muted, marginVertical: 10 }}>اختار وقت، وحط التلفون. VAY يحرس القلعة. كي تخرج من التطبيق قبل الوقت، العدو يدخل.</T>
-        {[[25, 'قراية ولا قرآن'], [45, 'خدمة ولا قراية'], [60, 'رباط كامل']].map(([m, n]) => (
+        <T s={15} style={{ textAlign: 'center', color: C.muted, marginVertical: 10 }}>اختر مدة، وضع الهاتف. VAY يحرس القلعة. إن خرجت من التطبيق قبل الوقت دخل العدو.</T>
+        {[[25, 'قراءة أو قرآن'], [45, 'عمل أو دراسة'], [60, 'رباط كامل']].map(([m, n]) => (
           <Pressable key={m} style={st.opt} onPress={() => { setMin(m); setLeft(m * 60); setState('run'); }}><T b s={18}>{m} دقيقة</T><T s={13} style={{ color: C.muted }}>{n}</T></Pressable>
         ))}
       </>)}
       {state === 'run' && (<>
         <Image source={POSE.fight} style={{ width: 160, height: 230, alignSelf: 'center' }} resizeMode="contain" />
         <T b s={56} style={{ textAlign: 'center' }}>{mm}</T>
-        <T s={14} style={{ textAlign: 'center', color: C.muted }}>VAY يحرس القلعة. ما تخرجش.</T>
+        <T s={14} style={{ textAlign: 'center', color: C.muted }}>VAY يحرس القلعة. لا تخرج.</T>
       </>)}
       {state === 'won' && (<>
         <Image source={POSE.win} style={{ width: 160, height: 230, alignSelf: 'center' }} resizeMode="contain" />
         <T b s={26} style={{ textAlign: 'center', color: C.red }}>القلعة سالمة! +{min} دقيقة رباط</T>
-        <Pressable style={st.cta} onPress={close}><T b style={{ textAlign: 'center' }}>كمّل</T></Pressable>
+        <Pressable style={st.cta} onPress={close}><T b style={{ textAlign: 'center' }}>متابعة</T></Pressable>
       </>)}
       {state === 'lost' && (<>
         <Image source={POSE.fall} style={{ width: 160, height: 230, alignSelf: 'center' }} resizeMode="contain" />
-        <T b s={22} style={{ textAlign: 'center' }}>خرجت قبل الوقت والعدو دخل.</T>
-        <T s={14} style={{ textAlign: 'center', color: C.muted }}>موش مشكل، عاود من جديد.</T>
-        <Pressable style={st.cta} onPress={() => setState('pick')}><T b style={{ textAlign: 'center' }}>عاود الرباط</T></Pressable>
+        <T b s={22} style={{ textAlign: 'center' }}>خرجت قبل الوقت فدخل العدو.</T>
+        <T s={14} style={{ textAlign: 'center', color: C.muted }}>لا بأس، أعِد من جديد.</T>
+        <Pressable style={st.cta} onPress={() => setState('pick')}><T b style={{ textAlign: 'center' }}>أعِد الرباط</T></Pressable>
       </>)}
     </View>
   );
@@ -100,7 +100,7 @@ export default function Path({ S, save, openFight }) {
         <Image source={ENEMY_IMG.beast} style={StyleSheet.absoluteFill} resizeMode="cover" />
         <View style={st.beastShade} />
         <T b s={20} style={{ color: C.bone }}>النفس الأمّارة بالسوء</T>
-        <T s={12} style={{ color: '#d9cfc6' }}>الوحش الكبير · تهزمو في 21 يوم</T>
+        <T s={12} style={{ color: '#d9cfc6' }}>الوحش الأكبر · تهزمه في 21 يومًا</T>
       </View>
       <View style={[st.row, { gap: 8, marginVertical: 10 }]}>
         <T s={12} style={{ color: C.muted }}>صحة الوحش</T>
@@ -121,11 +121,11 @@ export default function Path({ S, save, openFight }) {
           );
           return (
             <View key={d} style={{ alignItems: 'center', marginBottom: 14, transform: [{ translateX: off }] }}>
-              {isToday && <Pressable onPress={openFight} style={st.go}><T b s={13} style={{ color: C.night }}>{downN === enemies.length ? 'ربحت النهار ✓' : `ابدا معركة النهار ${d}`}</T></Pressable>}
+              {isToday && <Pressable onPress={openFight} style={st.go}><T b s={13} style={{ color: C.night }}>{downN === enemies.length ? 'ربحت اليوم ✓' : `ابدأ معركة اليوم ${d}`}</T></Pressable>}
               {isToday ? (
                 <Pressable onPress={openFight}><Animated.View style={{ transform: [{ scale: pulse }] }}>{node}</Animated.View></Pressable>
               ) : node}
-              <T s={11} style={{ color: C.muted, marginTop: 6, textAlign: 'center' }}>{boss ? 'معركة كبيرة' : `النهار ${d}`}</T>
+              <T s={11} style={{ color: C.muted, marginTop: 6, textAlign: 'center' }}>{boss ? 'معركة كبرى' : `اليوم ${d}`}</T>
             </View>
           );
         })}
@@ -133,8 +133,8 @@ export default function Path({ S, save, openFight }) {
 
       <Pressable style={[st.ribatBtn, st.row]} onPress={() => setRibat(true)}>
         <Icon name="hourglass" size={26} />
-        <View style={{ flex: 1, marginRight: 10 }}><T b s={16}>الرباط</T><T s={12} style={{ color: C.muted }}>جلسة تركيز: VAY يحرس القلعة وانت تخدم ولا تقرا</T></View>
-        <T b s={14} style={{ color: C.red }}>{day.ribat ? `${day.ribat} د ✓` : 'ابدا'}</T>
+        <View style={{ flex: 1, marginRight: 10 }}><T b s={16}>الرباط</T><T s={12} style={{ color: C.muted }}>جلسة تركيز: VAY يحرس القلعة وأنت تعمل أو تقرأ</T></View>
+        <T b s={14} style={{ color: C.red }}>{day.ribat ? `${day.ribat} د ✓` : 'ابدأ'}</T>
       </Pressable>
 
       <Modal visible={ribat} animationType="slide" onRequestClose={() => setRibat(false)}>
@@ -143,9 +143,9 @@ export default function Path({ S, save, openFight }) {
       <Modal visible={orders} transparent animationType="fade" onRequestClose={() => setOrders(false)}>
         <View style={st.modalBg}>
           <View style={st.ordersCard}>
-            <T b s={14} style={{ color: C.red }}>⚔️ أوامر القائد ناظم · النهار {idx}</T>
+            <T b s={14} style={{ color: C.red }}>⚔️ أوامر القائد ناظم · اليوم {idx}</T>
             <T s={17} style={{ marginTop: 8 }}>{idx <= 21 ? MSG[idx - 1] : MSG_AFTER}</T>
-            <Pressable style={st.cta} onPress={() => { setOrders(false); save((x) => { x.lastOrders = k; return x; }); }}><T b style={{ textAlign: 'center' }}>فهمت، يزّي نبداو</T></Pressable>
+            <Pressable style={st.cta} onPress={() => { setOrders(false); save((x) => { x.lastOrders = k; return x; }); }}><T b style={{ textAlign: 'center' }}>فهمت، لنبدأ</T></Pressable>
           </View>
         </View>
       </Modal>

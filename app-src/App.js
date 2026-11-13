@@ -144,9 +144,9 @@ function Tabs({ tab, setTab }) {
 
 // ---------- onboarding ----------
 const INTRO = [
-  ['fight', 'أنا VAY.', 'كل واحد فينا في حرب. الحرب العظمى هي حرب النفس، والعدو الكبير هو «النفس الأمّارة».'],
-  ['fall', 'وكل يوم معارك صغيرة.', 'شيطان الفجر يعقدلك 3 عقد وانت راقد. خنزب يسرقلك الخشوع. الكسل والتسويف يقولولك «غدوة».'],
-  ['win', 'ما تحاربش وحدك.', 'كل صلاة وكل عادة ضربة. 21 يوم، 3 جبهات، وأنا معاك. وكي تطيح، نقوّموك. يزّي؟'],
+  ['fight', 'أنا VAY.', 'كل واحد منّا في حرب. الحرب العظمى هي حرب النفس، والعدو الكبير هو «النفس الأمّارة».'],
+  ['fall', 'وكل يوم معارك صغيرة.', 'شيطان الفجر يعقد عليك 3 عقد وأنت نائم. خنزب يسرق منك الخشوع. الكسل والتسويف يقولان لك «غدًا».'],
+  ['win', 'لن تحارب وحدك.', 'كل صلاة وكل عادة ضربة. 21 يومًا، 3 جبهات، وأنا معك. وإذا سقطت أقمناك. هيّا؟'],
 ];
 function Onboard({ save }) {
   const [step, setStep] = useState(0);
@@ -162,7 +162,7 @@ function Onboard({ save }) {
         <Image source={POSE[pose]} style={{ width: 200, height: 300, alignSelf: 'center' }} resizeMode="contain" />
         <T b s={28} style={{ textAlign: 'center', marginTop: 16 }}>{t1}</T>
         <T s={16} style={{ textAlign: 'center', color: '#cfc6bd', marginTop: 8 }}>{t2}</T>
-        <Btn style={{ marginTop: 28 }} title={step < 2 ? 'كمّل' : 'نبدا الحرب ⚔️'} onPress={() => setStep(step + 1)} />
+        <Btn style={{ marginTop: 28 }} title={step < 2 ? 'التالي' : 'لنبدأ الحرب ⚔️'} onPress={() => setStep(step + 1)} />
       </View>
     );
   }
@@ -171,15 +171,15 @@ function Onboard({ save }) {
       <T b s={30} style={{ letterSpacing: 3, textAlign: 'center', marginTop: 20, color: C.red }}>VAYNORA</T>
       <T b s={22} style={{ textAlign: 'center' }}>حرب النفس</T>
       <T s={15} style={{ textAlign: 'center', color: C.muted, marginBottom: 24 }}>اصنع من الألم قوة</T>
-      <T b style={{ marginTop: 12 }}>شنوة اسمك يا محارب؟</T>
+      <T b style={{ marginTop: 12 }}>ما اسمك أيها المحارب؟</T>
       <TextInput value={name} onChangeText={setName} placeholder="اسمك" placeholderTextColor={C.muted} style={st.input} />
       <T b style={{ marginTop: 12 }}>مدينتك (لمواقيت الصلاة)</T>
       <View style={st.wrap}>{CITIES.map(([c]) => <Chip key={c} title={c} on={city === c} onPress={() => setCity(c)} />)}</View>
-      <Btn style={{ marginTop: 20 }} title="نبدا اليوم ⚔️" onPress={() => {
+      <Btn style={{ marginTop: 20 }} title="أبدأ اليوم ⚔️" onPress={() => {
         if (!name.trim()) return;
         save((s) => { s.profile = { name: name.trim(), city, start: keyOf(new Date()) }; return s; }, true);
       }} />
-      <T s={12} style={{ color: C.muted, textAlign: 'center', marginTop: 10 }}>بياناتك تقعد في تلفونك. حساب VAYNORA تعملو من بعد في «الكتيبة».</T>
+      <T s={12} style={{ color: C.muted, textAlign: 'center', marginTop: 10 }}>بياناتك تبقى في هاتفك. حساب VAYNORA تنشئه لاحقًا في «الكتيبة».</T>
     </ScrollView>
   );
 }
@@ -270,7 +270,7 @@ function Chain({ S }) {
         <T s={14} style={{ color: C.muted }}>السلسلة</T>
         <T b s={48} style={{ color: C.red }}>🔗 {s.chain}</T>
         <T s={13} style={{ color: C.muted }}>أطول سلسلة: {s.best} · أيام ربحتها: {s.won}</T>
-        <T s={13} style={{ marginTop: 6, textAlign: 'center' }}>القاعدة: ما تفلّتش زوز أيام ورا بعضهم. نهار واحد ما يكسرش السلسلة.</T>
+        <T s={13} style={{ marginTop: 6, textAlign: 'center' }}>القاعدة: لا تُضيّع يومين متتاليين. يوم واحد لا يكسر السلسلة.</T>
       </Card>
       <Card>
         <Row style={{ justifyContent: 'space-between' }}>
@@ -280,7 +280,7 @@ function Chain({ S }) {
         {s.next && (
           <View style={{ marginTop: 10 }}>
             <View style={st.bar}><View style={[st.barIn, { width: `${Math.min(100, (s.xp / s.next[0]) * 100)}%` }]} /></View>
-            <T s={12} style={{ color: C.muted, marginTop: 4 }}>باقيلك {s.next[0] - s.xp} نقطة لـ «{s.next[1]}»</T>
+            <T s={12} style={{ color: C.muted, marginTop: 4 }}>بقي لك {s.next[0] - s.xp} نقطة لبلوغ «{s.next[1]}»</T>
           </View>
         )}
       </Card>
@@ -297,7 +297,7 @@ function Chain({ S }) {
             </View>
           ))}
         </Row>
-        <T s={12} style={{ color: C.muted, textAlign: 'center', marginTop: 8 }}>صوّر الشاشة وحطها ستوري مع @vaynora_</T>
+        <T s={12} style={{ color: C.muted, textAlign: 'center', marginTop: 8 }}>صوّر الشاشة وانشرها في القصة مع @vaynora_</T>
       </Card>
 
       <H>🏅 الشارات</H>
@@ -314,15 +314,15 @@ function Chain({ S }) {
           <T b s={22} style={{ textAlign: 'center', marginTop: 6 }}>شهادة محارب</T>
           <T s={14} style={{ textAlign: 'center', marginTop: 10 }}>تشهد VAYNORA أن</T>
           <T b s={26} style={{ textAlign: 'center', color: C.red }}>{S.profile.name}</T>
-          <T s={14} style={{ textAlign: 'center' }}>أتمّ تحدي حرب النفس 21 يوم، وربح {s.first21} يوم منها.</T>
+          <T s={14} style={{ textAlign: 'center' }}>أتمّ تحدي حرب النفس 21 يومًا، وربح {s.first21} يومًا منها.</T>
           <T s={13} style={{ textAlign: 'center', color: C.muted, marginTop: 8 }}>{keyOf(new Date())} · ناظم</T>
-          <T s={12} style={{ textAlign: 'center', marginTop: 12 }}>ابعث «كمّلت» لناظم مع تصويرة السلسلة باش تاخو الشهادة الرسمية PDF.</T>
-          <Btn small style={{ marginTop: 10 }} title="ابعث «كمّلت» لناظم" onPress={() => Linking.openURL(IG_DM)} />
+          <T s={12} style={{ textAlign: 'center', marginTop: 12 }}>أرسل «أتممت» إلى ناظم مع صورة السلسلة لتحصل على الشهادة الرسمية PDF.</T>
+          <Btn small style={{ marginTop: 10 }} title="أرسل «أتممت» إلى ناظم" onPress={() => Linking.openURL(IG_DM)} />
         </View>
       ) : (
         <Card>
-          <T s={14}>تربح الشهادة كي تكمّل 21 يوم وتربح {WIN_DAYS} يوم منهم على الأقل.</T>
-          <T s={13} style={{ color: C.muted, marginTop: 4 }}>توّا: ربحت {s.first21} · النهار {Math.min(s.todayIdx, 21)} من 21</T>
+          <T s={14}>تنال الشهادة حين تُتمّ 21 يومًا وتربح {WIN_DAYS} يومًا منها على الأقل.</T>
+          <T s={13} style={{ color: C.muted, marginTop: 4 }}>الآن: ربحت {s.first21} · اليوم {Math.min(s.todayIdx, 21)} من 21</T>
         </Card>
       )}
     </View>
@@ -347,34 +347,34 @@ function Fajr({ S, save }) {
       <Card style={{ alignItems: 'center' }}>
         <T s={14} style={{ color: C.muted }}>الفجر اليوم في {S.profile.city}</T>
         <T b s={40}>{hm(pt.fajr)}</T>
-        <T s={13} style={{ color: C.muted }}>غدوة: {hm(ptTom.fajr)} · الشروق: {hm(pt.sunrise)}</T>
+        <T s={13} style={{ color: C.muted }}>غدًا: {hm(ptTom.fajr)} · الشروق: {hm(pt.sunrise)}</T>
       </Card>
       <Row style={{ gap: 10 }}>
-        <Card style={{ flex: 1, alignItems: 'center' }}><T s={13} style={{ color: C.muted }}>فجر ورا بعضو</T><T b s={28} style={{ color: C.red }}>{s.fajrRun}</T></Card>
-        <Card style={{ flex: 1, alignItems: 'center' }}><T s={13} style={{ color: C.muted }}>أيام الفجر الكل</T><T b s={28}>{s.fajrDays}</T></Card>
+        <Card style={{ flex: 1, alignItems: 'center' }}><T s={13} style={{ color: C.muted }}>فجر متتالٍ</T><T b s={28} style={{ color: C.red }}>{s.fajrRun}</T></Card>
+        <Card style={{ flex: 1, alignItems: 'center' }}><T s={13} style={{ color: C.muted }}>مجموع أيام الفجر</T><T b s={28}>{s.fajrDays}</T></Card>
       </Row>
       <H>⏰ منبّه الفجر</H>
       <Card>
-        <T s={14}>3 تنبيهات، كل 3 دقايق، كل واحد أقوى من اللي قبلو.</T>
+        <T s={14}>3 تنبيهات، كل 3 دقائق، كل واحد أقوى من سابقه.</T>
         <Row style={{ justifyContent: 'space-between', marginTop: 10 }}>
           <Btn small kind="ghost" title="−5" onPress={() => shift('wake', -5)} />
-          <View style={{ alignItems: 'center' }}><T s={12} style={{ color: C.muted }}>وقت القيام</T><T b s={28}>{st8.wake}</T></View>
+          <View style={{ alignItems: 'center' }}><T s={12} style={{ color: C.muted }}>وقت الاستيقاظ</T><T b s={28}>{st8.wake}</T></View>
           <Btn small kind="ghost" title="+5" onPress={() => shift('wake', 5)} />
         </Row>
         <Row style={{ justifyContent: 'center', marginTop: 8 }}>
-          <Chip title={st8.fajr ? 'المنبّه شاعل' : 'المنبّه طافي'} on={st8.fajr} onPress={() => save((x) => { x.settings.fajr = !x.settings.fajr; return x; }, true)} />
+          <Chip title={st8.fajr ? 'المنبّه مفعّل' : 'المنبّه متوقف'} on={st8.fajr} onPress={() => save((x) => { x.settings.fajr = !x.settings.fajr; return x; }, true)} />
         </Row>
-        <T s={12} style={{ color: C.muted, textAlign: 'center', marginTop: 6 }}>نصيحة: قوم 20 لـ30 دقيقة قبل الفجر ({hm(new Date(ptTom.fajr - 25 * 60000))} غدوة).</T>
+        <T s={12} style={{ color: C.muted, textAlign: 'center', marginTop: 6 }}>نصيحة: استيقظ قبل الفجر بـ20 إلى 30 دقيقة ({hm(new Date(ptTom.fajr - 25 * 60000))} غدًا).</T>
       </Card>
       <H>🌙 خطة النوم</H>
       <Card>
         <Row style={{ justifyContent: 'space-between' }}>
           <Btn small kind="ghost" title="−15" onPress={() => shift('sleep', -15)} />
-          <View style={{ alignItems: 'center' }}><T s={12} style={{ color: C.muted }}>وقت الرقاد</T><T b s={28}>{st8.sleep}</T></View>
+          <View style={{ alignItems: 'center' }}><T s={12} style={{ color: C.muted }}>وقت النوم</T><T b s={28}>{st8.sleep}</T></View>
           <Btn small kind="ghost" title="+15" onPress={() => shift('sleep', 15)} />
         </Row>
-        <T s={14} style={{ textAlign: 'center', marginTop: 6, color: sleepH < 6 ? C.amber : C.bone }}>ترقد {sleepH} ساعة{sleepH < 6 ? ' · قليل، قدّم وقت الرقاد' : ''}</T>
-        <T s={13} style={{ marginTop: 8 }}>• تذكير 30 دقيقة قبل الرقاد{'\n'}• الشارجور برّا بيت الرقاد{'\n'}• المنبّه بعيد على الفراش{'\n'}• ما تشربش قهوة بعد العصر</T>
+        <T s={14} style={{ textAlign: 'center', marginTop: 6, color: sleepH < 6 ? C.amber : C.bone }}>تنام {sleepH} ساعة{sleepH < 6 ? ' · قليل، قدّم وقت النوم' : ''}</T>
+        <T s={13} style={{ marginTop: 8 }}>• تذكير قبل النوم بـ30 دقيقة{'\n'}• الشاحن خارج غرفة النوم{'\n'}• المنبّه بعيد عن الفراش{'\n'}• لا تشرب القهوة بعد العصر</T>
       </Card>
     </View>
   );
@@ -391,10 +391,10 @@ function Reminders({ S, save }) {
   return (
     <View>
       <H>⏰ التذكيرات</H>
-      {Platform.OS === 'web' && <Card><T s={13} style={{ color: C.amber }}>التذكيرات تخدم في التطبيق على التلفون، موش في المتصفح.</T></Card>}
-      {[['prayers', '🕌 مواقيت الصلاة الخمسة'], ['fajr', '🌅 منبّه الفجر وتذكير الرقاد'], ['shield', '🛡️ درع الليل 22:00'], ['sportOn', '💪 الرياضة · ' + s.sport]].map(([f, n]) => (
+      {Platform.OS === 'web' && <Card><T s={13} style={{ color: C.amber }}>التذكيرات تعمل في التطبيق على الهاتف، لا في المتصفح.</T></Card>}
+      {[['prayers', '🕌 مواقيت الصلوات الخمس'], ['fajr', '🌅 منبّه الفجر وتذكير النوم'], ['shield', '🛡️ درع الليل 22:00'], ['sportOn', '💪 الرياضة · ' + s.sport]].map(([f, n]) => (
         <Card key={f} style={{ paddingVertical: 10 }}>
-          <Row style={{ justifyContent: 'space-between' }}><T s={15}>{n}</T><Chip title={s[f] ? 'شاعل' : 'طافي'} on={s[f]} onPress={() => tg(f)} /></Row>
+          <Row style={{ justifyContent: 'space-between' }}><T s={15}>{n}</T><Chip title={s[f] ? 'مفعّل' : 'متوقف'} on={s[f]} onPress={() => tg(f)} /></Row>
         </Card>
       ))}
       <Card style={{ paddingVertical: 10 }}>
@@ -406,13 +406,13 @@ function Reminders({ S, save }) {
 
       <H>📌 مهامي</H>
       <Card>
-        <TextInput value={t} onChangeText={setT} placeholder="المهمة (مثلا: نقرا 10 صفحات)" placeholderTextColor={C.muted} style={st.input} />
+        <TextInput value={t} onChangeText={setT} placeholder="المهمة (مثلًا: أقرأ 10 صفحات)" placeholderTextColor={C.muted} style={st.input} />
         <Row style={{ marginTop: 8, justifyContent: 'space-between' }}>
           <TextInput value={time} onChangeText={setTime} placeholder="08:00" placeholderTextColor={C.muted} style={[st.input, { width: 90, textAlign: 'center' }]} />
-          <Row><Chip title="كل يوم" on={daily} onPress={() => setDaily(true)} /><Chip title="اليوم برك" on={!daily} onPress={() => setDaily(false)} /></Row>
+          <Row><Chip title="كل يوم" on={daily} onPress={() => setDaily(true)} /><Chip title="اليوم فقط" on={!daily} onPress={() => setDaily(false)} /></Row>
         </Row>
-        {!valid && <T s={12} style={{ color: C.amber }}>اكتب الوقت هكا: 08:00</T>}
-        <Btn style={{ marginTop: 10 }} title="زيد المهمة" onPress={() => {
+        {!valid && <T s={12} style={{ color: C.amber }}>اكتب الوقت هكذا: 08:00</T>}
+        <Btn style={{ marginTop: 10 }} title="أضف المهمة" onPress={() => {
           if (!t.trim() || !valid) return;
           save((x) => { x.tasks.push({ id: Date.now(), t: t.trim(), time, daily, date: daily ? null : keyOf(new Date()) }); return x; }, true);
           setT('');
@@ -422,7 +422,7 @@ function Reminders({ S, save }) {
         <Card key={x.id} style={{ paddingVertical: 10 }}>
           <Row style={{ justifyContent: 'space-between' }}>
             <View style={{ flex: 1 }}><T b>{x.t}</T><T s={12} style={{ color: C.muted }}>{x.time} · {x.daily ? 'كل يوم' : x.date}</T></View>
-            <Chip title="نحّي" onPress={() => save((y) => { y.tasks = y.tasks.filter((z) => z.id !== x.id); return y; }, true)} />
+            <Chip title="حذف" onPress={() => save((y) => { y.tasks = y.tasks.filter((z) => z.id !== x.id); return y; }, true)} />
           </Row>
         </Card>
       ))}
@@ -436,7 +436,7 @@ function Shop({ S, save }) {
   const [f, setF] = useState({ name: S.profile.name, phone: '', city: '', address: '', qty: '1' });
   const [sent, setSent] = useState(false);
   const ok = f.name && /^\d{8}$/.test(f.phone.replace(/\s/g, '')) && f.city && f.address;
-  const text = `طلب ${item.t}\nالاسم: ${f.name}\nالتلفون: ${f.phone}\nالولاية: ${f.city}\nالعنوان: ${f.address}\nالعدد: ${f.qty}\nالدفع عند الاستلام`;
+  const text = `طلب ${item.t}\nالاسم: ${f.name}\nالهاتف: ${f.phone}\nالولاية: ${f.city}\nالعنوان: ${f.address}\nالعدد: ${f.qty}\nالدفع عند الاستلام`;
   return (
     <View>
       <H>📒 المتجر</H>
@@ -444,24 +444,24 @@ function Shop({ S, save }) {
         <T b s={18}>{item.t}</T>
         <T s={14} style={{ marginTop: 4 }}>{item.d}</T>
         <T b s={22} style={{ color: C.red, marginTop: 8 }}>{item.price} د.ت</T>
-        <T s={12} style={{ color: C.muted }}>الدفع عند الاستلام · كمّل حربك والدفتر في يدك</T>
+        <T s={12} style={{ color: C.muted }}>الدفع عند الاستلام · أكمل حربك والدفتر في يدك</T>
       </Card>
       <H>احجز نسختك</H>
       <Card>
-        {[['name', 'الاسم واللقب'], ['phone', 'رقم التلفون (8 أرقام)'], ['city', 'الولاية'], ['address', 'العنوان']].map(([k, p]) => (
+        {[['name', 'الاسم واللقب'], ['phone', 'رقم الهاتف (8 أرقام)'], ['city', 'الولاية'], ['address', 'العنوان']].map(([k, p]) => (
           <TextInput key={k} value={f[k]} onChangeText={(v) => setF({ ...f, [k]: v })} placeholder={p} placeholderTextColor={C.muted} keyboardType={k === 'phone' ? 'phone-pad' : 'default'} style={[st.input, { marginBottom: 8 }]} />
         ))}
         <Row>{['1', '2', '3'].map((q) => <Chip key={q} title={`${q} نسخة`} on={f.qty === q} onPress={() => setF({ ...f, qty: q })} />)}</Row>
         <T b s={16} style={{ marginTop: 8 }}>المجموع: {item.price * Number(f.qty)} د.ت</T>
-        <Btn style={{ marginTop: 10, opacity: ok ? 1 : 0.5 }} title="ابعث الطلب لناظم" onPress={async () => {
+        <Btn style={{ marginTop: 10, opacity: ok ? 1 : 0.5 }} title="أرسل الطلب إلى ناظم" onPress={async () => {
           if (!ok) return;
           await Clipboard.setStringAsync(text);
           save((x) => { x.orders.push({ at: new Date().toISOString(), ...f, item: item.id }); return x; });
           setSent(true);
           Linking.openURL(IG_DM);
         }} />
-        {sent && <T s={13} style={{ color: C.green, marginTop: 8 }}>✓ الطلب تنسخ. في إنستغرام اعمل «لصق» وابعثو لناظم.</T>}
-        {!ok && <T s={12} style={{ color: C.muted, marginTop: 6 }}>عبّي الاسم، التلفون، الولاية والعنوان.</T>}
+        {sent && <T s={13} style={{ color: C.green, marginTop: 8 }}>✓ تم نسخ الطلب. في إنستغرام اختر «لصق» وأرسله إلى ناظم.</T>}
+        {!ok && <T s={12} style={{ color: C.muted, marginTop: 6 }}>املأ الاسم والهاتف والولاية والعنوان.</T>}
       </Card>
     </View>
   );
@@ -482,38 +482,38 @@ function Emergency({ save, close }) {
     <ScrollView contentContainerStyle={{ padding: 20 }}>
       <Row style={{ justifyContent: 'space-between' }}>
         <T b s={20} style={{ color: C.red }}>🔴 زر الطوارئ</T>
-        <Pressable onPress={close}><T s={16} style={{ color: C.muted }}>سكّر ✕</T></Pressable>
+        <Pressable onPress={close}><T s={16} style={{ color: C.muted }}>إغلاق ✕</T></Pressable>
       </Row>
       {mode === 'timer' && (
         <View>
-          <T s={15} style={{ marginTop: 10 }}>الموجة تعدّي. قاعدة 10 دقايق: ما تعمل حتى قرار قبل ما يوفى العدّاد.</T>
+          <T s={15} style={{ marginTop: 10 }}>الموجة ستمرّ. قاعدة 10 دقائق: لا تتخذ أي قرار قبل أن ينتهي العدّاد.</T>
           <T b s={64} style={{ textAlign: 'center', marginVertical: 16 }}>{mm}</T>
           <Card style={{ borderColor: C.red, borderWidth: 1 }}>
             <T s={13} style={{ color: C.muted }}>الخطوة {step + 1} من {TEN.length}</T>
             <T b s={18} style={{ marginTop: 4 }}>{TEN[step]}</T>
           </Card>
           <Row style={{ justifyContent: 'space-between' }}>
-            <Btn small kind="ghost" title="الخطوة اللي قبل" onPress={() => setStep(Math.max(0, step - 1))} />
-            <Btn small kind="ghost" title="الخطوة الجاية" onPress={() => setStep(Math.min(TEN.length - 1, step + 1))} />
+            <Btn small kind="ghost" title="الخطوة السابقة" onPress={() => setStep(Math.max(0, step - 1))} />
+            <Btn small kind="ghost" title="الخطوة التالية" onPress={() => setStep(Math.min(TEN.length - 1, step + 1))} />
           </Row>
-          <Btn style={{ marginTop: 16 }} title="✓ عدّات الموجة" onPress={() => { save((s) => { s.sos.passed++; const k = keyOf(new Date()); s.days[k] = s.days[k] || {}; s.days[k].sos = (s.days[k].sos || 0) + 1; return s; }); setMode('passed'); }} />
-          <Btn kind="ghost" style={{ marginTop: 10 }} title="طحت" onPress={() => { save((s) => { s.sos.falls++; const k = keyOf(new Date()); s.days[k] = s.days[k] || {}; s.days[k].fell = true; return s; }); setMode('fell'); }} />
+          <Btn style={{ marginTop: 16 }} title="✓ مرّت الموجة" onPress={() => { save((s) => { s.sos.passed++; const k = keyOf(new Date()); s.days[k] = s.days[k] || {}; s.days[k].sos = (s.days[k].sos || 0) + 1; return s; }); setMode('passed'); }} />
+          <Btn kind="ghost" style={{ marginTop: 10 }} title="سقطتُ" onPress={() => { save((s) => { s.sos.falls++; const k = keyOf(new Date()); s.days[k] = s.days[k] || {}; s.days[k].fell = true; return s; }); setMode('fell'); }} />
         </View>
       )}
       {mode === 'passed' && (
         <View style={{ marginTop: 20 }}>
-          <T b s={26} style={{ textAlign: 'center' }}>🛡️ ربحت المعركة هاذي</T>
-          <T s={15} style={{ textAlign: 'center', marginTop: 10 }}>+20 ⭐. كل موجة تعدّيها تقوّيك للي بعدها. احمد ربي وارجع لنهارك.</T>
-          <Btn style={{ marginTop: 20 }} title="نرجع لنهاري" onPress={close} />
+          <T b s={26} style={{ textAlign: 'center' }}>🛡️ ربحت هذه المعركة</T>
+          <T s={15} style={{ textAlign: 'center', marginTop: 10 }}>+20 ⭐. كل موجة تتجاوزها تقوّيك للتي بعدها. احمد الله وعُد إلى يومك.</T>
+          <Btn style={{ marginTop: 20 }} title="أعود إلى يومي" onPress={close} />
         </View>
       )}
       {mode === 'fell' && (
         <View style={{ marginTop: 10 }}>
           <T b s={22}>إن سقطت اليوم</T>
-          <T s={15} style={{ marginTop: 6 }}>ما رجعتش للصفر. السلسلة ما تتكسرش بنهار واحد. المهم شنوة تعمل توا:</T>
+          <T s={15} style={{ marginTop: 6 }}>لم تعد إلى الصفر. السلسلة لا تنكسر بيوم واحد. المهم ما تفعله الآن:</T>
           {FIRST.map((x, i) => <Card key={i} style={{ paddingVertical: 10 }}><T s={15}>{i + 1}. {x}</T></Card>)}
           <Card style={{ borderColor: C.crimson, borderWidth: 1 }}><T s={16} style={{ textAlign: 'center' }}>{ZUMAR}</T></Card>
-          <Btn title="نرجع لتحدّيا" onPress={close} />
+          <Btn title="أعود إلى تحدّيَّ" onPress={close} />
         </View>
       )}
     </ScrollView>

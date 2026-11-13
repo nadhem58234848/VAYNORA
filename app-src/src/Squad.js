@@ -22,25 +22,25 @@ export default function Squad({ S, save }) {
     return (
       <View>
         <T b s={22}>حساب VAYNORA</T>
-        <T s={14} style={{ color: C.muted, marginTop: 4 }}>اعمل حسابك باش صحابك يلقاوك ويشوفو تقدّمك وانت تشوف تقدّمهم.</T>
+        <T s={14} style={{ color: C.muted, marginTop: 4 }}>أنشئ حسابك ليجدك أصدقاؤك ويروا تقدّمك وترى تقدّمهم.</T>
         <View style={st.card}>
           <T b>اسم المحارب (بالحروف اللاتينية)</T>
           <TextInput value={user} onChangeText={(v) => setUser(v.toLowerCase().trim())} autoCapitalize="none" placeholder="mohamed_21" placeholderTextColor={C.muted} style={st.input} />
-          {!!user && !ok && <T s={12} style={{ color: C.amber }}>من 3 لـ20 حرف: a-z، أرقام، _ ولا .</T>}
+          {!!user && !ok && <T s={12} style={{ color: C.amber }}>من 3 إلى 20 حرفًا: a-z، أرقام، _ أو .</T>}
           <Pressable style={[st.red, !ok && { opacity: 0.5 }]} onPress={() => ok && save((x) => { x.account = { user, at: new Date().toISOString(), synced: false }; return x; })}>
-            <T b style={{ textAlign: 'center' }}>اعمل الحساب ⚔️</T>
+            <T b style={{ textAlign: 'center' }}>أنشئ الحساب ⚔️</T>
           </Pressable>
         </View>
       </View>
     );
   }
 
-  const invite = () => Share.share({ message: `دخلت حرب النفس مع VAYNORA ⚔️ ادخل معايا في الكتيبة وخلّي نشوفو شكون يطيّح شياطينو أكثر. اسمي: @${acc.user}\n${APP_URL}` }).catch(() => {});
+  const invite = () => Share.share({ message: `دخلتُ حرب النفس مع VAYNORA ⚔️ انضمّ إلى كتيبتي ولنرَ من يُسقط شياطينه أكثر. اسمي: @${acc.user}\n${APP_URL}` }).catch(() => {});
 
   return (
     <View>
       <T b s={22}>⚔️ الكتيبة</T>
-      <T s={14} style={{ color: C.muted }}>انت وصحابك ضد نفس الوحش. كل واحد يشوف ضربات صحابو.</T>
+      <T s={14} style={{ color: C.muted }}>أنت وأصدقاؤك ضد الوحش نفسه. كلٌّ يرى ضربات رفاقه.</T>
       <View style={[st.card, { borderColor: C.crimson }]}>
         <View style={[st.row, { justifyContent: 'space-between' }]}>
           <View><T b s={18}>@{acc.user}</T><T s={12} style={{ color: C.red }}>{s.rank}</T></View>
@@ -52,10 +52,10 @@ export default function Squad({ S, save }) {
           <View style={{ alignItems: 'center' }}><T b s={20}>{Math.round(100 - (b.hp / b.max) * 100)}%</T><T s={11} style={{ color: C.muted }}>ضعف الوحش</T></View>
         </View>
       </View>
-      <Pressable style={st.red} onPress={invite}><T b style={{ textAlign: 'center' }}>تحدّى صاحبك يدخل معاك</T></Pressable>
+      <Pressable style={st.red} onPress={invite}><T b style={{ textAlign: 'center' }}>تحدَّ صديقك لينضمّ إليك</T></Pressable>
       <View style={st.card}>
-        <T b>صحابي</T>
-        <T s={13} style={{ color: C.muted, marginTop: 6 }}>قائمة الصحاب وتقدّمهم تتفتح كي نربطو الحسابات بالسيرفر. توا الحساب محفوظ في تلفونك، وكي يتربط يتبعث وحدو.</T>
+        <T b>رفاقي</T>
+        <T s={13} style={{ color: C.muted, marginTop: 6 }}>قائمة الرفاق وتقدّمهم تُفتح حين نربط الحسابات بالخادم. حسابك الآن محفوظ في هاتفك، وسيُرسل تلقائيًّا عند الربط.</T>
       </View>
     </View>
   );

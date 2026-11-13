@@ -46,26 +46,26 @@ export async function rescheduleAll(state) {
   if (s.prayers) {
     for (let d = 0; d < 4; d++) {
       const t = prayerTimes(state.profile.city, addDays(new Date(), d));
-      PRAYERS.forEach(([id, name]) => jobs.push(at(`حان وقت ${name}`, 'قوم صلّي في وقتها. الصلاة أول انتصار في النهار.', t[id])));
+      PRAYERS.forEach(([id, name]) => jobs.push(at(`حان وقت ${name}`, 'قُم وصلِّ في وقتها. الصلاة أول انتصار في اليوم.', t[id])));
     }
   }
   if (s.fajr) {
     // Fajr alarm: three reminders that get stronger, 3 minutes apart
     const w = toMin(s.wake);
-    jobs.push(daily('⏰ قوم للفجر', 'ابعد على الفراش. توضّا. هذا أول انتصار.', fromMin(w)));
-    jobs.push(daily('⏰ مازلت راقد؟', 'النفس تقلّك «خمسة دقايق». ما تسمعلهاش. قوم توا.', fromMin(w + 3)));
-    jobs.push(daily('🔴 آخر نداء للفجر', '«الصلاة خير من النوم». حط ساقيك في الأرض.', fromMin(w + 6)));
-    jobs.push(daily('🌙 وقت الرقاد بعد 30 دقيقة', 'حضّر روحك: الشارجور برّا البيت، والمنبّه بعيد.', fromMin(toMin(s.sleep) - 30)));
+    jobs.push(daily('⏰ قُم للفجر', 'ابتعد عن الفراش. توضّأ. هذا أول انتصار.', fromMin(w)));
+    jobs.push(daily('⏰ ما زلت نائمًا؟', 'النفس تقول لك «خمس دقائق». لا تسمع لها. قُم الآن.', fromMin(w + 3)));
+    jobs.push(daily('🔴 آخر نداء للفجر', '«الصلاة خير من النوم». ضع قدميك على الأرض.', fromMin(w + 6)));
+    jobs.push(daily('🌙 وقت النوم بعد 30 دقيقة', 'هيّئ نفسك: الشاحن خارج الغرفة، والمنبّه بعيد.', fromMin(toMin(s.sleep) - 30)));
   }
-  if (s.shield) jobs.push(daily('🛡️ درع الليل', 'التليفون برّا بيت الرقاد. كان جاتك موجة، حلّ زر الطوارئ.', '22:00'));
-  if (s.sportOn) jobs.push(daily('💪 وقت الرياضة', 'ولو النسخة الصغيرة. ما تفلّتش زوز أيام.', s.sport));
-  jobs.push(daily('📝 التقرير الليلي', 'كمّل نهارك: الصلوات، العادات، وشنوة ربحت اليوم.', fromMin(toMin(s.sleep) - 60)));
+  if (s.shield) jobs.push(daily('🛡️ درع الليل', 'الهاتف خارج غرفة النوم. إن جاءتك موجة فافتح زر الطوارئ.', '22:00'));
+  if (s.sportOn) jobs.push(daily('💪 وقت الرياضة', 'ولو النسخة الصغيرة. لا تُضيّع يومين متتاليين.', s.sport));
+  jobs.push(daily('📝 التقرير الليلي', 'أتمم يومك: الصلوات، العادات، وما الذي ربحته اليوم.', fromMin(toMin(s.sleep) - 60)));
   (state.tasks || []).forEach((t) => {
-    if (t.daily) jobs.push(daily('📌 ' + t.t, 'مهمتك. اعملها توا.', t.time));
+    if (t.daily) jobs.push(daily('📌 ' + t.t, 'مهمتك. أنجزها الآن.', t.time));
     else if (t.date) {
       const [h, m] = t.time.split(':').map(Number);
       const d = new Date(t.date + 'T00:00:00'); d.setHours(h, m, 0, 0);
-      jobs.push(at('📌 ' + t.t, 'مهمتك. اعملها توا.', d));
+      jobs.push(at('📌 ' + t.t, 'مهمتك. أنجزها الآن.', d));
     }
   });
   await Promise.all(jobs.filter(Boolean));
