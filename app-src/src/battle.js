@@ -116,6 +116,7 @@ export function beast(state) {
     let g = 3 * frac;
     if (i < today && !won) g -= 2; // a lost day feeds the soul
     if (d && d.boss) g += 3;
+    if (d && d.lesson === 'ok') g += 0.5;
     if (d && d.fell) g -= 4;
     if (d && d.sos) g += Math.min(3, d.sos);
     if (i === today) gain = g;

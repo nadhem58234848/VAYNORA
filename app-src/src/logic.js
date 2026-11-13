@@ -50,6 +50,7 @@ export function dayXP(day, idx) {
   activeHabits(idx).forEach((h) => { const v = day.h && day.h[h.id]; if (v === 'f') xp += 10; else if (v === 'm') xp += 5; });
   xp += (day.knots || []).filter(Boolean).length * 5;
   if (day.task) xp += 10;
+  if (day.lesson === 'ok') xp += 10;
   xp += Math.min(60, day.ribat || 0);
   if (day.boss) xp += 50;
   if (day.report) xp += 15;

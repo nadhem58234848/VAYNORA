@@ -6,6 +6,7 @@ import { captureRef } from 'react-native-view-shot';
 import * as Sharing from 'expo-sharing';
 import Icon from './icons';
 import { sfx } from './sfx';
+import Lesson from './Lesson';
 import Svg, { Path as SP } from 'react-native-svg';
 import { C, PRAYERS, HABITS, MSG, MSG_AFTER, TASK, RANKS } from './data';
 import { keyOf, dayIndex, weekOf, dayXP, stats, prayerTimes, hm, addDays, activeHabits, parseKey, dayWon } from './logic';
@@ -91,6 +92,7 @@ function TomInput({ day, set }) {
 }
 
 const PRAISE = ['ضربة موفّقة!', 'أحسنت!', 'ثبّتك الله', 'هكذا يُقاتل المحارب', 'ضربة في الصميم!', 'واصل، هو يضعف'];
+const MILE = { 7: 'وسام الأسبوع الأول', 14: 'وسام الأسبوعين', 21: 'وسام الواحد والعشرين', 30: 'وسام الشهر', 50: 'وسام الخمسين', 100: 'وسام المئة', 200: 'وسام المئتين', 365: 'وسام السنة' };
 const DAYL = ['ح', 'ن', 'ث', 'ر', 'خ', 'ج', 'س'];
 const FLAME_SAY = [
   'أول شعلة. من هنا تبدأ الحرب حقًّا.',
@@ -117,7 +119,7 @@ function Flame({ S, onNext }) {
   const [shown, setShown] = useState(Math.max(0, n - 1));
   const nd = Platform.OS !== 'web';
   useEffect(() => {
-    sfx('flame');
+    sfx(MILE[n] ? 'win' : 'flame');
     Animated.spring(grow, { toValue: 1, friction: 4, tension: 60, useNativeDriver: nd }).start();
     const t = setTimeout(() => { setShown(n); buzz(); }, 650);
     Animated.loop(Animated.sequence([
@@ -135,7 +137,8 @@ function Flame({ S, onNext }) {
     <View style={{ flex: 1, padding: 20, justifyContent: 'space-between' }}>
       <View />
       <View style={{ alignItems: 'center' }}>
-        <View style={st.bubbleBig}><T s={16} style={{ textAlign: 'center' }}>{flameSay(n)}</T></View>
+        {MILE[n] && <View style={[st.row, st.mile]}><Icon name="crown" size={22} /><T b s={16}>{MILE[n]}</T></View>}
+        <View style={st.bubbleBig}><T s={16} style={{ textAlign: 'center' }}>{MILE[n] ? `${MILE[n]} لك. قليل من يصل إلى هنا، فاحمد الله واثبت.` : flameSay(n)}</T></View>
         <View style={[st.row, { justifyContent: 'center', alignItems: 'flex-end', marginTop: 16 }]}>
           <Image source={POSE.win} style={{ width: 120, height: 170 }} resizeMode="contain" />
           <Animated.View style={{ transform: [{ scale: Animated.multiply(grow, pulse) }] }}><FlameArt size={150} /></Animated.View>
@@ -297,6 +300,7 @@ function Result({ S, save, close, pop }) {
       <Sec title={`العادات · ${habits.length} من ${activeHabits(idx).length}`}>
         {habits.length === 0 && <T s={13} style={{ color: C.muted }}>لم تُسجَّل عادة بعد.</T>}
         {habits.map((h) => <Line key={h.id} label={h.t} value={day.h[h.id] === 'f' ? 'كاملة' : 'على الأقل'} color={day.h[h.id] === 'f' ? C.green : C.amber} />)}
+        {day.lesson === 'ok' && <Line label="درس اليوم" value="أجبت صحيحًا" color={C.green} />}
         {!!day.task && <Line label="مهمة اليوم" value="أُنجزت" color={C.green} />}
         {!!day.ribat && <Line label="الرباط" value={`${day.ribat} دقيقة`} color={C.green} />}
       </Sec>
@@ -358,6 +362,7 @@ export default function Fight({ S, save, close }) {
   const combo = useRef(0);
   const praiseT = useRef(null);
   const [phase, setPhase] = useState('fight');
+  const [skipL, setSkipL] = useState(false);
   const shake = useRef(new Animated.Value(0)).current;
   const pop = useRef(new Animated.Value(0)).current;
   const cardRef = useRef(null);
@@ -394,6 +399,9 @@ export default function Fight({ S, save, close }) {
     setDone(true);
   };
 
+  if (!done && !day.lesson && !skipL) {
+    return <Lesson idx={idx} close={close} onDone={(ok) => { save((x) => { x.days[k] = x.days[k] || {}; x.days[k].lesson = ok ? 'ok' : 'no'; return x; }); setSkipL(true); }} />;
+  }
   if (done && phase === 'flame') return <Flame S={S} onNext={() => setPhase('card')} />;
   if (done) return <Result S={S} save={save} close={close} pop={pop} />;
 
@@ -434,6 +442,7 @@ export default function Fight({ S, save, close }) {
 }
 
 const st = StyleSheet.create({
+  mile: { gap: 8, borderWidth: 2, borderColor: C.bone, borderRadius: 30, paddingVertical: 8, paddingHorizontal: 18, marginBottom: 14, backgroundColor: C.crimson },
   praise: { position: 'absolute', bottom: 92, left: 20, right: 20, backgroundColor: C.green, borderRadius: 14, paddingVertical: 10, paddingHorizontal: 14, flexDirection: 'row-reverse', alignItems: 'center', gap: 10 },
   bubbleBig: { borderWidth: 2, borderColor: '#333', borderRadius: 18, paddingVertical: 12, paddingHorizontal: 16, marginHorizontal: 10 },
   sec: { backgroundColor: '#151515', borderWidth: 1, borderColor: '#2a2a2a', borderRadius: 16, padding: 14, marginTop: 12 },
