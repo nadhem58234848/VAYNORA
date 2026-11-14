@@ -18,6 +18,7 @@ h1{font-weight:800;font-size:40px;line-height:1.25;margin:10px 0 6px;color:#8a8a
 .lock{font-size:13px;color:#8a8a8a;margin:-6px 0 14px}
 .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#ececec;color:#000;padding:10px 18px;border-radius:12px;font-weight:800;display:none}
 footer{margin-top:30px;color:#444;font-size:13px;font-weight:600}
+.ig{display:block;text-align:center;margin-top:9px;color:#8a8a8a;font:600 13px Cairo,sans-serif;background:none;border:0;width:100%;cursor:pointer;text-decoration:underline}
 </style></head><body><div class="w">
 <div class="sub" style="margin:0">ناظم · حرب النفس</div>
 <h1>ما تحاربش <span class="r">وحدك</span>.</h1>
@@ -26,21 +27,22 @@ footer{margin-top:30px;color:#444;font-size:13px;font-weight:600}
 
 <div class="c"><h2>متابعة جماعية · 21 يوم</h2><div class="p">29 <small>دينار</small></div>
 <ul><li>مجموعة صغيرة من المحاربين</li><li>تقرير كل ليلة: الفجر، الصلوات، العادات</li><li>نجاوبك ونوجّهك</li><li>أوديو مني كل جمعة</li></ul>
-<button class="btn" data-m="السلام عليكم، نحب ندخل المتابعة الجماعية 21 يوم (29 دينار)">نحب ندخل</button></div>
+<button class="btn" data-m="السلام عليكم، نحب ندخل المتابعة الجماعية 21 يوم (29 دينار)">نحب ندخل</button><button class="ig" data-m="السلام عليكم، نحب ندخل المتابعة الجماعية 21 يوم (29 دينار)">ولا ابعثلي في الإنستا</button></div>
 
 <div class="c hot"><span class="tag">5 أماكن برك</span><h2>متابعة شخصية · 21 يوم</h2><div class="p">79 <small>دينار</small></div>
 <ul><li>واحد لواحد معايا على واتساب</li><li>خطة نوم وفجر على قدّك</li><li>تشيك يومي</li><li>3 مكالمات: البداية، النص، الآخر</li><li>شهادة VAYNORA كي تكمّل</li></ul>
-<button class="btn" data-m="السلام عليكم، نحب المتابعة الشخصية 21 يوم (79 دينار)">نحجز بلاصتي</button></div>
+<button class="btn" data-m="السلام عليكم، نحب المتابعة الشخصية 21 يوم (79 دينار)">نحجز بلاصتي</button><button class="ig" data-m="السلام عليكم، نحب المتابعة الشخصية 21 يوم (79 دينار)">ولا ابعثلي في الإنستا</button></div>
 
 <div class="c"><span class="tag">مستوى أعلى</span><h2>نظام 90 يوم</h2><div class="p">149 <small>دينار · ولا 3 × 50</small></div>
 <div class="lock">🔒 كان للي كمّل الـ21 يوم وخذا شهادتو</div>
 <ul><li>بناء كامل: نفس، جسد، دين</li><li>متابعة 3 شهور</li><li>5 أماكن في كل دفعة</li></ul>
-<button class="btn" data-m="السلام عليكم، عندي شهادة 21 يوم ونحب نظام 90 يوم">عندي الشهادة، نحب ندخل</button></div>
+<button class="btn" data-m="السلام عليكم، عندي شهادة 21 يوم ونحب نظام 90 يوم">عندي الشهادة، نحب ندخل</button><button class="ig" data-m="السلام عليكم، عندي شهادة 21 يوم ونحب نظام 90 يوم">ولا ابعثلي في الإنستا</button></div>
 
 <p class="note">تضغط على الزر ← يتنسخ الميساج ← يتحلّ الإنستا ← تلصقو وتبعث.</p>
 <footer>حرب النفس · اصنع من الألم قوة</footer>
 </div><div class="toast" id="t">تنسخ الميساج ✓ الصقو في الإنستا</div>
 <script>
-document.querySelectorAll('.btn').forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.m)}catch(e){}
+document.querySelectorAll('.btn').forEach(b=>b.onclick=()=>{location.href='https://wa.me/21658886475?text='+encodeURIComponent(b.dataset.m)});
+document.querySelectorAll('.ig').forEach(b=>b.onclick=async()=>{try{await navigator.clipboard.writeText(b.dataset.m)}catch(e){}
 const t=document.getElementById('t');t.style.display='block';setTimeout(()=>{location.href='https://ig.me/m/nadhem_elaashek'},900)});
 </script></body></html>
