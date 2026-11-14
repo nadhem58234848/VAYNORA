@@ -1,0 +1,49 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex">
+<title>أرقام صفحة العرض</title><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&display=swap" rel="stylesheet">
+<style>*{box-sizing:border-box}body{margin:0;background:#000;color:#bbb;font-family:Cairo,system-ui,sans-serif;padding:20px 16px 60px}.w{max-width:480px;margin:auto}
+h1{color:#ececec;font-size:26px;margin:0 0 4px}.sub{color:#777;font-size:14px;margin:0 0 18px}
+.tabs{display:flex;gap:8px;margin-bottom:16px}.tabs button{flex:1;border:0;border-radius:12px;padding:10px;background:#1a1a1a;color:#aaa;font:800 14px Cairo}.tabs .on{background:#C81E1E;color:#fff}
+.f{background:#0e0e0e;border:1px solid #222;border-radius:18px;padding:16px;margin-bottom:12px}
+.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #1a1a1a}.row:last-child{border:0}
+.row b{color:#ececec;font-size:22px}.row .r{color:#E8282B}.bar{height:8px;background:#1a1a1a;border-radius:4px;margin-top:4px}.bar i{display:block;height:8px;border-radius:4px;background:#C81E1E}
+h2{font-size:17px;color:#ececec;margin:0 0 8px}input{width:70px;background:#1a1a1a;border:1px solid #333;border-radius:10px;color:#fff;font:800 18px Cairo;text-align:center;padding:4px}
+.set input{width:100%;text-align:right;font-size:14px;margin:8px 0}.btn{border:0;border-radius:12px;padding:10px 16px;background:#C81E1E;color:#fff;font:800 15px Cairo}
+.note{font-size:13px;color:#666;line-height:1.8}</style></head><body><div class="w">
+<h1>أرقام صفحة العرض</h1><p class="sub">شكون دخل، شكون ضغط، وشكون ما كمّلش</p><div id="app">نحمّل…</div></div>
+<script>
+const K='vay_admin_v1',KP='vay_offer_paid_v1',OF={group:'جماعية 21',personal:'شخصية 21',['90']:'90 يوم','6m':'6 شهور'};
+let C={},PAID={},ROWS=null,F='all',ERR='';
+try{C=JSON.parse(localStorage.getItem(K))||{}}catch(e){}try{PAID=JSON.parse(localStorage.getItem(KP))||{}}catch(e){}
+function sid(v){const m=String(v).match(/\/d\/([\w-]{20,})/);return m?m[1]:v.trim()}
+function gviz(id,cb,err){const n='gv'+Date.now(),s=document.createElement('script');let done=false;window[n]=r=>{done=true;cb(r)};s.onerror=()=>err();setTimeout(()=>{if(!done)err()},12000);
+ s.src='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?tqx=responseHandler:'+n+'&headers=1&tq='+encodeURIComponent("select A,B where B contains 'offer'")+'&_='+Date.now();document.head.appendChild(s)}
+function gdate(v){if(!v)return 0;const m=String(v).match(/Date\((\d+),(\d+),(\d+),?(\d+)?,?(\d+)?,?(\d+)?/);return m?new Date(+m[1],+m[2],+m[3],+(m[4]||0),+(m[5]||0)).getTime():0}
+function load(){if(!C.sheet){render();return}ROWS=null;ERR='';render();
+ gviz(C.sheet,r=>{ROWS=(r.table.rows||[]).map(x=>{let o={};try{o=JSON.parse(x.c[1]&&(x.c[1].v||x.c[1].f)||'{}')}catch(e){}o.ts=gdate(x.c[0]&&x.c[0].v);return o}).filter(o=>o.event==='offer');render()},
+ ()=>{ERR='ما نجمتش نقرا الشيت. تأكد إنو مشارك «Anyone with the link».';render()})}
+function since(){const d=new Date();d.setHours(0,0,0,0);return F==='today'?d.getTime():F==='7'?d.getTime()-6*864e5:0}
+function uniq(a){return new Set(a.map(o=>o.sid)).size}
+function render(){const A=document.getElementById('app');
+ if(!C.sheet){A.innerHTML=`<div class="f set"><h2>ربط الشيت (مرة وحدة)</h2><p class="note">حط رابط شيت الأجوبة متاع الفورم (نفس الشيت متاع لوحة المحاربين).</p><input id="s" placeholder="https://docs.google.com/spreadsheets/d/..."><button class="btn" onclick="C.sheet=sid(document.getElementById('s').value);try{localStorage.setItem(K,JSON.stringify(C))}catch(e){};load()">احفظ</button></div>`;return}
+ if(ERR){A.innerHTML=`<div class="f">${ERR}</div><button class="btn" onclick="C.sheet='';render()">بدّل الرابط</button>`;return}
+ if(!ROWS){A.innerHTML='<div class="f">نحمّل الأرقام…</div>';return}
+ const t0=since(),R=ROWS.filter(o=>o.ts>=t0),V=uniq(R.filter(o=>o.a==='view')),S=uniq(R.filter(o=>o.a==='scroll')),CL=R.filter(o=>o.a==='click'),CU=uniq(CL);
+ const pct=(a,b)=>b?Math.round(a*100/b):0;
+ let h=`<div class="tabs">${[['today','اليوم'],['7','7 أيام'],['all','الكل']].map(([k,l])=>`<button class="${F===k?'on':''}" onclick="F='${k}';render()">${l}</button>`).join('')}</div>
+ <div class="f"><div class="row"><span>دخلو للصفحة</span><b>${V}</b></div>
+ <div class="row"><span>هبطو يشوفو العروض</span><b>${S} <small style="font-size:13px;color:#777">(${pct(S,V)}%)</small></b></div>
+ <div class="row"><span>ضغطو على زر اشتراك</span><b class="r">${CU} <small style="font-size:13px;color:#777">(${pct(CU,V)}%)</small></b></div></div>
+ <div class="f"><h2>حسب العرض</h2>`;
+ let totC=0,totP=0;
+ for(const k of ['group','personal','90','6m']){const c=uniq(CL.filter(o=>o.o===k)),wa=uniq(CL.filter(o=>o.o===k&&o.ch==='wa')),ig=c-wa,p=+(PAID[k]||0);totC+=c;totP+=p;
+  h+=`<div class="row" style="display:block"><div style="display:flex;justify-content:space-between"><span style="color:#ececec;font-weight:800">${OF[k]}</span><span>ضغطو: <b>${c}</b> <small style="color:#777">(واتساب ${wa} · إنستا ${ig})</small></span></div>
+  <div class="bar"><i style="width:${Math.min(100,pct(c,Math.max(1,CU)))}%"></i></div>
+  <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:14px"><span>خلّصو: <input type="number" min="0" value="${p}" onchange="PAID['${k}']=this.value;try{localStorage.setItem(KP,JSON.stringify(PAID))}catch(e){};render()"></span><span>ما كمّلوش: <b class="r" style="font-size:18px">${Math.max(0,c-p)}</b></span></div></div>`}
+ h+=`</div><div class="f"><div class="row"><span>المجموع ضغطو</span><b>${totC}</b></div><div class="row"><span>خلّصو</span><b>${totP}</b></div><div class="row"><span>ما كمّلوش</span><b class="r">${Math.max(0,totC-totP)}</b></div></div>
+ <p class="note">• «دخلو» و«ضغطو» يتحسبو بالزيارة (نفس الشخص في نفس الزيارة يتحسب مرة).<br>• «خلّصو» إنت تكتبها بيدك كي يخلّصك حد (تتحفظ في تليفونك). «ما كمّلوش» = ضغطو − خلّصو.<br>• باش تعرف منين جاو: في الستوري حط الرابط <b dir="ltr" style="color:#ccc;unicode-bidi:isolate">/m/?s=story</b> وفي البايو <b dir="ltr" style="color:#ccc;unicode-bidi:isolate">/m/?s=bio</b>.</p>
+ <p style="text-align:center"><button class="btn" onclick="load()">حدّث</button></p>`;
+ const src={};R.filter(o=>o.a==='view').forEach(o=>{src[o.src||'?']=src[o.src||'?']||new Set();src[o.src||'?'].add(o.sid)});
+ const ks=Object.keys(src);if(ks.length){h+=`<div class="f"><h2>منين جاو</h2>${ks.sort((a,b)=>src[b].size-src[a].size).map(k=>`<div class="row"><span>${k.replace(/[<>&"]/g,'')}</span><b>${src[k].size}</b></div>`).join('')}</div>`}
+ A.innerHTML=h}
+load();
+</script></body></html>
