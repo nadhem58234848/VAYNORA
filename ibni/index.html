@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ابنِ نفسك · ناظم</title>
+<meta name="theme-color" content="#0D0D0D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="ابنِ نفسك">
+<link rel="apple-touch-icon" href="../harb/vay2-180.png">
+<link rel="manifest" href="manifest.json">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--night:#0D0D0D;--card:#161414;--card2:#1E1A1A;--line:#2C2626;--bone:#F4F1EC;--mute:#A39C94;--dim:#6E6862;--red:#C81E1E;--crim:#8E1D20}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{background:var(--night);color:var(--bone);font-family:Cairo,system-ui,sans-serif;font-size:16px;line-height:1.6}
+body{padding:env(safe-area-inset-top) 0 calc(96px + env(safe-area-inset-bottom));min-height:100vh}
+.wrap{max-width:480px;margin:0 auto;padding:0 16px}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+.hide{display:none!important}
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;padding:18px 0 8px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand img{width:34px;height:34px;border-radius:50%}
+.brand b{font-weight:900;font-size:19px;letter-spacing:-.2px}
+.brand small{display:block;color:var(--mute);font-size:12px;font-weight:600;margin-top:-4px}
+.ico{width:38px;height:38px;border-radius:12px;background:var(--card);border:1px solid var(--line);display:grid;place-items:center}
+.ico svg{width:18px;height:18px;stroke:var(--mute);fill:none;stroke-width:2}
+/* hero */
+.hero{position:relative;margin-top:10px;border-radius:24px;padding:20px;background:radial-gradient(120% 90% at 100% 0%,#3a1214 0%,#1a0f10 45%,var(--card) 100%);border:1px solid #3a2020;overflow:hidden}
+.hero .wk{display:inline-flex;gap:6px;align-items:center;font-size:12px;font-weight:700;color:var(--bone);background:rgba(200,30,30,.18);border:1px solid rgba(200,30,30,.45);padding:3px 10px;border-radius:99px}
+.hero h1{font-size:30px;font-weight:900;line-height:1.25;margin-top:10px}
+.hero h1 span{color:var(--red)}
+.hero p{color:var(--mute);font-size:14px;margin-top:2px}
+.hero h1,.hero p{padding-left:100px}
+.ring{position:absolute;left:18px;top:22px;width:92px;height:92px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .n{position:absolute;inset:0;display:grid;place-items:center;font-weight:900;font-size:22px}
+.ring .n small{display:block;font-size:10px;color:var(--mute);font-weight:700;margin-top:-8px;text-align:center}
+.lesson{margin-top:16px;padding-top:14px;border-top:1px dashed #4a2a2a;font-size:14px}
+.lesson em{font-style:normal;color:var(--mute);font-size:12px;display:block}
+/* sections */
+h2{font-size:15px;font-weight:800;color:var(--mute);margin:26px 2px 10px;display:flex;justify-content:space-between;align-items:center}
+h2 a{font-size:13px;color:var(--red);font-weight:700}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:16px}
+/* mission */
+.mis .t{font-weight:800;font-size:17px;line-height:1.5}
+.mis .m{color:var(--mute);font-size:13px;margin-top:6px}
+.mis .m b{color:var(--bone);font-weight:700}
+.seg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:14px}
+.seg button{padding:10px 4px;border-radius:14px;background:var(--card2);border:1px solid var(--line);font-weight:700;font-size:14px;color:var(--mute);transition:.15s}
+.seg button.on[data-v="2"]{background:var(--red);border-color:var(--red);color:#fff}
+.seg button.on[data-v="1"]{background:var(--crim);border-color:var(--crim);color:#fff}
+.seg button.on[data-v="0"]{background:#2a2626;border-color:#4a4444;color:var(--bone)}
+/* habits */
+.hab{display:flex;align-items:center;gap:12px;padding:14px;border-radius:18px;background:var(--card);border:1px solid var(--line);margin-bottom:10px;transition:.15s;user-select:none}
+.hab .box{flex:none;width:34px;height:34px;border-radius:11px;border:2px solid #4a4242;display:grid;place-items:center;transition:.15s}
+.hab .box svg{width:18px;height:18px;stroke:#fff;stroke-width:3.2;fill:none;opacity:0}
+.hab .tx{flex:1;min-width:0}
+.hab .tx b{font-weight:700;display:block;font-size:16px}
+.hab .tx small{font-size:12px;color:var(--dim)}
+.hab.s2{border-color:rgba(200,30,30,.55);background:linear-gradient(90deg,var(--card),rgba(200,30,30,.10))}
+.hab.s2 .box{background:var(--red);border-color:var(--red)}
+.hab.s2 .box svg{opacity:1}
+.hab.s1{border-color:rgba(142,29,32,.7)}
+.hab.s1 .box{background:var(--crim);border-color:var(--crim)}
+.hab.s1 .box svg{opacity:1}
+.hab.s1 .tx small{color:#d9a3a3}
+.hab.s0 .tx b{color:var(--dim);text-decoration:line-through}
+.hab.s0 .box{border-color:#3a3434;background:#1a1717}
+.hint{font-size:12px;color:var(--dim);text-align:center;margin-top:2px}
+/* prayers */
+.pr{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.pr button{padding:10px 0 8px;border-radius:16px;background:var(--card2);border:1px solid var(--line);font-weight:700;font-size:14px;color:var(--mute)}
+.pr button i{display:block;width:10px;height:10px;border-radius:50%;margin:0 auto 4px;border:2px solid #4a4242}
+.pr button.s2{border-color:var(--red);color:var(--bone)} .pr button.s2 i{background:var(--red);border-color:var(--red)}
+.pr button.s1{border-color:var(--crim);color:var(--bone)} .pr button.s1 i{background:transparent;border-color:var(--crim);box-shadow:inset 0 0 0 2px var(--crim)}
+.leg{display:flex;gap:14px;justify-content:center;font-size:12px;color:var(--dim);margin-top:10px}
+.leg i{display:inline-block;width:8px;height:8px;border-radius:50%;margin-left:5px;vertical-align:middle}
+/* chain */
+.chain{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+.chain button{aspect-ratio:1;border-radius:12px;background:var(--card2);border:1px solid var(--line);font-weight:800;font-size:13px;color:var(--dim);position:relative}
+.chain button.done{background:var(--red);border-color:var(--red);color:#fff}
+.chain button.part{background:var(--crim);border-color:var(--crim);color:#fff}
+.chain button.miss{color:#5a5252;background:#121010}
+.chain button.miss::after{content:"";position:absolute;inset:30% 30%;border-top:2px solid #4a4242;transform:rotate(-45deg);top:50%}
+.chain button.today{outline:2px solid var(--bone);outline-offset:2px}
+.chain button.fut{opacity:.45}
+.chain .lbl{grid-column:1/-1;font-size:12px;color:var(--mute);font-weight:700;margin-top:6px}
+.chain .lbl:first-child{margin-top:0}
+.rule{display:flex;gap:10px;align-items:center;margin-top:14px;padding:12px 14px;border-radius:14px;background:#140f0f;border:1px solid #3a2020;font-size:13px}
+.rule b{color:var(--red)}
+/* bottom bar */
+.bar{position:fixed;inset:auto 0 0 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(transparent,var(--night) 35%);z-index:5}
+.bar .in{max-width:448px;margin:0 auto}
+.btn{display:flex;width:100%;align-items:center;justify-content:center;gap:10px;padding:15px;border-radius:18px;background:var(--red);color:#fff;font-weight:800;font-size:17px;box-shadow:0 10px 30px rgba(200,30,30,.28)}
+.btn.ghost{background:var(--card);border:1px solid var(--line);box-shadow:none;color:var(--bone)}
+.btn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.2}
+.btn+.btn{margin-top:10px}
+/* forms */
+label.f{display:block;font-size:14px;font-weight:700;margin:16px 2px 6px}
+label.f small{color:var(--dim);font-weight:600}
+input[type=text],input[type=time],input[type=date],textarea{width:100%;padding:13px 14px;border-radius:14px;background:var(--card2);border:1px solid var(--line);outline:none;font-size:16px;-webkit-appearance:none;appearance:none}
+input:focus,textarea:focus{border-color:var(--red)}
+textarea{min-height:76px;resize:none;line-height:1.6}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:9px 14px;border-radius:99px;background:var(--card2);border:1px solid var(--line);font-size:14px;font-weight:600;color:var(--mute)}
+.chip.on{background:rgba(200,30,30,.16);border-color:var(--red);color:var(--bone)}
+.addrow{display:flex;gap:8px;margin-top:10px}
+.addrow input{flex:1}
+.addrow button{flex:none;width:52px;border-radius:14px;background:var(--crim);color:#fff;font-size:24px;font-weight:700}
+/* screens */
+.screen{animation:in .25s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.intro{padding-top:8vh;text-align:center}
+.intro img{width:84px;height:84px;border-radius:50%;box-shadow:0 0 0 6px rgba(200,30,30,.12),0 0 60px rgba(200,30,30,.35)}
+.intro h1{font-size:34px;font-weight:900;margin-top:20px;line-height:1.3}
+.intro h1 span{color:var(--red)}
+.intro p{color:var(--mute);margin-top:10px;font-size:15px}
+.pill3{display:flex;justify-content:center;gap:8px;margin-top:22px}
+.pill3 span{font-size:13px;font-weight:700;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--card)}
+.steps{text-align:right;margin-top:26px;display:grid;gap:10px}
+.steps div{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 14px;font-size:14px}
+.steps i{flex:none;font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:800;font-size:13px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--mute);font-weight:700;font-size:14px;padding:16px 0 4px}
+.back svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.2}
+.rep{white-space:pre-wrap;font-size:14px;line-height:1.9;background:#110e0e;border:1px dashed #4a2a2a;border-radius:16px;padding:14px;margin-top:14px}
+.score{display:flex;gap:10px;margin-top:6px}
+.score div{flex:1;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px;text-align:center}
+.score b{display:block;font-size:24px;font-weight:900}
+.score small{color:var(--mute);font-size:12px;font-weight:700}
+.toast{position:fixed;top:calc(16px + env(safe-area-inset-top));left:50%;transform:translateX(-50%) translateY(-120px);background:var(--bone);color:var(--night);font-weight:800;padding:10px 18px;border-radius:99px;z-index:9;transition:.3s;font-size:14px;white-space:nowrap}
+.toast.on{transform:translateX(-50%) translateY(0)}
+.done-ov{position:fixed;inset:0;background:rgba(13,13,13,.96);z-index:8;display:grid;place-items:center;text-align:center;padding:24px}
+.done-ov .big{font-size:64px;font-weight:900;color:var(--red);line-height:1}
+.done-ov h3{font-size:24px;font-weight:900;margin-top:10px}
+.done-ov p{color:var(--mute);margin-top:6px}
+.foot{text-align:center;color:var(--dim);font-size:12px;margin-top:30px;letter-spacing:2px;font-weight:700}
+.sett .hab{cursor:default}
+.del{color:var(--dim);font-size:13px;font-weight:700;padding:6px}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- ONBOARDING -->
+<section id="sOn" class="screen hide"><div class="wrap">
+  <div class="intro" id="on1">
+    <img src="../harb/vay2-180.png" alt="">
+    <h1>ابنِ نفسك<br><span>يوماً بعد يوم</span></h1>
+    <p>برنامج المتابعة مع ناظم · 21 يوماً</p>
+    <div class="pill3"><span>الروح</span><span>الجسد</span><span>العقل</span></div>
+    <div class="steps">
+      <div><i>1</i><span>في الصباح: مهمة اليوم ودرسه.</span></div>
+      <div><i>2</i><span>خلال اليوم: علامة على كل عادة. «على الأقل» تُحسب أيضاً.</span></div>
+      <div><i>3</i><span>في الليل: التقرير يُرسل إلى ناظم بضغطة واحدة.</span></div>
+    </div>
+    <div style="height:22px"></div>
+    <button class="btn" onclick="onStep(2)">لنبدأ</button>
+  </div>
+  <div id="on2" class="hide">
+    <button class="back" onclick="onStep(1)"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>رجوع</button>
+    <h1 style="font-size:26px;font-weight:900;margin-top:6px">البداية</h1>
+    <label class="f">الاسم <small>(كما يظهر في التقرير)</small></label>
+    <input type="text" id="inName" placeholder="الاسم الأول" autocomplete="given-name">
+    <label class="f">يوم البداية</label>
+    <div class="chips" id="startChips"></div>
+    <input type="date" id="inStart" class="hide" style="margin-top:10px">
+    <label class="f">عاداتي <small>(اختر من 3 إلى 7)</small></label>
+    <div class="chips" id="habChips"></div>
+    <div class="addrow"><input type="text" id="inHab" placeholder="عادة خاصة بي..." maxlength="40"><button onclick="addCustom()">+</button></div>
+    <p class="hint" style="margin-top:10px">الصلوات الخمس ومهمة اليوم لهما مكان خاص، فلا حاجة لإضافتهما.</p>
+    <div style="height:24px"></div>
+    <button class="btn" onclick="finishOn()">ابدأ الرحلة</button>
+  </div>
+</div></section>
+
+<!-- TODAY -->
+<section id="sToday" class="screen hide"><div class="wrap">
+  <div class="top">
+    <div class="brand"><img src="../harb/vay2-180.png" alt=""><div><b>ابنِ نفسك</b><small>مع ناظم</small></div></div>
+    <button class="ico" onclick="show('sSet')" aria-label="الإعدادات"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+  </div>
+
+  <div class="hero">
+    <span class="wk" id="hWeek"></span>
+    <h1 id="hDay"></h1>
+    <p id="hDate"></p>
+    <div class="ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="42" stroke="#2a1a1a" stroke-width="9" fill="none"/><circle id="ringC" cx="50" cy="50" r="42" stroke="#C81E1E" stroke-width="9" fill="none" stroke-linecap="round" stroke-dasharray="264" stroke-dashoffset="264" style="transition:stroke-dashoffset .5s"/></svg><div class="n"><div><span id="ringN">0</span>%<small>اليوم</small></div></div></div>
+    <div class="lesson" id="hLesson"></div>
+  </div>
+
+  <div id="preStart" class="card hide" style="margin-top:14px;text-align:center"></div>
+
+  <h2>مهمة اليوم</h2>
+  <div class="card mis">
+    <div class="t" id="mT"></div>
+    <div class="m" id="mM"></div>
+    <div class="seg" id="mSeg"><button data-v="2">كاملة</button><button data-v="1">على الأقل</button><button data-v="0">لم تتم</button></div>
+  </div>
+
+  <h2>عاداتي <a href="#" onclick="show('sSet');return false">تعديل</a></h2>
+  <div id="habList"></div>
+  <p class="hint">ضغطة: كاملة · ضغطتان: على الأقل · ثلاث: لم تتم</p>
+
+  <h2>الصلوات الخمس</h2>
+  <div class="card">
+    <div class="pr" id="prList"></div>
+    <div class="leg"><span><i style="background:var(--red)"></i>في وقتها</span><span><i style="box-shadow:inset 0 0 0 2px var(--crim)"></i>في يومها</span></div>
+  </div>
+
+  <h2>السلسلة · 21 يوماً</h2>
+  <div class="card">
+    <div class="chain" id="chain"></div>
+    <div class="rule"><b>القاعدة:</b><span>لا تفويت ليومين متتاليين. السقوط ليس عودة إلى الصفر.</span></div>
+  </div>
+  <div class="foot">VAYNORA · حرب النفس</div>
+</div>
+<div class="bar"><div class="in"><button class="btn" onclick="openReport()"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>تقرير الليل</button></div></div>
+</section>
+
+<!-- REPORT -->
+<section id="sRep" class="screen hide"><div class="wrap">
+  <button class="back" onclick="show('sToday')"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>اليوم</button>
+  <h1 style="font-size:26px;font-weight:900;margin-top:4px">تقرير الليل</h1>
+  <p style="color:var(--mute);font-size:14px" id="rSub"></p>
+  <div class="score" style="margin-top:14px">
+    <div><b id="rScore">0%</b><small>نتيجة اليوم</small></div>
+    <div><b id="rPr">0/5</b><small>الصلوات</small></div>
+    <div><b id="rChain">0</b><small>السلسلة</small></div>
+  </div>
+  <label class="f">1. وقت النوم البارحة / وقت الاستيقاظ</label>
+  <div class="row"><input type="time" id="qSleep"><input type="time" id="qWake"></div>
+  <label class="f">2. الفجر</label>
+  <div class="seg" id="qFajr" style="grid-template-columns:1fr 1fr;margin-top:0"><button data-v="2">في وقتها</button><button data-v="0">فاتت</button></div>
+  <label class="f">5. أصعب لحظة اليوم</label>
+  <textarea id="qHard" placeholder="بصدق، في سطر أو سطرين"></textarea>
+  <label class="f">6. شيء واحد أفخر به اليوم</label>
+  <textarea id="qProud" placeholder="ولو كان صغيراً"></textarea>
+  <p class="hint" style="margin-top:8px">السؤال 3 (الصلوات) و4 (مهمة اليوم) يُملآن تلقائياً من صفحة اليوم.</p>
+  <div class="rep" id="rText"></div>
+  <div style="height:16px"></div>
+  <button class="btn" onclick="sendWA()"><svg viewBox="0 0 24 24"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg>إرسال التقرير إلى ناظم</button>
+  <button class="btn ghost" onclick="copyRep()"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>نسخ التقرير</button>
+  <div style="height:20px"></div>
+</div></section>
+
+<!-- SETTINGS -->
+<section id="sSet" class="screen hide sett"><div class="wrap">
+  <button class="back" onclick="show('sToday')"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>اليوم</button>
+  <h1 style="font-size:26px;font-weight:900;margin-top:4px">الإعدادات</h1>
+  <label class="f">الاسم</label>
+  <input type="text" id="sName">
+  <label class="f">يوم البداية</label>
+  <input type="date" id="sStart">
+  <label class="f">عاداتي</label>
+  <div id="sHabs"></div>
+  <div class="addrow"><input type="text" id="sHabIn" placeholder="أضف عادة..." maxlength="40"><button onclick="setAdd()">+</button></div>
+  <div class="chips" id="sSug" style="margin-top:12px"></div>
+  <div style="height:22px"></div>
+  <button class="btn" onclick="saveSet()">حفظ</button>
+  <div class="card" style="margin-top:22px;font-size:13px;color:var(--mute)">
+    <b style="color:var(--bone)">ملاحظة مهمة:</b> البيانات محفوظة على هذا الهاتف فقط. افتح التطبيق دائماً من المكان نفسه. على الآيفون: زر المشاركة ثم «إضافة إلى الشاشة الرئيسية» ليصبح تطبيقاً مستقلاً.
+  </div>
+  <div style="text-align:center;margin-top:18px"><button class="del" id="resetBtn" onclick="resetAll()">مسح كل البيانات</button></div>
+</div></section>
+
+<div class="done-ov hide" id="doneOv" onclick="this.classList.add('hide')">
+  <div><div class="big" id="dovN"></div><h3>سُجّل اليوم</h3><p>تقريرك في الطريق إلى ناظم.<br>غداً يوم جديد، والسلسلة مستمرة.</p><div style="height:20px"></div><button class="btn ghost" style="width:auto;padding:12px 28px;margin:auto">حسناً</button></div>
+</div>
+
+<script>
+const WA='21658886475', KEY='vay_ibni_v1', N=21;
+const SUG=['النوم والاستيقاظ في وقت ثابت','أول ساعة بلا هاتف','الرياضة','القراءة','شرب الماء (لتران)','ورد القرآن','أذكار الصباح والمساء','المشي 20 دقيقة','تحديد مهمة الغد الوحيدة','لا هاتف بعد العاشرة ليلاً'];
+const WEEKS=['الروح','الجسد','العقل'];
+// [lesson, full mission, minimum]
+const P=[
+['لماذا بدأ ناظم رحلته، ولماذا هذه البداية','تطبيق خطة النوم الليلة: الهاتف خارج الغرفة في الوقت المحدد','الهاتف بعيد عن الفراش'],
+['الفجر هو المفتاح','الاستيقاظ للفجر، والوضوء مباشرة، ثم الصلاة','صلاة الفجر ولو بعد وقتها'],
+['أول عشر دقائق بعد الاستيقاظ تحكم اليوم','ساعة كاملة بعد الاستيقاظ بلا هاتف: ماء، أذكار الصباح، حركة','10 دقائق بلا هاتف'],
+['الصلوات الخمس عمود اليوم','الصلوات الخمس في وقتها، وربط كل صلاة بعمل ثابت','الخمس في يومها ولو تأخرت'],
+['القرآن قبل الدنيا','صفحة من القرآن بعد الفجر','خمس آيات'],
+['«إن... فسأفعل»: خطة للأيام الصعبة','كتابة 3 خطط: إن سهرت، إن تعبت، إن دعاني الأصحاب','خطة واحدة'],
+['مراجعة الأسبوع الأول','كتابة: ما الذي نجح، ما الذي سقط، وتعديل واحد للأسبوع الثاني','رسالة صوتية بدل الكتابة'],
+['الجسد أمانة','15 دقيقة تمرين صباحاً بلا أدوات: ضغط، قرفصاء، بلانك','10 ضغطات'],
+['الطعام ليس للشبع فقط','لتران من الماء، وبلا مشروبات سكرية','كأس ماء عند الاستيقاظ'],
+['مكالمة منتصف البرنامج','دوش بارد 30 ثانية في آخر الاستحمام','ماء بارد على الوجه'],
+['الشمس والمشي يصفّيان الذهن','20 دقيقة مشي في الخارج','5 دقائق'],
+['الهاتف يسرق اليوم','مراجعة وقت الشاشة، إطفاء الإشعارات، وحذف تطبيق يضيّع الوقت','إطفاء الإشعارات'],
+['البيئة أقوى من الإرادة','ترتيب البيت، وتحديد من يجذبني إلى الوراء','ترتيب الفراش'],
+['مراجعة الأسبوع الثاني','كتابة: ما الذي نجح، ما الذي سقط، وتعديل واحد للأسبوع الثالث','رسالة صوتية بدل الكتابة'],
+['مهمة واحدة تكفي ليُحسب اليوم','كتابة أهم مهمة للغد الليلة، وإنجازها قبل الظهر','كتابتها فقط'],
+['القراءة تبني العقل','10 صفحات من كتاب نافع','صفحة واحدة'],
+['قاعدة الدقائق العشر عند الرغبة','عند الرغبة: انتظار 10 دقائق، ثم القيام، والوضوء، والخروج من البيت','الانتظار 10 دقائق فقط'],
+['لا تفويت ليومين، والساعة الأولى بعد السقوط','كتابة الخطة: «إن سقطت، ففي أول ساعة سأفعل...»','حفظ القاعدة'],
+['المال: البداية من الصفر','خطوة واحدة نحو عمل أو مشروع: سؤال، تعلّم، أو تقديم','كتابة الخطوة'],
+['من أريد أن أكون؟','كتابة رسالة إلى نفسي: «أصبحتُ شخصاً...»','جملة واحدة'],
+['الختام','مكالمة الختام مع ناظم: نفس أسئلة البداية بالأرقام، ثم الشهادة','حضور المكالمة']
+];
+const PR=['الفجر','الظهر','العصر','المغرب','العشاء'];
+const ST=['لم تتم','على الأقل','كاملة'];
+let S;
+const $=id=>document.getElementById(id);
+function load(){try{S=JSON.parse(localStorage.getItem(KEY))}catch(e){S=null}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function ymd(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function parse(s){const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)}
+function dayNum(dateStr){return Math.round((parse(dateStr)-parse(S.start))/864e5)+1}
+function dateOf(n){const d=parse(S.start);d.setDate(d.getDate()+n-1);return ymd(d)}
+const todayStr=()=>ymd(new Date());
+let view=null; // date string being viewed
+function rec(ds){S.days[ds]=S.days[ds]||{h:{},p:[null,null,null,null,null],m:null};return S.days[ds]}
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
+function show(id){['sOn','sToday','sRep','sSet'].forEach(s=>$(s).classList.toggle('hide',s!==id));scrollTo(0,0);if(id==='sToday')renderToday();if(id==='sSet'){tmp=null;$('sName').value='';$('sStart').value='';renderSet()}}
+
+/* onboarding */
+let pick=[],startOpt;
+function onStep(n){$('on1').classList.toggle('hide',n!==1);$('on2').classList.toggle('hide',n!==2);scrollTo(0,0);if(n===2)renderOn()}
+function nextSunday(){const d=new Date();d.setDate(d.getDate()+((7-d.getDay())%7||7));return ymd(d)}
+function renderOn(){
+  const opts=[['today','اليوم',todayStr()],['sun','الأحد القادم',nextSunday()],['other','تاريخ آخر','']];
+  if(!startOpt)startOpt='today';
+  $('startChips').innerHTML=opts.map(o=>`<button class="chip ${startOpt===o[0]?'on':''}" onclick="startOpt='${o[0]}';renderOn()">${o[1]}</button>`).join('');
+  $('inStart').classList.toggle('hide',startOpt!=='other');
+  const all=[...new Set([...SUG,...pick])];
+  $('habChips').innerHTML=all.map((h,i)=>`<button class="chip ${pick.includes(h)?'on':''}" data-h="${esc(h)}">${esc(h)}</button>`).join('');
+  $('habChips').querySelectorAll('button').forEach(b=>b.onclick=()=>{const h=b.dataset.h;if(pick.includes(h))pick=pick.filter(x=>x!==h);else if(pick.length<7)pick.push(h);else toast('الحد الأقصى 7 عادات');renderOn()});
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function addCustom(){const v=$('inHab').value.trim();if(!v)return;if(pick.length>=7)return toast('الحد الأقصى 7 عادات');if(!pick.includes(v))pick.push(v);$('inHab').value='';renderOn()}
+function finishOn(){
+  const name=$('inName').value.trim();
+  if(!name)return toast('اكتب الاسم أولاً'),$('inName').focus();
+  if(pick.length<3)return toast('اختر 3 عادات على الأقل');
+  let start=startOpt==='today'?todayStr():startOpt==='sun'?nextSunday():$('inStart').value;
+  if(!start)return toast('اختر تاريخ البداية');
+  S={name,start,habits:pick.map((t,i)=>({id:'h'+Date.now().toString(36)+i,t})),days:{},sent:{}};
+  save();view=null;show('sToday');toast('بسم الله، بدأت الرحلة');
+}
+
+/* today */
+function curView(){if(view)return view;const t=todayStr();const n=dayNum(t);if(n<1)return S.start;if(n>N)return dateOf(N);return t}
+function score(ds){
+  const r=S.days[ds];if(!r)return 0;const n=dayNum(ds);let tot=0,got=0;
+  S.habits.forEach(h=>{tot+=1;const v=r.h[h.id];if(v===2)got+=1;else if(v===1)got+=.6});
+  r.p.forEach(v=>{tot+=1;if(v===2)got+=1;else if(v===1)got+=.5});
+  if(n>=1&&n<=N){tot+=2;if(r.m===2)got+=2;else if(r.m===1)got+=1.3}
+  return tot?Math.round(got/tot*100):0;
+}
+function chainLen(){let c=0,miss=0;const t=Math.min(dayNum(todayStr()),N);for(let n=1;n<=t;n++){const ds=dateOf(n);const ok=S.sent[ds]||score(ds)>=50;if(ok){c++;miss=0}else if(n<t){miss++;if(miss>=2)c=0}}return c}
+function renderToday(){
+  const ds=curView(),n=dayNum(ds),t=todayStr(),tn=dayNum(t);
+  const r=rec(ds),p=P[Math.max(0,Math.min(N,n)-1)];
+  $('hWeek').textContent='الأسبوع '+Math.ceil(Math.max(1,n)/7)+' · '+WEEKS[Math.min(2,Math.floor((Math.max(1,n)-1)/7))];
+  $('hDay').innerHTML=(ds===t?'اليوم ':'اليوم ')+'<span>'+n+'</span> من 21';
+  const d=parse(ds);$('hDate').textContent=(S.name?S.name+' · ':'')+d.toLocaleDateString('ar-TN',{weekday:'long',day:'numeric',month:'long'})+(ds!==t?' · (يوم سابق)':'');
+  $('hLesson').innerHTML='<em>درس اليوم من ناظم</em>'+esc(p[0]);
+  const pre=$('preStart');
+  if(tn<1){pre.classList.remove('hide');pre.innerHTML='<b>يبدأ البرنامج بعد '+(1-tn)+' '+(1-tn===1?'يوم':'أيام')+'</b><br><span style="color:var(--mute);font-size:13px">هذه معاينة لليوم الأول، ويمكن التجربة من الآن.</span>'}else pre.classList.add('hide');
+  $('mT').textContent=p[1];$('mM').innerHTML='على الأقل: <b>'+esc(p[2])+'</b>';
+  $('mSeg').querySelectorAll('button').forEach(b=>{b.classList.toggle('on',r.m===+b.dataset.v);b.onclick=()=>{const v=+b.dataset.v;r.m=r.m===v?null:v;save();renderToday()}});
+  $('habList').innerHTML=S.habits.map(h=>{const v=r.h[h.id];const cls=v==null?'':'s'+v;return `<div class="hab ${cls}" data-id="${h.id}"><div class="box"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div><div class="tx"><b>${esc(h.t)}</b><small>${v==null?'اضغط للتسجيل':ST[v]}</small></div></div>`}).join('');
+  $('habList').querySelectorAll('.hab').forEach(el=>el.onclick=()=>{const id=el.dataset.id,v=r.h[id];r.h[id]=v==null?2:v===2?1:v===1?0:null;if(r.h[id]==null)delete r.h[id];save();if(navigator.vibrate)navigator.vibrate(8);renderToday()});
+  $('prList').innerHTML=PR.map((x,i)=>`<button class="${r.p[i]==null?'':'s'+r.p[i]}" data-i="${i}"><i></i>${x}</button>`).join('');
+  $('prList').querySelectorAll('button').forEach(b=>b.onclick=()=>{const i=+b.dataset.i,v=r.p[i];r.p[i]=v==null?2:v===2?1:null;save();renderToday()});
+  const sc=score(ds);$('ringN').textContent=sc;$('ringC').style.strokeDashoffset=264-264*sc/100;
+  let h='';for(let k=1;k<=N;k++){if(k%7===1)h+=`<div class="lbl">الأسبوع ${Math.ceil(k/7)} · ${WEEKS[Math.floor((k-1)/7)]}</div>`;const kd=dateOf(k);const s=S.days[kd]?score(kd):0;let c='';if(k>tn)c='fut';else if(S.sent[kd]||s>=80)c='done';else if(s>=50)c='part';else if(k<tn)c='miss';if(kd===ds)c+=' today';h+=`<button class="${c}" data-k="${k}">${k}</button>`}
+  $('chain').innerHTML=h;
+  $('chain').querySelectorAll('button').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;if(k>Math.max(tn,1))return toast('لم يأتِ هذا اليوم بعد');view=dateOf(k);if(view===todayStr())view=null;renderToday();scrollTo({top:0,behavior:'smooth'})});
+}
+
+/* report */
+function hhmm(v){return v||'—'}
+function buildRep(){
+  const ds=curView(),n=dayNum(ds),r=rec(ds),p=P[Math.max(0,Math.min(N,n)-1)];
+  const q=r.q||{};const prN=r.p.filter(v=>v===2).length,prD=r.p.filter(v=>v!=null).length;
+  const L=[];
+  L.push('تقرير الليل · اليوم '+n+'/21');
+  L.push(S.name+' · '+parse(ds).toLocaleDateString('ar-TN',{weekday:'long',day:'numeric',month:'long'}));
+  L.push('');
+  L.push('1. النوم: '+hhmm(q.sleep)+' · الاستيقاظ: '+hhmm(q.wake));
+  L.push('2. الفجر: '+(q.fajr===2?'في وقتها':q.fajr===0?'فاتت':(r.p[0]===2?'في وقتها':'—')));
+  L.push('3. الصلوات: '+prN+'/5 في وقتها'+(prD>prN?' (+'+(prD-prN)+' في يومها)':''));
+  L.push('4. مهمة اليوم: '+(r.m==null?'—':ST[r.m])+' («'+p[1]+'»)');
+  L.push('5. أصعب لحظة: '+(q.hard||'—'));
+  L.push('6. أفخر بـ: '+(q.proud||'—'));
+  L.push('');
+  L.push('العادات:');
+  S.habits.forEach(h=>{const v=r.h[h.id];L.push((v===2?'✓ ':v===1?'◐ ':'✕ ')+h.t+(v===1?' (على الأقل)':''))});
+  L.push('');
+  L.push('النتيجة: '+score(ds)+'% · السلسلة: '+chainLen()+' '+(chainLen()===1?'يوم':'أيام'));
+  return L.join('\n');
+}
+function openReport(){
+  const ds=curView(),r=rec(ds);r.q=r.q||{};
+  if(r.q.fajr==null&&r.p[0]!=null)r.q.fajr=r.p[0]===2?2:0;
+  $('qSleep').value=r.q.sleep||'';$('qWake').value=r.q.wake||'';$('qHard').value=r.q.hard||'';$('qProud').value=r.q.proud||'';
+  $('rSub').textContent='اليوم '+dayNum(ds)+' من 21 · ست أسئلة، دقيقة واحدة';
+  show('sRep');refreshRep();
+}
+function refreshRep(){
+  const ds=curView(),r=rec(ds);
+  $('qFajr').querySelectorAll('button').forEach(b=>b.classList.toggle('on',r.q.fajr===+b.dataset.v));
+  $('rScore').textContent=score(ds)+'%';$('rPr').textContent=r.p.filter(v=>v===2).length+'/5';$('rChain').textContent=chainLen();
+  $('rText').textContent=buildRep();
+}
+['qSleep','qWake','qHard','qProud'].forEach(id=>{const el=$(id);el.addEventListener('input',()=>{const r=rec(curView());const k={qSleep:'sleep',qWake:'wake',qHard:'hard',qProud:'proud'}[id];r.q[k]=el.value;save();refreshRep()})});
+$('qFajr').querySelectorAll('button').forEach(b=>b.onclick=()=>{const r=rec(curView());r.q.fajr=+b.dataset.v;save();refreshRep()});
+function markSent(){const ds=curView();S.sent[ds]=Date.now();save()}
+function sendWA(){
+  const r=rec(curView());if(!r.q.hard&&!r.q.proud&&!r.q.sleep)return toast('أجب عن الأسئلة أولاً');
+  markSent();const txt=buildRep();$('dovN').textContent=dayNum(curView())+'/21';$('doneOv').classList.remove('hide');
+  setTimeout(()=>{location.href='https://wa.me/'+WA+'?text='+encodeURIComponent(txt)},450);
+}
+function copyRep(){const t=buildRep();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('نُسخ التقرير')).catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();toast('نُسخ التقرير')})}
+
+/* settings */
+let tmp;
+function renderSet(){
+  if(!tmp)tmp=S.habits.map(h=>({...h}));
+  $('sName').value=$('sName').value||S.name;$('sStart').value=$('sStart').value||S.start;
+  $('sHabs').innerHTML=tmp.map((h,i)=>`<div class="hab"><div class="tx"><b>${esc(h.t)}</b></div><button class="del" data-i="${i}">حذف</button></div>`).join('');
+  $('sHabs').querySelectorAll('.del').forEach(b=>b.onclick=()=>{if(tmp.length<=1)return toast('عادة واحدة على الأقل');tmp.splice(+b.dataset.i,1);renderSet()});
+  $('sSug').innerHTML=SUG.filter(s=>!tmp.some(h=>h.t===s)).map(s=>`<button class="chip" data-s="${esc(s)}">+ ${esc(s)}</button>`).join('');
+  $('sSug').querySelectorAll('button').forEach(b=>b.onclick=()=>{if(tmp.length>=7)return toast('الحد الأقصى 7 عادات');tmp.push({id:'h'+Date.now().toString(36),t:b.dataset.s});renderSet()});
+}
+function setAdd(){const v=$('sHabIn').value.trim();if(!v)return;if(tmp.length>=7)return toast('الحد الأقصى 7 عادات');tmp.push({id:'h'+Date.now().toString(36),t:v});$('sHabIn').value='';renderSet()}
+function saveSet(){const nm=$('sName').value.trim();if(nm)S.name=nm;if($('sStart').value)S.start=$('sStart').value;S.habits=tmp;tmp=null;$('sName').value='';$('sStart').value='';view=null;save();show('sToday');toast('حُفظت التعديلات')}
+let rs=0;function resetAll(){if(!rs){rs=1;$('resetBtn').textContent='اضغط مرة أخرى للتأكيد';setTimeout(()=>{rs=0;$('resetBtn').textContent='مسح كل البيانات'},3000);return}try{localStorage.removeItem(KEY)}catch(e){}location.reload()}
+
+load();
+if(S&&S.habits)show('sToday');else{show('sOn');onStep(1)}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S&&!$('sToday').classList.contains('hide')){view=null;renderToday()}});
+</script>
+</body>
+</html>
