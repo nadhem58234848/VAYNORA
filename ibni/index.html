@@ -155,7 +155,7 @@ textarea{min-height:76px;resize:none;line-height:1.6}
 .certc h3{font-size:20px;font-weight:900;margin:6px 0 2px}.certc p{color:var(--mute);font-size:14px}
 .cov{position:fixed;inset:0;background:#000;z-index:9;overflow:auto;padding:calc(16px + env(safe-area-inset-top)) 16px 30px}
 .cov img{width:100%;border-radius:10px;border:1px solid #222;margin:14px 0}
-input[type=number]{width:100%;padding:13px 14px;border-radius:14px;background:var(--card2);border:1px solid var(--line);outline:none;font-size:16px;-webkit-appearance:none;appearance:none}
+input[type=tel],input[type=email],input[type=number]{width:100%;padding:13px 14px;border-radius:14px;background:var(--card2);border:1px solid var(--line);outline:none;font-size:16px;-webkit-appearance:none;appearance:none}
 .welcome{text-align:right;margin-top:24px;padding:16px 18px;border-radius:18px;background:linear-gradient(135deg,#1a0307,#0E0E0E 70%);border:1px solid #2e0a10;border-right:4px solid var(--red)}
 .welcome em{font-style:normal;color:var(--red);font-weight:800;font-size:13px;display:block;margin-bottom:6px}
 .welcome p{color:#e6e6e6;font-size:15px;margin-top:6px;line-height:1.8}.welcome b{color:#fff;font-weight:800}
@@ -192,6 +192,10 @@ input[type=number]{width:100%;padding:13px 14px;border-radius:14px;background:va
     <label class="f">الاسم <small>(كما يظهر في التقرير)</small></label>
     <input type="text" id="inName" placeholder="الاسم الأول" autocomplete="given-name">
     <div class="row"><div><label class="f">العمر</label><input type="number" id="inAge" inputmode="numeric" min="10" max="90" placeholder="مثلاً 24"></div><div><label class="f">بلد الإقامة</label><input type="text" id="inCountry" list="ctry" placeholder="البلد"></div></div>
+    <label class="f">رقم واتساب <small>(مع رمز البلد)</small></label>
+    <input type="tel" id="inWa" inputmode="tel" placeholder="+216 ..." style="direction:ltr;text-align:right">
+    <label class="f">البريد الإلكتروني</label>
+    <input type="email" id="inMail" inputmode="email" placeholder="name@gmail.com" style="direction:ltr;text-align:right">
     <datalist id="ctry"><option value="تونس"><option value="المغرب"><option value="الجزائر"><option value="ليبيا"><option value="مصر"><option value="فرنسا"><option value="ألمانيا"><option value="إيطاليا"></datalist>
     <label class="f">يوم البداية</label>
     <div class="chips" id="startChips"></div>
@@ -406,11 +410,14 @@ function finishOn(){
   if(!name)return toast('الاسم مطلوب'),$('inName').focus();
   if(!(age>=10&&age<=90))return toast('العمر مطلوب'),$('inAge').focus();
   if(!country)return toast('بلد الإقامة مطلوب'),$('inCountry').focus();
+  const wa=$('inWa').value.replace(/[^\d+]/g,''),mail=$('inMail').value.trim();
+  if(wa.replace(/\D/g,'').length<8)return toast('رقم واتساب مطلوب'),$('inWa').focus();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail))return toast('البريد الإلكتروني غير صحيح'),$('inMail').focus();
   if(pick.length<3)return toast('المطلوب 3 عادات على الأقل');
   let start=startOpt==='today'?todayStr():startOpt==='sun'?nextSunday():$('inStart').value;
   if(!start)return toast('تاريخ البداية مطلوب');
   const old=S||{};
-  S={pid:old.pid||Math.random().toString(36).slice(2,11),name,age,country,start,habits:pick.map((t,i)=>{const o=(old.habits||[]).find(h=>h.t===t);return o||{id:'h'+Date.now().toString(36)+i,t}}),days:old.days||{},sent:old.sent||{}};
+  S={...old,pid:old.pid||Math.random().toString(36).slice(2,11),name,age,country,wa,mail,start,habits:pick.map((t,i)=>{const o=(old.habits||[]).find(h=>h.t===t);return o||{id:'h'+Date.now().toString(36)+i,t}}),days:old.days||{},sent:old.sent||{}};
   save();send('join');view=null;show('sToday');toast('بسم الله، بدأت الرحلة');
 }
 
@@ -485,7 +492,7 @@ function refreshRep(){
 $('qFajr').querySelectorAll('button').forEach(b=>b.onclick=()=>{const r=rec(curView());r.q.fajr=+b.dataset.v;save();refreshRep()});
 function markSent(){const ds=curView();S.sent[ds]=Date.now();save();send('report',ds)}
 const FORM='https://docs.google.com/forms/d/e/1FAIpQLSdyvgA839EsPHlgy6pyZMMwuSgvQf4a1MagdlA3QyCmFQA_jw/formResponse',FE='entry.1472783396';
-function send(a,ds){try{const o={event:'ibni',a,pid:S.pid,name:S.name,age:S.age,country:S.country,start:S.start,habits:S.habits.map(h=>h.t),done:doneDays(),chain:chainLen(),m0:S.m0||null,m21:S.m21||null};
+function send(a,ds){try{const o={event:'ibni',a,pid:S.pid,name:S.name,age:S.age,country:S.country,wa:S.wa,mail:S.mail,start:S.start,habits:S.habits.map(h=>h.t),done:doneDays(),chain:chainLen(),m0:S.m0||null,m21:S.m21||null};
  if(ds){const r=rec(ds);o.day=dayNum(ds);o.score=score(ds);o.m=r.m;o.p=r.p;o.q=r.q||{};o.h={};S.habits.forEach(h=>o.h[h.t]=r.h[h.id]==null?null:r.h[h.id])}
  const fd=new FormData();fd.append(FE,JSON.stringify(o));fetch(FORM,{method:'POST',mode:'no-cors',body:fd}).catch(()=>{})}catch(e){}}
 const PASS=15;
@@ -576,8 +583,8 @@ function copyBackup(){const t=backupCode();(navigator.clipboard?navigator.clipbo
 function restore(){try{const o=JSON.parse(decodeURIComponent(escape(atob($('rstIn').value.trim()))));if(!o.habits||!o.start)throw 0;S=o;save();location.reload()}catch(e){toast('الكود غير صحيح')}}
 load();
 if(S&&S.habits&&!S.pid){S.pid=Math.random().toString(36).slice(2,11);save()}
-if(S&&S.habits&&S.age&&S.country)show('sToday');
-else if(S&&S.habits){show('sOn');pick=S.habits.map(h=>h.t);onStep(2);$('inName').value=S.name;startOpt='other';$('inStart').value=S.start;renderOn();toast('يرجى إكمال البيانات: العمر والبلد')}
+if(S&&S.habits&&S.age&&S.country&&S.wa&&S.mail)show('sToday');
+else if(S&&S.habits){show('sOn');pick=S.habits.map(h=>h.t);onStep(2);$('inName').value=S.name;startOpt='other';$('inStart').value=S.start;renderOn();$('inAge').value=S.age||'';$('inCountry').value=S.country||'';toast('يرجى إكمال البيانات: واتساب والبريد')}
 else{show('sOn');onStep(1)}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&S&&!$('sToday').classList.contains('hide')){view=null;renderToday()}});
 </script>

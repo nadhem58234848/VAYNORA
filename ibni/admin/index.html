@@ -72,7 +72,7 @@ function dayNow(start){const t=new Date();t.setHours(0,0,0,0);return Math.round(
 function ago(ts){if(!ts)return '—';const h=(Date.now()-ts)/36e5;return h<1?'الآن':h<24?'قبل '+Math.round(h)+' س':'قبل '+Math.round(h/24)+' ي'}
 const ST=['لم تتم','على الأقل','كاملة'];
 function people(){const P={};ROWS.slice().sort((a,b)=>a.ts-b.ts).forEach(o=>{const p=P[o.pid]=P[o.pid]||{pid:o.pid,reps:{},first:o.ts};
- Object.assign(p,{name:o.name,age:o.age,country:o.country,start:o.start,habits:o.habits||p.habits,done:o.done,chain:o.chain,last:o.ts});
+ Object.assign(p,{wa:o.wa||p.wa,mail:o.mail||p.mail,name:o.name,age:o.age,country:o.country,start:o.start,habits:o.habits||p.habits,done:o.done,chain:o.chain,last:o.ts});
  if(o.m0)p.m0=o.m0;if(o.m21)p.m21=o.m21;if(o.a==='report'&&o.day)p.reps[o.day]=o;if(o.a==='cert')p.cert=1;});
  return Object.values(P).map(p=>{p.day=Math.min(Math.max(dayNow(p.start),0),99);p.lastRep=Math.max(0,...Object.values(p.reps).map(r=>r.ts));
   const today=Math.min(p.day,N);let miss=0;for(let d=today-1;d>=1&&d>=today-3;d--){if(!p.reps[d])miss++;else break}p.miss=miss;return p}).sort((a,b)=>b.last-a.last)}
@@ -107,6 +107,7 @@ function render(){const A=document.getElementById('app');
   const hs=(p.habits||[]).map(t=>{const v=reps.map(r=>r.h&&r.h[t]).filter(x=>x!=null&&x!==undefined);const ok=reps.filter(r=>r.h&&(r.h[t]===2||r.h[t]===1)).length;const pc=reps.length?Math.round(ok/reps.length*100):0;return `<div><div class="r"><span>${esc(t)}</span><em>${pc}%</em></div><div class="pb"><i style="width:${pc}%"></i></div></div>`}).join('');
   const lastR=reps.sort((a,b)=>b.day-a.day)[0];
   h+=`<div class="sub"><div class="hd"><div class="av">${esc((p.name||'?').trim()[0]||'?')}</div><div class="nm"><b>${esc(p.name)}</b><small>${esc(p.age||'—')} سنة · ${esc(p.country||'—')}</small></div>${badge}</div>
+  <div class="stats">${p.wa?`<a href="https://wa.me/${esc(String(p.wa).replace(/\D/g,''))}" style="color:var(--red);font-weight:800;text-decoration:none;direction:ltr">واتساب <bdi dir="ltr">${esc(p.wa)}</bdi></a>`:''}${p.mail?`<a href="mailto:${esc(p.mail)}" style="color:var(--mute);text-decoration:none;direction:ltr">${esc(p.mail)}</a>`:''}</div>
   <div class="stats"><span>أيام ملتزمة <b>${p.done||0}</b>/21</span><span>السلسلة <b>${p.chain||0}</b></span><span>آخر تقرير <b>${ago(p.lastRep)}</b></span></div>
   <div class="chain">${ch}</div>
   ${meas(p)}
