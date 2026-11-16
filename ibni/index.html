@@ -196,6 +196,8 @@ input[type=tel],input[type=email],input[type=number]{width:100%;padding:13px 14p
     <input type="tel" id="inWa" inputmode="tel" placeholder="+216 ..." style="direction:ltr;text-align:right">
     <label class="f">البريد الإلكتروني</label>
     <input type="email" id="inMail" inputmode="email" placeholder="name@gmail.com" style="direction:ltr;text-align:right">
+    <label class="f">حساب إنستغرام <small>(إن وُجد)</small></label>
+    <input type="text" id="inIg" placeholder="@username" autocapitalize="off" autocorrect="off" style="direction:ltr;text-align:right">
     <datalist id="ctry"><option value="تونس"><option value="المغرب"><option value="الجزائر"><option value="ليبيا"><option value="مصر"><option value="فرنسا"><option value="ألمانيا"><option value="إيطاليا"></datalist>
     <label class="f">يوم البداية</label>
     <div class="chips" id="startChips"></div>
@@ -410,14 +412,14 @@ function finishOn(){
   if(!name)return toast('الاسم مطلوب'),$('inName').focus();
   if(!(age>=10&&age<=90))return toast('العمر مطلوب'),$('inAge').focus();
   if(!country)return toast('بلد الإقامة مطلوب'),$('inCountry').focus();
-  const wa=$('inWa').value.replace(/[^\d+]/g,''),mail=$('inMail').value.trim();
+  const wa=$('inWa').value.replace(/[^\d+]/g,''),mail=$('inMail').value.trim(),ig=$('inIg').value.trim().replace(/^@+/,'').replace(/^https?:\/\/(www\.)?instagram\.com\//,'').replace(/\/.*$/,'');
   if(wa.replace(/\D/g,'').length<8)return toast('رقم واتساب مطلوب'),$('inWa').focus();
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail))return toast('البريد الإلكتروني غير صحيح'),$('inMail').focus();
   if(pick.length<3)return toast('المطلوب 3 عادات على الأقل');
   let start=startOpt==='today'?todayStr():startOpt==='sun'?nextSunday():$('inStart').value;
   if(!start)return toast('تاريخ البداية مطلوب');
   const old=S||{};
-  S={...old,pid:old.pid||Math.random().toString(36).slice(2,11),name,age,country,wa,mail,start,habits:pick.map((t,i)=>{const o=(old.habits||[]).find(h=>h.t===t);return o||{id:'h'+Date.now().toString(36)+i,t}}),days:old.days||{},sent:old.sent||{}};
+  S={...old,pid:old.pid||Math.random().toString(36).slice(2,11),name,age,country,wa,mail,ig,start,habits:pick.map((t,i)=>{const o=(old.habits||[]).find(h=>h.t===t);return o||{id:'h'+Date.now().toString(36)+i,t}}),days:old.days||{},sent:old.sent||{}};
   save();send('join');view=null;show('sToday');toast('بسم الله، بدأت الرحلة');
 }
 
@@ -492,7 +494,7 @@ function refreshRep(){
 $('qFajr').querySelectorAll('button').forEach(b=>b.onclick=()=>{const r=rec(curView());r.q.fajr=+b.dataset.v;save();refreshRep()});
 function markSent(){const ds=curView();S.sent[ds]=Date.now();save();send('report',ds)}
 const FORM='https://docs.google.com/forms/d/e/1FAIpQLSdyvgA839EsPHlgy6pyZMMwuSgvQf4a1MagdlA3QyCmFQA_jw/formResponse',FE='entry.1472783396';
-function send(a,ds){try{const o={event:'ibni',a,pid:S.pid,name:S.name,age:S.age,country:S.country,wa:S.wa,mail:S.mail,start:S.start,habits:S.habits.map(h=>h.t),done:doneDays(),chain:chainLen(),m0:S.m0||null,m21:S.m21||null};
+function send(a,ds){try{const o={event:'ibni',a,pid:S.pid,name:S.name,age:S.age,country:S.country,wa:S.wa,mail:S.mail,ig:S.ig||'',start:S.start,habits:S.habits.map(h=>h.t),done:doneDays(),chain:chainLen(),m0:S.m0||null,m21:S.m21||null};
  if(ds){const r=rec(ds);o.day=dayNum(ds);o.score=score(ds);o.m=r.m;o.p=r.p;o.q=r.q||{};o.h={};S.habits.forEach(h=>o.h[h.t]=r.h[h.id]==null?null:r.h[h.id])}
  const fd=new FormData();fd.append(FE,JSON.stringify(o));fetch(FORM,{method:'POST',mode:'no-cors',body:fd}).catch(()=>{})}catch(e){}}
 const PASS=15;
