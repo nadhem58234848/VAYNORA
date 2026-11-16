@@ -183,6 +183,8 @@ input[type=number]{width:100%;padding:13px 14px;border-radius:14px;background:va
     </div>
     <div style="height:22px"></div>
     <button class="btn" onclick="onStep(2)">لنبدأ</button>
+    <button class="del" style="margin-top:14px" onclick="$('rstBox').classList.toggle('hide')">لديّ كود نسخة احتياطية</button>
+    <div id="rstBox" class="hide" style="margin-top:8px"><textarea id="rstIn" placeholder="الصق الكود هنا" style="direction:ltr;font-size:12px"></textarea><div style="height:8px"></div><button class="btn ghost" onclick="restore()">استعادة البيانات</button></div>
   </div>
   <div id="on2" class="hide">
     <button class="back" onclick="onStep(1)"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>رجوع</button>
@@ -219,6 +221,7 @@ input[type=number]{width:100%;padding:13px 14px;border-radius:14px;background:va
   </div>
 
   <div id="preStart" class="card hide" style="margin-top:14px;text-align:center"></div>
+  <div id="prompts"></div>
 
   <h2>مهمة اليوم</h2>
   <div class="card mis">
@@ -275,6 +278,34 @@ input[type=number]{width:100%;padding:13px 14px;border-radius:14px;background:va
   <div style="height:20px"></div>
 </div></section>
 
+<!-- MEASURES -->
+<section id="sMeas" class="screen hide"><div class="wrap">
+  <button class="back" onclick="show('sToday')"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>اليوم</button>
+  <h1 style="font-size:26px;font-weight:900;margin-top:4px" id="mzT"></h1>
+  <p style="color:var(--mute);font-size:14px" id="mzS"></p>
+  <label class="f">1. وقت النوم المعتاد / وقت الاستيقاظ المعتاد</label>
+  <div class="row"><input type="time" id="mz_sleep"><input type="time" id="mz_wake"></div>
+  <label class="f">2. كم صلاة في وقتها في اليوم؟ <small>(من 0 إلى 5)</small></label>
+  <div class="chips" data-k="pr" data-max="5"></div>
+  <label class="f">3. الفجر في وقتها: كم مرة في الأسبوع؟</label>
+  <div class="chips" data-k="fajr" data-max="7"></div>
+  <label class="f">4. كم ساعة على الهاتف في اليوم؟</label>
+  <input type="number" id="mz_phone" inputmode="decimal" min="0" max="20" placeholder="مثلاً 5">
+  <label class="f">5. التمرين: كم مرة في الأسبوع؟</label>
+  <div class="chips" data-k="sport" data-max="7"></div>
+  <div id="mz0">
+    <label class="f">6. أكبر ما يؤلمني الآن</label><textarea id="mz_pain"></textarea>
+    <label class="f">7. لماذا أريد أن أتغيّر؟ <small>(أعود إليها عند السقوط)</small></label><textarea id="mz_why"></textarea>
+  </div>
+  <div id="mz21">
+    <label class="f">6. أكبر شيء تغيّر فيّ</label><textarea id="mz_change"></textarea>
+    <label class="hab" style="margin-top:14px;cursor:pointer"><input type="checkbox" id="mz_ok" style="width:22px;height:22px;accent-color:#E60226"><span class="tx"><b style="font-size:14px">أسمح لناظم بنشر أرقامي «قبل/بعد» دون اسم ولا صورة</b></span></label>
+  </div>
+  <div style="height:18px"></div>
+  <button class="btn" onclick="saveMeas()">حفظ</button>
+  <div style="height:20px"></div>
+</div></section>
+
 <!-- SETTINGS -->
 <section id="sSet" class="screen hide sett"><div class="wrap">
   <button class="back" onclick="show('sToday')"><svg viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></svg>اليوم</button>
@@ -293,6 +324,10 @@ input[type=number]{width:100%;padding:13px 14px;border-radius:14px;background:va
   <div class="card" style="margin-top:22px;font-size:13px;color:var(--mute)">
     <b style="color:var(--bone)">ملاحظة مهمة:</b> البيانات محفوظة على هذا الهاتف فقط. يُفتح التطبيق دائماً من المكان نفسه. على الآيفون: زر المشاركة ثم «إضافة إلى الشاشة الرئيسية» ليصبح تطبيقاً مستقلاً.
   </div>
+  <h2>التذكير والحماية</h2>
+  <a class="btn ghost" href="reminder.ics" style="text-decoration:none"><svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"/></svg>تذكير يومي 21:30 في الرزنامة</a>
+  <button class="btn ghost" onclick="copyBackup()"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>نسخ كود النسخة الاحتياطية</button>
+  <p class="hint" style="margin-top:8px">يُحفظ الكود في الملاحظات أو يُرسل إلى ناظم، ويُستعمل عند تغيير الهاتف.</p>
   <div style="text-align:center;margin-top:18px"><button class="del" id="resetBtn" onclick="resetAll()">مسح كل البيانات</button></div>
 </div></section>
 
@@ -349,7 +384,7 @@ const todayStr=()=>ymd(new Date());
 let view=null; // date string being viewed
 function rec(ds){S.days[ds]=S.days[ds]||{h:{},p:[null,null,null,null,null],m:null};return S.days[ds]}
 function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(e._t);e._t=setTimeout(()=>e.classList.remove('on'),1800)}
-function show(id){['sOn','sToday','sRep','sSet'].forEach(s=>$(s).classList.toggle('hide',s!==id));scrollTo(0,0);if(id==='sToday')renderToday();if(id==='sSet'){tmp=null;$('sAge').value='';$('sCountry').value='';$('sName').value='';$('sStart').value='';renderSet()}}
+function show(id){['sOn','sToday','sRep','sSet','sMeas'].forEach(s=>$(s).classList.toggle('hide',s!==id));scrollTo(0,0);if(id==='sToday')renderToday();if(id==='sSet'){tmp=null;$('sAge').value='';$('sCountry').value='';$('sName').value='';$('sStart').value='';renderSet()}}
 
 /* onboarding */
 let pick=[],startOpt;
@@ -407,7 +442,7 @@ function renderToday(){
   const sc=score(ds);$('ringN').textContent=sc;$('ringC').style.strokeDashoffset=264-264*sc/100;
   let h='';for(let k=1;k<=N;k++){if(k%7===1)h+=`<div class="lbl">الأسبوع ${Math.ceil(k/7)} · ${WEEKS[Math.floor((k-1)/7)]}</div>`;const kd=dateOf(k);const s=S.days[kd]?score(kd):0;let c='';if(k>tn)c='fut';else if(S.sent[kd]||s>=80)c='done';else if(s>=50)c='part';else if(k<tn)c='miss';if(kd===ds)c+=' today';h+=`<button class="${c}" data-k="${k}">${k}</button>`}
   $('chain').innerHTML=h;
-  renderNext();
+  renderNext();renderPrompts();
   $('chain').querySelectorAll('button').forEach(b=>b.onclick=()=>{const k=+b.dataset.k;if(k>Math.max(tn,1))return toast('لم يأتِ هذا اليوم بعد');view=dateOf(k);if(view===todayStr())view=null;renderToday();scrollTo({top:0,behavior:'smooth'})});
 }
 
@@ -450,14 +485,14 @@ function refreshRep(){
 $('qFajr').querySelectorAll('button').forEach(b=>b.onclick=()=>{const r=rec(curView());r.q.fajr=+b.dataset.v;save();refreshRep()});
 function markSent(){const ds=curView();S.sent[ds]=Date.now();save();send('report',ds)}
 const FORM='https://docs.google.com/forms/d/e/1FAIpQLSdyvgA839EsPHlgy6pyZMMwuSgvQf4a1MagdlA3QyCmFQA_jw/formResponse',FE='entry.1472783396';
-function send(a,ds){try{const o={event:'ibni',a,pid:S.pid,name:S.name,age:S.age,country:S.country,start:S.start,habits:S.habits.map(h=>h.t),done:doneDays(),chain:chainLen()};
+function send(a,ds){try{const o={event:'ibni',a,pid:S.pid,name:S.name,age:S.age,country:S.country,start:S.start,habits:S.habits.map(h=>h.t),done:doneDays(),chain:chainLen(),m0:S.m0||null,m21:S.m21||null};
  if(ds){const r=rec(ds);o.day=dayNum(ds);o.score=score(ds);o.m=r.m;o.p=r.p;o.q=r.q||{};o.h={};S.habits.forEach(h=>o.h[h.t]=r.h[h.id]==null?null:r.h[h.id])}
  const fd=new FormData();fd.append(FE,JSON.stringify(o));fetch(FORM,{method:'POST',mode:'no-cors',body:fd}).catch(()=>{})}catch(e){}}
 const PASS=15;
 function doneDays(){let c=0;for(let n=1;n<=N;n++){const ds=dateOf(n);if(S.sent[ds]||(S.days[ds]&&score(ds)>=50))c++}return c}
 function passed(){return dayNum(todayStr())>=N&&doneDays()>=PASS}
 const LOCK='<svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>',OPEN='<svg viewBox="0 0 24 24"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 7.8-1"/></svg>';
-function renderNext(){const ok=passed(),d=doneDays(),tn=Math.min(Math.max(dayNum(todayStr()),0),N);let h='';
+function renderNext(){const ok=passed(),d=doneDays(),tn=Math.min(Math.max(dayNum(todayStr()),0),N);let h=S.m0&&S.m21?cmpCard():'';
  if(ok)h+=`<div class="certc"><img src="logo.png" style="width:64px"><h3>مبارك، تمّ البرنامج بنجاح</h3><p>${d} يوماً من 21 بالتزام</p><div style="height:12px"></div><button class="btn" onclick="openCert()">شهادتي</button></div>`;
  else h+=`<div class="card" style="margin-bottom:10px;font-size:14px"><b>طريق الشهادة</b><div style="color:var(--mute);font-size:13px">${d} من ${PASS} يوماً ملتزماً على الأقل · اليوم ${tn} من 21</div><div class="prog"><i style="width:${Math.min(100,d/PASS*100)}%"></i></div></div>`;
  [['90','برنامج 90 يوماً','الجبهات الأربع: الروح، الجسد، العقل، المال'],['6m','برنامج 6 أشهر','بناء الحياة: المشروع، المال، وصناعة المحتوى']].forEach(([k,t,dsc])=>{
@@ -509,6 +544,36 @@ function setAdd(){const v=$('sHabIn').value.trim();if(!v)return;if(tmp.length>=7
 function saveSet(){const nm=$('sName').value.trim();if(nm)S.name=nm;const ag=+$('sAge').value;if(ag>=10&&ag<=90)S.age=ag;const ct=$('sCountry').value.trim();if(ct)S.country=ct;$('sAge').value='';$('sCountry').value='';setTimeout(()=>send('profile'),0);if($('sStart').value)S.start=$('sStart').value;S.habits=tmp;tmp=null;$('sName').value='';$('sStart').value='';view=null;save();show('sToday');toast('حُفظت التعديلات')}
 let rs=0;function resetAll(){if(!rs){rs=1;$('resetBtn').textContent='ضغطة ثانية للتأكيد';setTimeout(()=>{rs=0;$('resetBtn').textContent='مسح كل البيانات'},3000);return}try{localStorage.removeItem(KEY)}catch(e){}location.reload()}
 
+const MQ=[['sleep','النوم'],['wake','الاستيقاظ'],['pr','الصلوات في وقتها',5],['fajr','الفجر في الأسبوع',7],['phone','ساعات الهاتف'],['sport','التمرين في الأسبوع',7]];
+let MZ='m0',mzv={};
+function openMeas(k){MZ=k;const o=S[k]||{};mzv={pr:o.pr,fajr:o.fajr,sport:o.sport};
+ $('mzT').textContent=k==='m0'?'قياس البداية':'قياس النهاية';
+ $('mzS').textContent=k==='m0'?'دقيقة واحدة بأرقام صادقة. نقارنها في اليوم 21.':'نفس الأسئلة بعد 21 يوماً، لنرى الفرق بالأرقام.';
+ $('mz0').classList.toggle('hide',k!=='m0');$('mz21').classList.toggle('hide',k!=='m21');
+ $('mz_sleep').value=o.sleep||'';$('mz_wake').value=o.wake||'';$('mz_phone').value=o.phone==null?'':o.phone;
+ $('mz_pain').value=o.pain||'';$('mz_why').value=o.why||'';$('mz_change').value=o.change||'';$('mz_ok').checked=!!o.ok;
+ show('sMeas');drawMz()}
+function drawMz(){document.querySelectorAll('#sMeas .chips').forEach(el=>{const k=el.dataset.k,mx=+el.dataset.max;let h='';for(let i=0;i<=mx;i++)h+=`<button class="chip ${mzv[k]===i?'on':''}" data-v="${i}">${i}</button>`;el.innerHTML=h;
+ el.querySelectorAll('button').forEach(b=>b.onclick=()=>{mzv[k]=+b.dataset.v;drawMz()})})}
+function saveMeas(){const o={sleep:$('mz_sleep').value,wake:$('mz_wake').value,pr:mzv.pr,fajr:mzv.fajr,sport:mzv.sport,phone:$('mz_phone').value===''?null:+$('mz_phone').value};
+ if(!o.sleep||!o.wake||o.pr==null||o.fajr==null||o.sport==null||o.phone==null)return toast('الأسئلة 1 إلى 5 مطلوبة');
+ if(MZ==='m0'){o.pain=$('mz_pain').value.trim();o.why=$('mz_why').value.trim()}else{o.change=$('mz_change').value.trim();o.ok=$('mz_ok').checked}
+ o.at=todayStr();S[MZ]=o;save();send(MZ);show('sToday');toast('حُفظ القياس')}
+function mins(t){if(!t)return null;const[a,b]=t.split(':').map(Number);return a*60+b}
+function cmpCard(){const a=S.m0,b=S.m21;let h=`<div class="card" style="margin-bottom:10px"><b>قبل / بعد</b><div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:6px 8px;margin-top:10px;font-size:14px"><span style="color:var(--dim)"></span><span style="color:var(--dim);text-align:center">اليوم 0</span><span style="color:var(--red);text-align:center;font-weight:800">اليوم 21</span>`;
+ MQ.forEach(([k,l])=>{h+=`<span style="color:var(--mute)">${l}</span><span style="text-align:center">${a[k]==null||a[k]===''?'—':a[k]}</span><span style="text-align:center;font-weight:800">${b[k]==null||b[k]===''?'—':b[k]}</span>`});
+ return h+`</div>${b.change?`<p style="margin-top:10px;font-size:14px;color:var(--mute)">«${esc(b.change)}»</p>`:''}</div>`}
+const isIOS=/iP(hone|ad|od)/.test(navigator.userAgent),standalone=!!(navigator.standalone||matchMedia('(display-mode: standalone)').matches),inApp=/FBAN|FBAV|Instagram|WhatsApp|Line\//i.test(navigator.userAgent);
+function renderPrompts(){const tn=dayNum(todayStr());let h='';
+ if(inApp)h+=`<div class="card" style="margin-top:14px;border-color:var(--red)"><b>افتح الرابط في Safari</b><div style="color:var(--mute);font-size:13px">المتصفح داخل واتساب أو إنستغرام قد يمسح البيانات. من القائمة «⋯» اختر «فتح في Safari».</div></div>`;
+ else if(isIOS&&!standalone&&!S.hideA2HS)h+=`<div class="card" style="margin-top:14px"><b>اجعله تطبيقاً على الشاشة</b><div style="color:var(--mute);font-size:13px">زر المشاركة <b style="color:#fff">⬆</b> في Safari، ثم «إضافة إلى الشاشة الرئيسية». بعدها يُفتح دائماً من الأيقونة، وإن كانت هناك بيانات سابقة تُنقل بكود النسخة الاحتياطية من الإعدادات.</div><button class="del" onclick="S.hideA2HS=1;save();renderToday()">تم</button></div>`;
+ if(!S.m0)h+=`<div class="card" style="margin-top:14px;border-color:var(--red);background:linear-gradient(135deg,#1a0307,#0E0E0E 70%)"><b>قبل البداية: قياس اليوم 0</b><div style="color:var(--mute);font-size:13px">خمسة أرقام ودقيقة واحدة، لنقارنها في اليوم 21.</div><div style="height:10px"></div><button class="btn" style="padding:12px;font-size:15px" onclick="openMeas('m0')">ابدأ القياس</button></div>`;
+ else if(tn>=N&&!S.m21)h+=`<div class="card" style="margin-top:14px;border-color:var(--red)"><b>قياس اليوم 21</b><div style="color:var(--mute);font-size:13px">نفس الأسئلة لنرى الفرق.</div><div style="height:10px"></div><button class="btn" style="padding:12px;font-size:15px" onclick="openMeas('m21')">ابدأ القياس</button></div>`;
+ if(!S.remSeen)h+=`<div class="card" style="margin-top:14px"><b>تذكير تقرير الليل</b><div style="color:var(--mute);font-size:13px">تنبيه كل ليلة على 21:30 في رزنامة الهاتف.</div><div style="height:10px"></div><a class="btn ghost" style="padding:12px;font-size:15px;text-decoration:none" href="reminder.ics" onclick="S.remSeen=1;save();setTimeout(renderToday,500)">إضافة التذكير</a></div>`;
+ $('prompts').innerHTML=h}
+function backupCode(){return btoa(unescape(encodeURIComponent(JSON.stringify(S))))}
+function copyBackup(){const t=backupCode();(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('نُسخ الكود')).catch(()=>{const a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();document.execCommand('copy');a.remove();toast('نُسخ الكود')})}
+function restore(){try{const o=JSON.parse(decodeURIComponent(escape(atob($('rstIn').value.trim()))));if(!o.habits||!o.start)throw 0;S=o;save();location.reload()}catch(e){toast('الكود غير صحيح')}}
 load();
 if(S&&S.habits&&!S.pid){S.pid=Math.random().toString(36).slice(2,11);save()}
 if(S&&S.habits&&S.age&&S.country)show('sToday');

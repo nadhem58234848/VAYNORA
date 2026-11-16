@@ -73,7 +73,7 @@ function ago(ts){if(!ts)return '—';const h=(Date.now()-ts)/36e5;return h<1?'ا
 const ST=['لم تتم','على الأقل','كاملة'];
 function people(){const P={};ROWS.slice().sort((a,b)=>a.ts-b.ts).forEach(o=>{const p=P[o.pid]=P[o.pid]||{pid:o.pid,reps:{},first:o.ts};
  Object.assign(p,{name:o.name,age:o.age,country:o.country,start:o.start,habits:o.habits||p.habits,done:o.done,chain:o.chain,last:o.ts});
- if(o.a==='report'&&o.day)p.reps[o.day]=o;if(o.a==='cert')p.cert=1;});
+ if(o.m0)p.m0=o.m0;if(o.m21)p.m21=o.m21;if(o.a==='report'&&o.day)p.reps[o.day]=o;if(o.a==='cert')p.cert=1;});
  return Object.values(P).map(p=>{p.day=Math.min(Math.max(dayNow(p.start),0),99);p.lastRep=Math.max(0,...Object.values(p.reps).map(r=>r.ts));
   const today=Math.min(p.day,N);let miss=0;for(let d=today-1;d>=1&&d>=today-3;d--){if(!p.reps[d])miss++;else break}p.miss=miss;return p}).sort((a,b)=>b.last-a.last)}
 function repText(r){const L=['اليوم '+r.day+'/21 · النتيجة '+r.score+'%'];const q=r.q||{};
@@ -81,6 +81,12 @@ function repText(r){const L=['اليوم '+r.day+'/21 · النتيجة '+r.scor
  L.push('الصلوات: '+(r.p||[]).filter(v=>v===2).length+'/5 في وقتها');L.push('مهمة اليوم: '+(r.m==null?'—':ST[r.m]));
  L.push('أصعب لحظة: '+(q.hard||'—'));L.push('أفخر بـ: '+(q.proud||'—'));
  Object.entries(r.h||{}).forEach(([k,v])=>L.push((v===2?'✓ ':v===1?'◐ ':'✕ ')+k));return L.join('\n')}
+const MQ=[['sleep','النوم'],['wake','الاستيقاظ'],['pr','الصلوات في وقتها'],['fajr','الفجر/أسبوع'],['phone','ساعات الهاتف'],['sport','التمرين/أسبوع']];
+function meas(p){if(!p.m0)return '<div class="note" style="margin-top:8px">لم يملأ قياس اليوم 0 بعد.</div>';const a=p.m0,b=p.m21||{};
+ let h='<div style="display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:4px 8px;margin-top:12px;font-size:13px;background:#080808;border:1px solid #1e1e1e;border-radius:12px;padding:10px"><span></span><span style="color:var(--dim);text-align:center">اليوم 0</span><span style="color:var(--red);text-align:center;font-weight:800">اليوم 21</span>';
+ MQ.forEach(([k,l])=>{h+=`<span style="color:var(--mute)">${l}</span><span style="text-align:center">${esc(a[k]==null?'—':a[k])}</span><span style="text-align:center;font-weight:800">${esc(b[k]==null?'—':b[k])}</span>`});
+ h+='</div>';if(a.pain)h+=`<div class="note" style="margin-top:6px"><b style="color:#fff">ما يؤلمه:</b> ${esc(a.pain)}</div>`;if(a.why)h+=`<div class="note"><b style="color:#fff">لماذا:</b> ${esc(a.why)}</div>`;
+ if(b.change)h+=`<div class="note"><b style="color:#fff">ما تغيّر:</b> ${esc(b.change)}</div>`;if(p.m21)h+=`<div class="note" style="color:${b.ok?'#fff':'#ff9aa8'}">${b.ok?'✓ يسمح بنشر أرقامه دون اسم':'✕ لا يسمح بالنشر'}</div>`;return h}
 function render(){const A=document.getElementById('app');
  if(!C.sheet){A.innerHTML=`<div class="f"><b>ربط الشيت (مرة واحدة)</b><p class="note">رابط شيت أجوبة الفورم، نفس الشيت المستعمل في لوحة المحاربين ولوحة العروض. يُحفظ في هذا الهاتف فقط.</p><input id="s" placeholder="https://docs.google.com/spreadsheets/d/..."><button class="btn" onclick="C.sheet=sid(document.getElementById('s').value);try{localStorage.setItem(K,JSON.stringify(C))}catch(e){};load()">حفظ</button></div>`;return}
  if(ERR){A.innerHTML=`<div class="f">${ERR}</div><div style="height:10px"></div><button class="btn" onclick="C.sheet='';render()">تغيير الرابط</button>`;return}
@@ -103,6 +109,7 @@ function render(){const A=document.getElementById('app');
   h+=`<div class="sub"><div class="hd"><div class="av">${esc((p.name||'?').trim()[0]||'?')}</div><div class="nm"><b>${esc(p.name)}</b><small>${esc(p.age||'—')} سنة · ${esc(p.country||'—')}</small></div>${badge}</div>
   <div class="stats"><span>أيام ملتزمة <b>${p.done||0}</b>/21</span><span>السلسلة <b>${p.chain||0}</b></span><span>آخر تقرير <b>${ago(p.lastRep)}</b></span></div>
   <div class="chain">${ch}</div>
+  ${meas(p)}
   <div class="hb">${hs}</div>
   ${lastR?`<button class="more" onclick="OPEN['${p.pid}']=!OPEN['${p.pid}'];render()">${OPEN[p.pid]?'إخفاء التقارير':'التقارير ('+reps.length+')'}</button>${OPEN[p.pid]?reps.map(r=>`<div class="rep">${esc(repText(r))}</div>`).join(''):''}`:'<div class="note" style="margin-top:8px">لم يُرسل أي تقرير بعد.</div>'}
   </div>`});
